@@ -20,7 +20,7 @@
       "state": "Enabled",
       "moduleName": "mod-password-validator",
       "expression": "(?=.*[a-z])(?=.*[A-Z]).+",
-      "description": "The password must contains both upper and lower case letters",
+      "description": "The password must contain both upper and lower case letters",
       "orderNo": 1,
       "errMessageId": "password.alphabetical.invalid"
     },
@@ -32,7 +32,7 @@
       "state": "Enabled",
       "moduleName": "mod-password-validator",
       "expression": "(?=.*\\d).+",
-      "description": "The password must contains at least one numeric character",
+      "description": "The password must contain at least one numeric character",
       "orderNo": 2,
       "errMessageId": "password.number.invalid"
     },
@@ -44,7 +44,7 @@
       "state": "Enabled",
       "moduleName": "mod-password-validator",
       "expression": "(?=.*[!\"#$%&'()*+,-./:;<=>?@\\[\\]^_`{|}~]).+",
-      "description": "The password must contains at least one special character",
+      "description": "The password must contain at least one special character",
       "orderNo": 3,
       "errMessageId": "password.no-special-character"
     },
@@ -56,7 +56,7 @@
       "state": "Enabled",
       "moduleName": "mod-password-validator",
       "expression": "^(?:(?!<USER_NAME>).)+$",
-      "description": "The password must contains at least one special character",
+      "description": "The password must contain at least one special character",
       "orderNo": 4,
       "errMessageId": "password.no-special-character"
     },
@@ -68,7 +68,7 @@
       "state": "Enabled",
       "moduleName": "mod-password-validator",
       "expression": "^(?:(?!qwe)(?!asd)(?!zxc)(?!qaz)(?!zaq)(?!xsw)(?!wsx)(?!edc)(?!cde)(?!rfv)(?!vfr)(?!tgb)(?!bgt)(?!yhn)(?!nhy)(?!ujm)(?!mju)(?!ik,)(?!,ki)(?!ol.)(?!.lo)(?!p;/)(?!/;p)(?!123).)+$",
-      "description": "The password must contains at least one special character",
+      "description": "The password must contain at least one special character",
       "orderNo": 5,
       "errMessageId": "password.no-special-character"
     },
@@ -80,7 +80,7 @@
       "state": "Enabled",
       "moduleName": "mod-password-validator",
       "expression": "^(?:(.)(?!\\1))*$",
-      "description": "The password must not have repeating symbols",
+      "description": "The password must not contain repeating symbols",
       "orderNo": 6,
       "errMessageId": "password.rule.repeating.symbols.invalid"
     },

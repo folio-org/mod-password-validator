@@ -69,7 +69,7 @@ public class ValidateDefaultRulesUnitTest {
       .put("state", "Enabled")
       .put("moduleName", "mod-password-validator")
       .put("expression", "(?=.*[a-z])(?=.*[A-Z]).+")
-      .put("description", "The password must contains both upper and lower case letters")
+      .put("description", "The password must contain both upper and lower case letters")
       .put("orderNo", 1)
       .put("errMessageId", "password.alphabetical.invalid")
       .mapTo(Rule.class);
@@ -82,7 +82,7 @@ public class ValidateDefaultRulesUnitTest {
       .put("state", "Enabled")
       .put("moduleName", "mod-password-validator")
       .put("expression", "(?=.*\\d).+")
-      .put("description", "The password must contains at least one numeric character")
+      .put("description", "The password must contain at least one numeric character")
       .put("orderNo", 2)
       .put("errMessageId", "password.number.invalid")
       .mapTo(Rule.class);
@@ -95,7 +95,7 @@ public class ValidateDefaultRulesUnitTest {
       .put("state", "Enabled")
       .put("moduleName", "mod-password-validator")
       .put("expression", "(?=.*[!\"#$%&'()*+,-./:;<=>?@\\[\\]^_`{|}~]).+")
-      .put("description", "The password must contains at least one special character")
+      .put("description", "The password must contain at least one special character")
       .put("orderNo", 3)
       .put("errMessageId", "password.no-special-character")
       .mapTo(Rule.class);
@@ -108,9 +108,9 @@ public class ValidateDefaultRulesUnitTest {
       .put("state", "Enabled")
       .put("moduleName", "mod-password-validator")
       .put("expression", "^(?:(?!<USER_NAME>).)+$")
-      .put("description", "The password must contains at least one special character")
+      .put("description", "The password must not contain your username")
       .put("orderNo", 4)
-      .put("errMessageId", "password.no-special-character")
+      .put("errMessageId", "password.username.duplicate")
       .mapTo(Rule.class);
 
     Rule regSequence_Rule = new JsonObject()
@@ -121,7 +121,7 @@ public class ValidateDefaultRulesUnitTest {
       .put("state", "Enabled")
       .put("moduleName", "mod-password-validator")
       .put("expression", "^(?:(?!qwe)(?!asd)(?!zxc)(?!qaz)(?!zaq)(?!xsw)(?!wsx)(?!edc)(?!cde)(?!rfv)(?!vfr)(?!tgb)(?!bgt)(?!yhn)(?!nhy)(?!ujm)(?!mju)(?!ik,)(?!,ki)(?!ol.)(?!.lo)(?!p;/)(?!/;p)(?!123).)+$")
-      .put("description", "The password must contains at least one special character")
+      .put("description", "The password must contain at least one special character")
       .put("orderNo", 5)
       .put("errMessageId", "password.no-special-character")
       .mapTo(Rule.class);
@@ -134,7 +134,7 @@ public class ValidateDefaultRulesUnitTest {
       .put("state", "Enabled")
       .put("moduleName", "mod-password-validator")
       .put("expression", "^(?:(.)(?!\\1))*$")
-      .put("description", "The password must not have repeating symbols")
+      .put("description", "The password must not contain repeating symbols")
       .put("orderNo", 6)
       .put("errMessageId", "password.rule.repeating.symbols.invalid")
       .mapTo(Rule.class);
@@ -178,7 +178,8 @@ public class ValidateDefaultRulesUnitTest {
       JsonObject response = result.result();
       String validationResult = response.getString(RESPONSE_VALIDATION_RESULT_KEY);
       Assert.assertEquals(VALIDATION_VALID_RESULT, validationResult);
-      Assert.assertNull(response.getValue(RESPONSE_ERROR_MESSAGES_KEY));
+      JsonArray errorMessages = (JsonArray) response.getValue(RESPONSE_ERROR_MESSAGES_KEY);
+      Assert.assertTrue(errorMessages.isEmpty());
     };
     validationEngineService.validatePassword(password, requestHeaders, checkingHandler);
 

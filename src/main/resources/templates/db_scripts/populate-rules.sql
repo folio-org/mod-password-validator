@@ -19,7 +19,7 @@ INSERT INTO validation_rules (_id, jsonb) VALUES
       "state": "Enabled",
       "moduleName": "mod-password-validator",
       "expression": "(?=.*[a-z])(?=.*[A-Z]).+",
-      "description": "The password must contains both upper and lower case letters",
+      "description": "The password must contain both upper and lower case letters",
       "orderNo": 1,
       "errMessageId": "password.alphabetical.invalid"
     }'),
@@ -31,7 +31,7 @@ INSERT INTO validation_rules (_id, jsonb) VALUES
       "state": "Enabled",
       "moduleName": "mod-password-validator",
       "expression": "(?=.*\\d).+",
-      "description": "The password must contains at least one numeric character",
+      "description": "The password must contain at least one numeric character",
       "orderNo": 2,
       "errMessageId": "password.number.invalid"
     }'),
@@ -43,7 +43,7 @@ INSERT INTO validation_rules (_id, jsonb) VALUES
       "state": "Enabled",
       "moduleName": "mod-password-validator",
       "expression": "(?=.*[!\"#$%&''()*+,-./:;<=>?@\\[\\]^_`{|}~]).+",
-      "description": "The password must contains at least one special character",
+      "description": "The password must contain at least one special character",
       "orderNo": 3,
       "errMessageId": "password.no-special-character"
     }'),
@@ -55,9 +55,9 @@ INSERT INTO validation_rules (_id, jsonb) VALUES
       "state": "Enabled",
       "moduleName": "mod-password-validator",
       "expression": "^(?:(?!<USER_NAME>).)+$",
-      "description": "The password must contains at least one special character",
+      "description": "The password must not contain your username",
       "orderNo": 4,
-      "errMessageId": "password.no-special-character"
+      "errMessageId": "password.username.duplicate"
     }'),
 ('8d4a2124-8a54-4c49-84c8-36a8f7fc01a8', '{
       "ruleId": "8d4a2124-8a54-4c49-84c8-36a8f7fc01a8",
@@ -67,7 +67,7 @@ INSERT INTO validation_rules (_id, jsonb) VALUES
       "state": "Enabled",
       "moduleName": "mod-password-validator",
       "expression": "^(?:(?!qwe)(?!asd)(?!zxc)(?!qaz)(?!zaq)(?!xsw)(?!wsx)(?!edc)(?!cde)(?!rfv)(?!vfr)(?!tgb)(?!bgt)(?!yhn)(?!nhy)(?!ujm)(?!mju)(?!ik,)(?!,ki)(?!ol.)(?!.lo)(?!p;/)(?!/;p)(?!123).)+$",
-      "description": "The password must contains at least one special character",
+      "description": "The password must contain at least one special character",
       "orderNo": 5,
       "errMessageId": "password.no-special-character"
     }'),
@@ -79,7 +79,7 @@ INSERT INTO validation_rules (_id, jsonb) VALUES
       "state": "Enabled",
       "moduleName": "mod-password-validator",
       "expression": "^(?:(.)(?!\\1))*$",
-      "description": "The password must not have repeating symbols",
+      "description": "The password must not contain repeating symbols",
       "orderNo": 6,
       "errMessageId": "password.rule.repeating.symbols.invalid"
     }'),
