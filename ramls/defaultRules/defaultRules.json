@@ -58,7 +58,7 @@
       "expression": "^(?:(?!<USER_NAME>).)+$",
       "description": "The password must contain at least one special character",
       "orderNo": 4,
-      "errMessageId": "password.no-special-character"
+      "errMessageId": "password.username.duplicate"
     },
     {
       "ruleId": "8d4a2124-8a54-4c49-84c8-36a8f7fc01a8",
