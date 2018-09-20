@@ -97,7 +97,7 @@ public class ValidateDefaultRulesUnitTest {
       .put("expression", "(?=.*[!\"#$%&'()*+,-./:;<=>?@\\[\\]^_`{|}~]).+")
       .put("description", "The password must contain at least one special character")
       .put("orderNo", 3)
-      .put("errMessageId", "password.no-special-character")
+      .put("errMessageId", "password.specialCharacter.invalid")
       .mapTo(Rule.class);
 
     Rule regUserName_Rule = new JsonObject()
@@ -110,12 +110,12 @@ public class ValidateDefaultRulesUnitTest {
       .put("expression", "^(?:(?!<USER_NAME>).)+$")
       .put("description", "The password must not contain your username")
       .put("orderNo", 4)
-      .put("errMessageId", "password.username.duplicate")
+      .put("errMessageId", "password.usernameDuplicate.invalid")
       .mapTo(Rule.class);
 
     Rule regSequence_Rule = new JsonObject()
       .put("ruleId", "8d4a2124-8a54-4c49-84c8-36a8f7fc01a8")
-      .put("name", "sequence_characters")
+      .put("name", "keyboard_sequence")
       .put("type", "RegExp")
       .put("validationType", "Strong")
       .put("state", "Enabled")
@@ -123,7 +123,7 @@ public class ValidateDefaultRulesUnitTest {
       .put("expression", "^(?:(?!qwe)(?!asd)(?!zxc)(?!qaz)(?!zaq)(?!xsw)(?!wsx)(?!edc)(?!cde)(?!rfv)(?!vfr)(?!tgb)(?!bgt)(?!yhn)(?!nhy)(?!ujm)(?!mju)(?!ik,)(?!,ki)(?!ol.)(?!.lo)(?!p;/)(?!/;p)(?!123).)+$")
       .put("description", "The password must contain at least one special character")
       .put("orderNo", 5)
-      .put("errMessageId", "password.no-special-character")
+      .put("errMessageId", "password.keyboardSequence.invalid")
       .mapTo(Rule.class);
 
     Rule regRepeatingSymbols_Rule = new JsonObject()
@@ -136,7 +136,7 @@ public class ValidateDefaultRulesUnitTest {
       .put("expression", "^(?:(.)(?!\\1))*$")
       .put("description", "The password must not contain repeating symbols")
       .put("orderNo", 6)
-      .put("errMessageId", "password.rule.repeating.symbols.invalid")
+      .put("errMessageId", "password.repeatingSymbols.invalid")
       .mapTo(Rule.class);
 
     Rule regWhiteSpace_Rule = new JsonObject()
@@ -149,7 +149,7 @@ public class ValidateDefaultRulesUnitTest {
       .put("expression", "^[^\\s]+$")
       .put("description", "The password must not contain a white space")
       .put("orderNo", 7)
-      .put("errMessageId", "password.white-space.invalid")
+      .put("errMessageId", "password.whiteSpace.invalid")
       .mapTo(Rule.class);
 
     rulesList.add(regMinimumLength_Rule);
