@@ -42,6 +42,9 @@
         {
           "methods": ["POST"],
           "pathPattern": "/_/tenant"
+        }, {
+          "methods": ["DELETE"],
+          "pathPattern": "/_/tenant"
         }
       ]
     }
