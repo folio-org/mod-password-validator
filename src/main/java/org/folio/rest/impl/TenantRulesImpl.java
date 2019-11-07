@@ -19,12 +19,11 @@ import java.util.Map;
 
 public class TenantRulesImpl implements TenantRules {
 
-  private final Logger logger = LoggerFactory.getLogger(TenantRulesImpl.class);
-
   private static final String ORDER_NUMBER_ERROR = "Order number cannot be negative";
   private static final String VALIDATION_TYPE_ERROR = "In case of RegExp rule Validation Type can only be Strong";
   private static final String IMPLEMENTATION_REFERENCE_REQUIRED_ERROR = "In case of Programmatic rule Implementation reference should be provided";
 
+  private final Logger logger = LoggerFactory.getLogger(TenantRulesImpl.class);
   private final ValidatorRegistryService validatorRegistryService;
   private String tenantId;
 

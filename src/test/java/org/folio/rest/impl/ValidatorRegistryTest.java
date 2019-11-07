@@ -463,14 +463,14 @@ public class ValidatorRegistryTest {
   }
 
   @Test
-  public void shouldReturnNotFoundWhenRuleDoesNotExist(final TestContext context) {
+  public void shouldReturnServerErrorWhenRuleDoesNotExist(final TestContext context) {
     requestSpecification()
       .header(TENANT_HEADER)
       .body(REGEXP_RULE_ENABLED.toString())
       .when()
       .put(TENANT_RULES_PATH)
       .then()
-      .statusCode(HttpStatus.SC_NOT_FOUND);
+      .statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
   }
 
   @Test
