@@ -12,6 +12,8 @@ import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
@@ -20,6 +22,7 @@ import org.folio.rest.RestVerticle;
 import org.folio.rest.client.TenantClient;
 import org.folio.rest.jaxrs.model.Password;
 import org.folio.rest.jaxrs.model.Rule;
+import org.folio.rest.jaxrs.model.TenantAttributes;
 import org.folio.rest.persist.Criteria.Criterion;
 import org.folio.rest.persist.PostgresClient;
 import org.folio.rest.tools.utils.NetworkUtils;
@@ -41,6 +44,7 @@ import static org.hamcrest.Matchers.is;
 
 @RunWith(VertxUnitRunner.class)
 public class PasswordResourceTest {
+  private static final Logger logger = LoggerFactory.getLogger(PasswordResourceTest.class);
 
   private static final String HOST = "http://localhost:";
   private static final String HTTP_PORT = "http.port";
@@ -98,7 +102,6 @@ public class PasswordResourceTest {
         PostgresClient.setConfigFilePath(postgresConfigPath);
         break;
       case "embedded":
-        PostgresClient.setIsEmbedded(true);
         PostgresClient.getInstance(vertx).startEmbeddedPostgres();
         break;
       default:
@@ -112,11 +115,12 @@ public class PasswordResourceTest {
     DeploymentOptions restVerticleDeploymentOptions = new DeploymentOptions().setConfig(new JsonObject().put(HTTP_PORT, port));
     vertx.deployVerticle(RestVerticle.class.getName(), restVerticleDeploymentOptions, res -> {
       try {
-        tenantClient.postTenant(null, res2 -> {
+        TenantAttributes t = new TenantAttributes().withModuleTo("mod-password-validator-1.0.0");
+        tenantClient.postTenant(t, res2 -> {
           async.complete();
         });
       } catch (Exception e) {
-        e.printStackTrace();
+        logger.error(e.getMessage());
       }
     });
   }

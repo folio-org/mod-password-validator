@@ -7,6 +7,7 @@ import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import org.folio.cql2pgjson.exception.FieldException;
 import org.folio.rest.jaxrs.model.Rule;
 import org.folio.rest.jaxrs.model.RuleCollection;
 import org.folio.rest.persist.Criteria.Criteria;
@@ -15,7 +16,7 @@ import org.folio.rest.persist.Criteria.Limit;
 import org.folio.rest.persist.Criteria.Offset;
 import org.folio.rest.persist.PostgresClient;
 import org.folio.rest.persist.cql.CQLWrapper;
-import org.z3950.zing.cql.cql2pgjson.CQL2PgJSON;
+import org.folio.cql2pgjson.CQL2PgJSON;
 
 import java.util.List;
 import java.util.UUID;
@@ -148,7 +149,7 @@ public class ValidatorRegistryServiceImpl implements ValidatorRegistryService {
           logger.error("Error while querying the db to get the rule by id", getReply.cause());
           asyncResultHandler.handle(Future.failedFuture(getReply.cause()));
         } else {
-          List<Rule> ruleList = (List<Rule>) getReply.result().getResults();
+          List<Rule> ruleList = getReply.result().getResults();
           if (ruleList.isEmpty()) {
             logger.debug("Rule " + ruleId + "was not found in the db");
             asyncResultHandler.handle(Future.succeededFuture(null));
@@ -175,7 +176,7 @@ public class ValidatorRegistryServiceImpl implements ValidatorRegistryService {
     Criteria criteria = new Criteria();
     criteria.addField(jsonbField);
     criteria.setOperation("=");
-    criteria.setValue(value);
+    criteria.setVal(value);
     return criteria;
   }
 
@@ -185,9 +186,9 @@ public class ValidatorRegistryServiceImpl implements ValidatorRegistryService {
    * @param query - query from URL
    * @param limit - limit of records for pagination
    * @return - CQL wrapper for building postgres request to database
-   * @throws org.z3950.zing.cql.cql2pgjson.FieldException
+   * @throws org.folio.cql2pgjson.exception.FieldException
    */
-  private CQLWrapper getCQL(String query, int limit, int offset) throws org.z3950.zing.cql.cql2pgjson.FieldException {
+  private CQLWrapper getCQL(String query, int limit, int offset) throws FieldException {
     CQL2PgJSON cql2pgJson = new CQL2PgJSON(VALIDATION_RULES_TABLE_NAME + ".jsonb");
     return new CQLWrapper(cql2pgJson, query)
       .setLimit(new Limit(limit))

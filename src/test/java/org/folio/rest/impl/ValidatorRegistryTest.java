@@ -7,6 +7,8 @@ import io.restassured.specification.RequestSpecification;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
@@ -14,6 +16,7 @@ import org.apache.http.HttpStatus;
 import org.folio.rest.RestVerticle;
 import org.folio.rest.client.TenantClient;
 import org.folio.rest.jaxrs.model.Rule;
+import org.folio.rest.jaxrs.model.TenantAttributes;
 import org.folio.rest.persist.Criteria.Criterion;
 import org.folio.rest.persist.PostgresClient;
 import org.folio.rest.tools.utils.NetworkUtils;
@@ -38,6 +41,8 @@ import static org.hamcrest.Matchers.not;
 
 @RunWith(VertxUnitRunner.class)
 public class ValidatorRegistryTest {
+
+  private static final Logger logger = LoggerFactory.getLogger(ValidatorRegistryTest.class);
 
   private static final JsonObject PROGRAMMATIC_RULE_DISABLED = new JsonObject()
     .put("name", "programmatic rule disabled")
@@ -156,7 +161,6 @@ public class ValidatorRegistryTest {
         PostgresClient.setConfigFilePath(postgresConfigPath);
         break;
       case "embedded":
-        PostgresClient.setIsEmbedded(true);
         PostgresClient.getInstance(vertx).startEmbeddedPostgres();
         break;
       default:
@@ -166,16 +170,17 @@ public class ValidatorRegistryTest {
         throw new Exception(message);
     }
 
-    TenantClient tenantClient = new TenantClient("http://localhost:" + port, "diku", "diku", false);
+    TenantClient tenantClient = new TenantClient(HOST + port, "diku", null);
 
     final DeploymentOptions options = new DeploymentOptions().setConfig(new JsonObject().put(HTTP_PORT, port));
     vertx.deployVerticle(RestVerticle.class.getName(), options, res -> {
       try {
-        tenantClient.postTenant(null, res2 -> {
+        TenantAttributes t = new TenantAttributes().withModuleTo("mod-password-validator-1.0.0");
+        tenantClient.postTenant(t, res2 -> {
           async.complete();
         });
       } catch (Exception e) {
-        e.printStackTrace();
+        logger.error(e.getMessage());
       }
     });
   }
@@ -463,14 +468,14 @@ public class ValidatorRegistryTest {
   }
 
   @Test
-  public void shouldReturnNotFoundWhenRuleDoesNotExist(final TestContext context) {
+  public void shouldReturnErrorWhenRuleDoesNotExist(final TestContext context) {
     requestSpecification()
       .header(TENANT_HEADER)
       .body(REGEXP_RULE_ENABLED.toString())
       .when()
       .put(TENANT_RULES_PATH)
       .then()
-      .statusCode(HttpStatus.SC_NOT_FOUND);
+      .statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
   }
 
   @Test
