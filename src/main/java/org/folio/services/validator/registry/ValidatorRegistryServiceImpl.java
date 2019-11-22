@@ -1,17 +1,12 @@
 package org.folio.services.validator.registry;
 
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
-import io.vertx.core.Vertx;
+import io.vertx.core.*;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import org.folio.cql2pgjson.exception.FieldException;
 import org.folio.rest.jaxrs.model.Rule;
 import org.folio.rest.jaxrs.model.RuleCollection;
-import org.folio.rest.persist.Criteria.Criteria;
-import org.folio.rest.persist.Criteria.Criterion;
 import org.folio.rest.persist.Criteria.Limit;
 import org.folio.rest.persist.Criteria.Offset;
 import org.folio.rest.persist.PostgresClient;
@@ -113,8 +108,7 @@ public class ValidatorRegistryServiceImpl implements ValidatorRegistryService {
   public ValidatorRegistryService updateTenantRule(String tenantId, JsonObject validationRule, Handler<AsyncResult<JsonObject>> asyncResultHandler) {
     try {
       String id = validationRule.getString(RULE_ID_FIELD);
-      Criteria idCrit = constructCriteria(RULE_ID_JSONB_FIELD, id);
-      PostgresClient.getInstance(vertx, tenantId).update(VALIDATION_RULES_TABLE_NAME, validationRule.mapTo(Rule.class), new Criterion(idCrit), true, putReply -> {
+      PostgresClient.getInstance(vertx, tenantId).update(VALIDATION_RULES_TABLE_NAME, validationRule.mapTo(Rule.class), id, putReply -> {
         if (putReply.failed()) {
           logger.error("Error while updating the rule " + id + " in the db", putReply.cause());
           asyncResultHandler.handle(Future.failedFuture(putReply.cause()));
@@ -142,19 +136,21 @@ public class ValidatorRegistryServiceImpl implements ValidatorRegistryService {
    */
   @Override
   public ValidatorRegistryService getTenantRuleByRuleId(String tenantId, String ruleId, Handler<AsyncResult<JsonObject>> asyncResultHandler) {
+    Promise<Rule> promise = Promise.promise();
+    PostgresClient.getInstance(vertx, tenantId).getById(VALIDATION_RULES_TABLE_NAME, ruleId, Rule.class, promise);
+
     try {
-      Criteria idCrit = constructCriteria(RULE_ID_JSONB_FIELD, ruleId);
-      PostgresClient.getInstance(vertx, tenantId).get(VALIDATION_RULES_TABLE_NAME, Rule.class, new Criterion(idCrit), true, false, getReply -> {
+      PostgresClient.getInstance(vertx, tenantId).getById(VALIDATION_RULES_TABLE_NAME, ruleId, Rule.class, getReply -> {
         if (getReply.failed()) {
           logger.error("Error while querying the db to get the rule by id", getReply.cause());
           asyncResultHandler.handle(Future.failedFuture(getReply.cause()));
         } else {
-          List<Rule> ruleList = getReply.result().getResults();
-          if (ruleList.isEmpty()) {
+          Rule rule = getReply.result();
+          if (rule == null) {
             logger.debug("Rule " + ruleId + "was not found in the db");
             asyncResultHandler.handle(Future.succeededFuture(null));
           } else {
-            asyncResultHandler.handle(Future.succeededFuture(JsonObject.mapFrom(ruleList.get(0))));
+            asyncResultHandler.handle(Future.succeededFuture(JsonObject.mapFrom(rule)));
           }
         }
       });
@@ -163,21 +159,6 @@ public class ValidatorRegistryServiceImpl implements ValidatorRegistryService {
       asyncResultHandler.handle(Future.failedFuture(e));
     }
     return this;
-  }
-
-  /**
-   * Builds criteria by which db result is filtered
-   *
-   * @param jsonbField - json key name
-   * @param value - value corresponding to the key
-   * @return - Criteria object
-   */
-  private Criteria constructCriteria(String jsonbField, String value) {
-    Criteria criteria = new Criteria();
-    criteria.addField(jsonbField);
-    criteria.setOperation("=");
-    criteria.setVal(value);
-    return criteria;
   }
 
   /**

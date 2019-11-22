@@ -506,7 +506,7 @@ public class ValidatorRegistryTest {
   public void shouldReturnNotFoundOnGetRuleByIdWhenRuleDoesNotExist(final TestContext context) {
     requestSpecification()
       .header(TENANT_HEADER)
-      .pathParam("ruleId", "nonexistent_rule_id")
+      .pathParam("ruleId", UUID.randomUUID().toString())
       .when()
       .get(TENANT_RULES_PATH + "/{ruleId}")
       .then()
