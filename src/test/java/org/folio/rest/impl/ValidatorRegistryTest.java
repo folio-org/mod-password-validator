@@ -129,6 +129,7 @@ public class ValidatorRegistryTest {
   private static final String TENANT = "diku";
   private static final String INCORRECT_TENANT = "test";
   private static final String RULE_ID = "ruleId";
+  private static final String ID = "id";
   private static final String VALIDATION_RULES_TABLE_NAME = "validation_rules";
 
   private static final Header TENANT_HEADER = new Header(RestVerticle.OKAPI_HEADER_TENANT, TENANT);
@@ -314,7 +315,7 @@ public class ValidatorRegistryTest {
       .when()
       .put(TENANT_RULES_PATH)
       .then()
-      .statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+      .statusCode(HttpStatus.SC_BAD_REQUEST);
   }
 
   @Test
@@ -475,11 +476,11 @@ public class ValidatorRegistryTest {
       .when()
       .put(TENANT_RULES_PATH)
       .then()
-      .statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+      .statusCode(HttpStatus.SC_BAD_REQUEST);
   }
 
   @Test
-  public void shouldUpdateExistingRule(final TestContext context) {
+  public void testUpdateExistingRuleCases(final TestContext context) {
     Response response = requestSpecification()
       .header(TENANT_HEADER)
       .body(PROGRAMMATIC_RULE_DISABLED.toString())
@@ -488,8 +489,75 @@ public class ValidatorRegistryTest {
 
     Assert.assertThat(response.statusCode(), is(HttpStatus.SC_CREATED));
     Rule createdRule = response.body().as(Rule.class);
+
+    /* no id and ruleId == 400 */
+    requestSpecification()
+      .header(TENANT_HEADER)
+      .body(createdRule.toString())
+      .when()
+      .put(TENANT_RULES_PATH)
+      .then()
+      .statusCode(HttpStatus.SC_BAD_REQUEST);
+
+    /* no id == 400 */
     JsonObject ruleToUpdate = buildProgrammaticRuleDisabled()
       .put(RULE_ID, createdRule.getRuleId())
+      .put("state", Rule.State.ENABLED.toString());
+
+    requestSpecification()
+      .header(TENANT_HEADER)
+      .body(ruleToUpdate.toString())
+      .when()
+      .put(TENANT_RULES_PATH)
+      .then()
+      .statusCode(HttpStatus.SC_BAD_REQUEST);
+
+    /* no ruleId == 400 */
+    ruleToUpdate = buildProgrammaticRuleDisabled()
+      .put(ID, createdRule.getRuleId())
+      .put("state", Rule.State.ENABLED.toString());
+
+    requestSpecification()
+      .header(TENANT_HEADER)
+      .body(ruleToUpdate.toString())
+      .when()
+      .put(TENANT_RULES_PATH)
+      .then()
+      .statusCode(HttpStatus.SC_BAD_REQUEST);
+
+    /* different id and ruleId == 400 */
+    ruleToUpdate = buildProgrammaticRuleDisabled()
+      .put(ID, createdRule.getRuleId())
+      .put(RULE_ID, UUID.randomUUID().toString())
+      .put("state", Rule.State.ENABLED.toString());
+
+    requestSpecification()
+      .header(TENANT_HEADER)
+      .body(ruleToUpdate.toString())
+      .when()
+      .put(TENANT_RULES_PATH)
+      .then()
+      .statusCode(HttpStatus.SC_BAD_REQUEST);
+
+    /* id and ruleId do not exist == 400 */
+    String randomId = UUID.randomUUID().toString();
+    ruleToUpdate = buildProgrammaticRuleDisabled()
+      .put(ID, randomId)
+      .put(RULE_ID, randomId)
+      .put("state", Rule.State.ENABLED.toString());
+
+    requestSpecification()
+      .header(TENANT_HEADER)
+      .body(ruleToUpdate.toString())
+      .when()
+      .put(TENANT_RULES_PATH)
+      .then()
+      .statusCode(HttpStatus.SC_NOT_FOUND);
+
+    /* should be updated */
+    ruleToUpdate = buildProgrammaticRuleDisabled()
+      .put(RULE_ID, createdRule.getRuleId())
+      .put(ID, createdRule.getRuleId())
       .put("state", Rule.State.ENABLED.toString());
 
     requestSpecification()
