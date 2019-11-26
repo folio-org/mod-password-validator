@@ -512,7 +512,7 @@ public class ValidatorRegistryTest {
       .then()
       .statusCode(HttpStatus.SC_BAD_REQUEST);
 
-    /* no ruleId == 400 */
+    /* no ruleId → 400 */
     ruleToUpdate = buildProgrammaticRuleDisabled()
       .put(ID, createdRule.getRuleId())
       .put("state", Rule.State.ENABLED.toString());
