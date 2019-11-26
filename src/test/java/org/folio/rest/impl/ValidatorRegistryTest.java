@@ -474,7 +474,7 @@ public class ValidatorRegistryTest {
       .then()
       .statusCode(HttpStatus.SC_BAD_REQUEST);
 
-    /* no id → 400 */
+    /* no id only → 200 */
     JsonObject ruleToUpdate = buildProgrammaticRuleDisabled()
       .put(RULE_ID, createdRule.getRuleId())
       .put("state", Rule.State.ENABLED.toString());
@@ -485,12 +485,13 @@ public class ValidatorRegistryTest {
       .when()
       .put(TENANT_RULES_PATH)
       .then()
-      .statusCode(HttpStatus.SC_BAD_REQUEST);
+      .statusCode(HttpStatus.SC_OK)
+      .body("state", is(Rule.State.ENABLED.toString()));
 
-    /* no ruleId → 400 */
+    /* no ruleId only → 200 */
     ruleToUpdate = buildProgrammaticRuleDisabled()
       .put(ID, createdRule.getRuleId())
-      .put("state", Rule.State.ENABLED.toString());
+      .put("state", Rule.State.DISABLED.toString());
 
     requestSpecification()
       .header(TENANT_HEADER)
@@ -498,13 +499,13 @@ public class ValidatorRegistryTest {
       .when()
       .put(TENANT_RULES_PATH)
       .then()
-      .statusCode(HttpStatus.SC_BAD_REQUEST);
+      .statusCode(HttpStatus.SC_OK)
+      .body("state", is(Rule.State.DISABLED.toString()));
 
     /* different id and ruleId → 400 */
     ruleToUpdate = buildProgrammaticRuleDisabled()
       .put(ID, createdRule.getRuleId())
-      .put(RULE_ID, UUID.randomUUID().toString())
-      .put("state", Rule.State.ENABLED.toString());
+      .put(RULE_ID, UUID.randomUUID().toString());
 
     requestSpecification()
       .header(TENANT_HEADER)
