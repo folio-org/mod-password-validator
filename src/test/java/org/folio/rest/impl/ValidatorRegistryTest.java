@@ -465,7 +465,7 @@ public class ValidatorRegistryTest {
     Assert.assertThat(response.statusCode(), is(HttpStatus.SC_CREATED));
     Rule createdRule = response.body().as(Rule.class);
 
-    /* no id and ruleId == 400 */
+    /* no id and no ruleId → 400 */
     requestSpecification()
       .header(TENANT_HEADER)
       .body(createdRule.toString())
@@ -487,7 +487,7 @@ public class ValidatorRegistryTest {
       .then()
       .statusCode(HttpStatus.SC_BAD_REQUEST);
 
-    /* no ruleId == 400 */
+    /* no ruleId → 400 */
     ruleToUpdate = buildProgrammaticRuleDisabled()
       .put(ID, createdRule.getRuleId())
       .put("state", Rule.State.ENABLED.toString());
@@ -514,7 +514,7 @@ public class ValidatorRegistryTest {
       .then()
       .statusCode(HttpStatus.SC_BAD_REQUEST);
 
-    /* id and ruleId do not exist == 400 */
+    /* id and ruleId do not exist → 400 */
     String randomId = UUID.randomUUID().toString();
     ruleToUpdate = buildProgrammaticRuleDisabled()
       .put(ID, randomId)
