@@ -490,7 +490,7 @@ public class ValidatorRegistryTest {
     Assert.assertThat(response.statusCode(), is(HttpStatus.SC_CREATED));
     Rule createdRule = response.body().as(Rule.class);
 
-    /* no id and ruleId == 400 */
+    /* no id and no ruleId → 400 */
     requestSpecification()
       .header(TENANT_HEADER)
       .body(createdRule.toString())
