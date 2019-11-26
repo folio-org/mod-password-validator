@@ -474,7 +474,7 @@ public class ValidatorRegistryTest {
       .then()
       .statusCode(HttpStatus.SC_BAD_REQUEST);
 
-    /* no id == 400 */
+    /* no id → 400 */
     JsonObject ruleToUpdate = buildProgrammaticRuleDisabled()
       .put(RULE_ID, createdRule.getRuleId())
       .put("state", Rule.State.ENABLED.toString());
