@@ -185,8 +185,7 @@ public class TenantRulesImpl implements TenantRules {
     if (StringUtils.isEmpty(entity.getId()) || StringUtils.isEmpty(entity.getRuleId())) {
       logger.debug("Rule id cannot be null or empty");
       return RULE_ID_EMPTY_ERROR;
-    } else if (!StringUtils.isEmpty(entity.getId()) && !StringUtils.isEmpty(entity.getRuleId())
-      && !entity.getId().equals(entity.getRuleId())) {
+    } else if (!entity.getId().equals(entity.getRuleId())) {
       logger.debug("Rule id and ruleId are different");
       return RULE_ID_MATCH_ERROR;
     }

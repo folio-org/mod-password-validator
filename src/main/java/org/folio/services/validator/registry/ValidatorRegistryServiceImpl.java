@@ -26,7 +26,6 @@ public class ValidatorRegistryServiceImpl implements ValidatorRegistryService {
 
   private static final String VALIDATION_RULES_TABLE_NAME = "validation_rules";
   private static final String RULE_ID_FIELD = "ruleId";
-  private static final String RULE_ID_JSONB_FIELD = "'ruleId'";
 
   private final Vertx vertx;
 

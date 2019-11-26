@@ -136,7 +136,6 @@ public class ValidatorRegistryTest {
 
   private static Vertx vertx;
   private static int port;
-  private static String useExternalDatabase;
 
   @org.junit.Rule
   public Timeout timeout = Timeout.seconds(180);
@@ -147,29 +146,7 @@ public class ValidatorRegistryTest {
     vertx = Vertx.vertx();
     port = NetworkUtils.nextFreePort();
 
-    useExternalDatabase = System.getProperty(
-      "org.folio.password.validator.test.database",
-      "embedded");
-
-    switch (useExternalDatabase) {
-      case "environment":
-        System.out.println("Using environment settings");
-        break;
-      case "external":
-        String postgresConfigPath = System.getProperty(
-          "org.folio.password.validator.test.config",
-          "/postgres-conf-local.json");
-        PostgresClient.setConfigFilePath(postgresConfigPath);
-        break;
-      case "embedded":
-        PostgresClient.getInstance(vertx).startEmbeddedPostgres();
-        break;
-      default:
-        String message = "No understood database choice made." +
-          "Please set org.folio.password.validator.test.config" +
-          "to 'external', 'environment' or 'embedded'";
-        throw new Exception(message);
-    }
+    PostgresClient.getInstance(vertx).startEmbeddedPostgres();
 
     TenantClient tenantClient = new TenantClient(HOST + port, "diku", null);
 
@@ -190,15 +167,13 @@ public class ValidatorRegistryTest {
   public static void tearDownClass(final TestContext context) {
     Async async = context.async();
     vertx.close(context.asyncAssertSuccess(res -> {
-      if (useExternalDatabase.equals("embedded")) {
-        PostgresClient.stopEmbeddedPostgres();
-      }
+      PostgresClient.stopEmbeddedPostgres();
       async.complete();
     }));
   }
 
   @Before
-  public void setUp(TestContext context) throws Exception {
+  public void setUp(TestContext context) {
     clearRulesTable(context);
   }
 
