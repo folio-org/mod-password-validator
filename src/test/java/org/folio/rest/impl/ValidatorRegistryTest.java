@@ -500,7 +500,7 @@ public class ValidatorRegistryTest {
       .then()
       .statusCode(HttpStatus.SC_BAD_REQUEST);
 
-    /* different id and ruleId == 400 */
+    /* different id and ruleId → 400 */
     ruleToUpdate = buildProgrammaticRuleDisabled()
       .put(ID, createdRule.getRuleId())
       .put(RULE_ID, UUID.randomUUID().toString())
