@@ -444,14 +444,14 @@ public class ValidatorRegistryTest {
   }
 
   @Test
-  public void shouldReturnErrorWhenRuleDoesNotExist(final TestContext context) {
+  public void shouldReturnNotFoundWhenRuleDoesNotExist(final TestContext context) {
     requestSpecification()
       .header(TENANT_HEADER)
-      .body(REGEXP_RULE_ENABLED.toString())
+      .body(REGEXP_RULE_ENABLED.put(ID, UUID.randomUUID().toString()).toString())
       .when()
       .put(TENANT_RULES_PATH)
       .then()
-      .statusCode(HttpStatus.SC_BAD_REQUEST);
+      .statusCode(HttpStatus.SC_NOT_FOUND);
   }
 
   @Test
