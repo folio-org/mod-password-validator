@@ -515,7 +515,7 @@ public class ValidatorRegistryTest {
       .then()
       .statusCode(HttpStatus.SC_BAD_REQUEST);
 
-    /* id and ruleId do not exist → 400 */
+    /* id and ruleId do not exist → 404 */
     String randomId = UUID.randomUUID().toString();
     ruleToUpdate = buildProgrammaticRuleDisabled()
       .put(ID, randomId)
