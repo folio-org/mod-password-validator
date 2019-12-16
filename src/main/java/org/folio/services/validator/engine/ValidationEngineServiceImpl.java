@@ -174,28 +174,24 @@ public class ValidationEngineServiceImpl implements ValidationEngineService {
         if (ar.succeeded()) {
           HttpResponse<Buffer> response = ar.result();
           if (response.statusCode() != 200) {
-            String message = "Error looking up user at url '" + userNameRequestUrl
-              + "' Expected status code 200, got '" + response.statusCode() +
-              "' :" + response.bodyAsString();
-            promise.fail(message);
+            return;
+          }
+          JsonObject resultObject = response.bodyAsJsonObject();
+          if (!resultObject.containsKey("totalRecords") || !resultObject.containsKey("users")) {
+            promise.fail("Error, missing field(s) 'totalRecords' and/or 'users' in user response object");
           } else {
-            JsonObject resultObject = response.bodyAsJsonObject();
-            if (!resultObject.containsKey("totalRecords") || !resultObject.containsKey("users")) {
-              promise.fail("Error, missing field(s) 'totalRecords' and/or 'users' in user response object");
+            int recordCount = resultObject.getInteger("totalRecords");
+            if (recordCount > 1) {
+              String errorMessage = "Bad results from username";
+              logger.error(errorMessage);
+              promise.fail(errorMessage);
+            } else if (recordCount == 0) {
+              String errorMessage = "No user found by user id :" + userId;
+              logger.error(errorMessage);
+              promise.fail(errorMessage);
             } else {
-              int recordCount = resultObject.getInteger("totalRecords");
-              if (recordCount > 1) {
-                String errorMessage = "Bad results from username";
-                logger.error(errorMessage);
-                promise.fail(errorMessage);
-              } else if (recordCount == 0) {
-                String errorMessage = "No user found by user id :" + userId;
-                logger.error(errorMessage);
-                promise.fail(errorMessage);
-              } else {
-                JsonObject resultUser = resultObject.getJsonArray("users").getJsonObject(0);
-                promise.complete(resultUser);
-              }
+              JsonObject resultUser = resultObject.getJsonArray("users").getJsonObject(0);
+              promise.complete(resultUser);
             }
           }
         }
@@ -219,39 +215,38 @@ public class ValidationEngineServiceImpl implements ValidationEngineService {
       .putHeader(HttpHeaders.CONTENT_TYPE.toString(), MediaType.APPLICATION_JSON)
       .putHeader(HttpHeaders.ACCEPT.toString(), MediaType.APPLICATION_JSON)
       .sendJsonObject(buildResetPasswordAction(userId, password), ar -> {
-        if (ar.succeeded()) {
-          HttpResponse<Buffer> validationResponse = ar.result();
-          if (validationResponse.statusCode() == HttpStatus.HTTP_OK.toInt()) {
-              String validationResult = validationResponse.bodyAsJsonObject().getString(ValidatorHelper.RESPONSE_VALIDATION_RESULT_KEY);
-              if (ValidatorHelper.VALIDATION_INVALID_RESULT.equals(validationResult)) {
-                errorMessages.add(rule.getErrMessageId());
-              }
-              promise.complete();
-          } else {
-            // TODO Inform administrator that remote module is down
-            logger.error("FOLIO module by the address " + remoteModuleUrl + " is not available.");
-            String errorMessage;
-            switch (rule.getValidationType()) {
-              case STRONG:
-                errorMessage = "Programmatic rule " +
-                  rule.getName() +
-                  " returns status code " +
-                  validationResponse.statusCode();
-                logger.error(errorMessage);
-                promise.fail(errorMessage);
-                break;
-              case SOFT:
-                promise.complete();
-                break;
-              default:
-                errorMessage = "Please add an action for the new added " +
-                  "rule type when internal FOLIO module is not available";
-                logger.error(errorMessage);
-                promise.fail(errorMessage);
+        if (ar.failed()) {
+          return;
+        }
+        HttpResponse<Buffer> validationResponse = ar.result();
+        if (validationResponse.statusCode() == HttpStatus.HTTP_OK.toInt()) {
+            String validationResult = validationResponse.bodyAsJsonObject().getString(ValidatorHelper.RESPONSE_VALIDATION_RESULT_KEY);
+            if (ValidatorHelper.VALIDATION_INVALID_RESULT.equals(validationResult)) {
+              errorMessages.add(rule.getErrMessageId());
             }
-          }
+            promise.complete();
         } else {
-          logger.error(ar.cause().getMessage());
+          // TODO Inform administrator that remote module is down
+          logger.error("FOLIO module by the address " + remoteModuleUrl + " is not available.");
+          String errorMessage;
+          switch (rule.getValidationType()) {
+            case STRONG:
+              errorMessage = "Programmatic rule " +
+                rule.getName() +
+                " returns status code " +
+                validationResponse.statusCode();
+              logger.error(errorMessage);
+              promise.fail(errorMessage);
+              break;
+            case SOFT:
+              promise.complete();
+              break;
+            default:
+              errorMessage = "Please add an action for the new added " +
+                "rule type when internal FOLIO module is not available";
+              logger.error(errorMessage);
+              promise.fail(errorMessage);
+          }
         }
       });
     return promise.future();
