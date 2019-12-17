@@ -174,6 +174,7 @@ public class ValidationEngineServiceImpl implements ValidationEngineService {
         if (ar.succeeded()) {
           HttpResponse<Buffer> response = ar.result();
           if (response.statusCode() != 200) {
+            promise.fail(ar.cause().getMessage());
             return;
           }
           JsonObject resultObject = response.bodyAsJsonObject();
@@ -216,6 +217,7 @@ public class ValidationEngineServiceImpl implements ValidationEngineService {
       .putHeader(HttpHeaders.ACCEPT.toString(), MediaType.APPLICATION_JSON)
       .sendJsonObject(buildResetPasswordAction(userId, password), ar -> {
         if (ar.failed()) {
+          promise.fail(ar.cause().getMessage());
           return;
         }
         HttpResponse<Buffer> validationResponse = ar.result();
