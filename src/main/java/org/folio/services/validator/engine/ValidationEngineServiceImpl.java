@@ -171,29 +171,31 @@ public class ValidationEngineServiceImpl implements ValidationEngineService {
       .putHeader(HttpHeaders.CONTENT_TYPE.toString(), MediaType.APPLICATION_JSON)
       .putHeader(HttpHeaders.ACCEPT.toString(), MediaType.APPLICATION_JSON)
       .send(ar -> {
-        if (ar.succeeded()) {
-          HttpResponse<Buffer> response = ar.result();
-          if (response.statusCode() != 200) {
-            promise.fail(ar.cause().getMessage());
-            return;
-          }
-          JsonObject resultObject = response.bodyAsJsonObject();
-          if (!resultObject.containsKey("totalRecords") || !resultObject.containsKey("users")) {
-            promise.fail("Error, missing field(s) 'totalRecords' and/or 'users' in user response object");
+        if (ar.failed()) {
+          promise.fail(ar.cause().getMessage());
+          return;
+        }
+        HttpResponse<Buffer> response = ar.result();
+        if (response.statusCode() != HttpStatus.HTTP_OK.toInt()) {
+          promise.fail(ar.cause().getMessage());
+          return;
+        }
+        JsonObject resultObject = response.bodyAsJsonObject();
+        if (!resultObject.containsKey("totalRecords") || !resultObject.containsKey("users")) {
+          promise.fail("Error, missing field(s) 'totalRecords' and/or 'users' in user response object");
+        } else {
+          int recordCount = resultObject.getInteger("totalRecords");
+          if (recordCount > 1) {
+            String errorMessage = "Bad results from username";
+            logger.error(errorMessage);
+            promise.fail(errorMessage);
+          } else if (recordCount == 0) {
+            String errorMessage = "No user found by user id :" + userId;
+            logger.error(errorMessage);
+            promise.fail(errorMessage);
           } else {
-            int recordCount = resultObject.getInteger("totalRecords");
-            if (recordCount > 1) {
-              String errorMessage = "Bad results from username";
-              logger.error(errorMessage);
-              promise.fail(errorMessage);
-            } else if (recordCount == 0) {
-              String errorMessage = "No user found by user id :" + userId;
-              logger.error(errorMessage);
-              promise.fail(errorMessage);
-            } else {
-              JsonObject resultUser = resultObject.getJsonArray("users").getJsonObject(0);
-              promise.complete(resultUser);
-            }
+            JsonObject resultUser = resultObject.getJsonArray("users").getJsonObject(0);
+            promise.complete(resultUser);
           }
         }
       });
