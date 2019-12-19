@@ -7,10 +7,7 @@ import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
-import io.vertx.ext.web.client.HttpRequest;
-import io.vertx.ext.web.client.HttpResponse;
-import io.vertx.ext.web.client.WebClient;
-import io.vertx.ext.web.client.WebClientOptions;
+import io.vertx.ext.web.client.*;
 import org.folio.HttpStatus;
 import org.folio.rest.jaxrs.model.Rule;
 import org.folio.rest.jaxrs.model.RuleCollection;
@@ -64,10 +61,8 @@ public class ValidationEngineServiceImpl implements ValidationEngineService {
   }
 
   private void initWebClient(final Vertx vertx) {
-    WebClientOptions options = new WebClientOptions();
-    options.setConnectTimeout(lookupTimeout);
-    options.setIdleTimeout(lookupTimeout);
-    this.webClient = WebClient.create(vertx, options);
+    this.webClient = WebClient.create(vertx,
+      new WebClientOptions().setConnectTimeout(lookupTimeout).setIdleTimeout(lookupTimeout));
   }
 
   /**
