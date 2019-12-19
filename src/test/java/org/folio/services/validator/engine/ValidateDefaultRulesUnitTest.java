@@ -32,10 +32,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.folio.services.validator.util.ValidatorHelper.RESPONSE_ERROR_MESSAGES_KEY;
 import static org.folio.services.validator.util.ValidatorHelper.RESPONSE_VALIDATION_RESULT_KEY;
@@ -200,6 +197,31 @@ public class ValidateDefaultRulesUnitTest {
     rulesList.add(REG_REPEATING_SYMBOLS_RULE);
     rulesList.add(REG_WHITE_SPACE_RULE);
     regExpRuleCollection.setRules(rulesList);
+  }
+
+  @Test
+  public void shouldFailWhenUserResponseFailed(TestContext testContext) {
+    //given
+    String password = "P@sw0rd1";
+    mockRegistryServiceResponse(JsonObject.mapFrom(regExpRuleCollection));
+    JsonObject userResponse = new JsonObject()
+      .put("user", new JsonArray())
+      .put("totalRecords", 1);
+    mockUserModule(HttpStatus.SC_OK, userResponse);
+
+    //expect
+    Handler<AsyncResult<JsonObject>> checkingHandler = testContext.asyncAssertFailure(response -> {
+      String validationResult = response.getMessage();
+      Assert.assertThat(validationResult, Matchers.is("Error, missing field(s) 'totalRecords' and/or 'users' in user response object"));
+    });
+
+    //when
+    validationEngineService.validatePassword(USER_ID_VALUE, password, requestHeaders, checkingHandler);
+
+    JsonObject userResponse1 = new JsonObject()
+      .put("users", new JsonArray())
+      .put("totalRecord", 1);
+    mockUserModule(HttpStatus.SC_OK, userResponse1);
   }
 
   @Test

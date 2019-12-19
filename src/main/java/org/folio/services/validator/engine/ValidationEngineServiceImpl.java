@@ -172,7 +172,7 @@ public class ValidationEngineServiceImpl implements ValidationEngineService {
         }
         HttpResponse<Buffer> response = ar.result();
         if (response.statusCode() != HttpStatus.HTTP_OK.toInt()) {
-          promise.fail(ar.cause().getMessage());
+          promise.fail("Error getting user by user id : " + userId);
           return;
         }
         JsonObject resultObject = response.bodyAsJsonObject();
@@ -185,7 +185,7 @@ public class ValidationEngineServiceImpl implements ValidationEngineService {
             logger.error(errorMessage);
             promise.fail(errorMessage);
           } else if (recordCount == 0) {
-            String errorMessage = "No user found by user id :" + userId;
+            String errorMessage = "No user found by user id : " + userId;
             logger.error(errorMessage);
             promise.fail(errorMessage);
           } else {
