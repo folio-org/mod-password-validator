@@ -200,14 +200,9 @@ public class ValidateDefaultRulesUnitTest {
   }
 
   @Test
-  public void shouldFailWhenUserResponseFailed(TestContext testContext) {
+  public void shouldFailWhenUserResponseIncorrectFormat(TestContext testContext) {
     //given
-    String password = "P@sw0rd1";
     mockRegistryServiceResponse(JsonObject.mapFrom(regExpRuleCollection));
-    JsonObject userResponse = new JsonObject()
-      .put("user", new JsonArray())
-      .put("totalRecords", 1);
-    mockUserModule(HttpStatus.SC_OK, userResponse);
 
     //expect
     Handler<AsyncResult<JsonObject>> checkingHandler = testContext.asyncAssertFailure(response -> {
@@ -215,13 +210,42 @@ public class ValidateDefaultRulesUnitTest {
       Assert.assertThat(validationResult, Matchers.is("Error, missing field(s) 'totalRecords' and/or 'users' in user response object"));
     });
 
-    //when
-    validationEngineService.validatePassword(USER_ID_VALUE, password, requestHeaders, checkingHandler);
+    // case 1 - no "users" in response
+    JsonObject userResponse = new JsonObject()
+      .put("user", new JsonArray())
+      .put("totalRecords", 1);
 
+    mockUserModule(HttpStatus.SC_OK, userResponse);
+
+    //when
+    validationEngineService.validatePassword(USER_ID_VALUE, "P@sw0rd1", requestHeaders, checkingHandler);
+
+    // case 2 - no "totalRecords" in response
     JsonObject userResponse1 = new JsonObject()
       .put("users", new JsonArray())
-      .put("totalRecord", 1);
+      .put("total", 1);
+
     mockUserModule(HttpStatus.SC_OK, userResponse1);
+
+    //when
+    validationEngineService.validatePassword(USER_ID_VALUE, "P@sw0rd1", requestHeaders, checkingHandler);
+  }
+
+  @Test
+  public void shouldFailWhenUserResponseFailed(TestContext testContext) {
+    //given
+    mockRegistryServiceResponse(JsonObject.mapFrom(regExpRuleCollection));
+
+    mockUserModule(HttpStatus.SC_BAD_REQUEST, new JsonObject());
+
+    //expect
+    Handler<AsyncResult<JsonObject>> checkingHandlerBadRequest = testContext.asyncAssertFailure(response -> {
+      String validationResult = response.getMessage();
+      Assert.assertThat(validationResult, Matchers.is("Error getting user by user id : " + USER_ID_VALUE));
+    });
+
+    //when
+    validationEngineService.validatePassword(USER_ID_VALUE, "P@sw0rd1", requestHeaders, checkingHandlerBadRequest);
   }
 
   @Test
@@ -408,7 +432,7 @@ public class ValidateDefaultRulesUnitTest {
 
   private void mockUserModule(int status, JsonObject response) {
     WireMock.stubFor(WireMock.get("/users?query=id==" + USER_ID_VALUE)
-      .willReturn(WireMock.okJson(response.toString())
+      .willReturn(WireMock.status(status).withBody(response.toString())
       ));
   }
 
