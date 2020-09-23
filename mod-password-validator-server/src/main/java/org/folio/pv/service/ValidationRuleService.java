@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -38,8 +37,8 @@ public class ValidationRuleService {
 
   public ValidationRule createOrUpdateValidationRule(ValidationRule validationRule) {
     var rule = validationRuleMapper.mapDtoToEntity(validationRule);
-    if (Objects.isNull(rule.getId())) {
-      if (Objects.isNull(rule.getCreatedDate())) {
+    if (rule.getId() == null) {
+      if (rule.getCreatedDate() == null) {
         rule.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
       }
     } else {

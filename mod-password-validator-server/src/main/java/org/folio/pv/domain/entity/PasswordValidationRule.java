@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.UUID;
 
 @Data
@@ -86,8 +85,8 @@ public class PasswordValidationRule {
     this.setErrMessageId(another.getErrMessageId());
     this.setUpdatedByUserId(another.getUpdatedByUserId());
     this.setUpdatedByUsername(another.getUpdatedByUsername());
-    var updatedDate = another.getUpdatedDate();
-    this.setUpdatedDate(Objects.nonNull(updatedDate) ? updatedDate : Timestamp.valueOf(LocalDateTime.now()));
+    var ud = another.getUpdatedDate();
+    this.setUpdatedDate(ud != null ? ud : Timestamp.valueOf(LocalDateTime.now()));
 
     return this;
   }

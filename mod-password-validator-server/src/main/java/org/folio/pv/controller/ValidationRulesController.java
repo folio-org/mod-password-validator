@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -31,7 +30,7 @@ public class ValidationRulesController implements RulesApi {
   @Override
   public ResponseEntity<ValidationRule> getTenantRuleById(String ruleId) {
     var rule = validationRuleService.getValidationRuleById(ruleId);
-    return Objects.isNull(rule) ? ResponseEntity.notFound().build() : new ResponseEntity<>(rule, HttpStatus.OK);
+    return rule == null ? ResponseEntity.notFound().build() : new ResponseEntity<>(rule, HttpStatus.OK);
   }
 
   @Override

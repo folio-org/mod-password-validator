@@ -11,7 +11,6 @@ import org.mapstruct.Mappings;
 import org.mapstruct.NullValueCheckStrategy;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Mapper(componentModel = "spring", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
@@ -66,6 +65,6 @@ public interface ValidationRuleMapper {
   }
 
   default String uuidToStringSafe(UUID uuid) {
-    return Objects.isNull(uuid) ? uuid.toString() : null;
+    return uuid != null ? uuid.toString() : null;
   }
 }

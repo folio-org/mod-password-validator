@@ -9,7 +9,6 @@ import org.folio.spring.utils.RequestUtils;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import static org.folio.spring.integration.XOkapiHeaders.OKAPI_HEADERS_PREFIX;
 import static org.folio.spring.integration.XOkapiHeaders.TENANT;
@@ -48,12 +47,12 @@ public class DefaultFolioExecutionContextService implements FolioExecutionContex
 
   private FolioExecutionContext getOrCreateFolioExecutionContext() {
     var context = folioExecutionContextThreadLocal.get();
-    return (Objects.nonNull(context)) ? context : createFolioExecutionContextFromRequest();
+    return context != null ? context : createFolioExecutionContextFromRequest();
   }
 
   private FolioExecutionContext createFolioExecutionContextFromRequest() {
     var httpHeadersFromRequest = RequestUtils.getHttpHeadersFromRequest();
-    return Objects.nonNull(httpHeadersFromRequest) ?
+    return httpHeadersFromRequest != null ?
       new DefaultFolioExecutionContext(folioModuleMetadata, httpHeadersFromRequest) : emptyFolioExecutionContext;
   }
 
@@ -81,7 +80,7 @@ public class DefaultFolioExecutionContextService implements FolioExecutionContex
     }
 
     private String retrieveFirstSafe(Collection<String> strings) {
-      return (Objects.nonNull(strings) && !strings.isEmpty()) ? strings.iterator().next() : "";
+      return strings != null && !strings.isEmpty() ? strings.iterator().next() : "";
     }
 
     @Override

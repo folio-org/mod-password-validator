@@ -7,7 +7,6 @@ import org.springframework.jdbc.datasource.DelegatingDataSource;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Objects;
 
 public class DataSourceFolioWrapper extends DelegatingDataSource {
   private final FolioExecutionContextService folioExecutionContextService;
@@ -18,7 +17,7 @@ public class DataSourceFolioWrapper extends DelegatingDataSource {
   }
 
   private Connection prepareConnectionSafe(Connection connection) throws SQLException {
-    if (Objects.nonNull(connection)) {
+    if (connection != null) {
       var folioExecutionContext = folioExecutionContextService.getFolioExecutionContext();
 
       var tenantId = folioExecutionContext.getTenantId();

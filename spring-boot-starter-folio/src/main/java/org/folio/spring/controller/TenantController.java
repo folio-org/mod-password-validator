@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.Objects;
 
 @Slf4j
 @RestController("defaultTenantController")
@@ -35,7 +34,7 @@ public class TenantController implements TenantApi {
 
   @Override
   public ResponseEntity<String> postTenant(@Valid TenantAttributes tenantAttributes) {
-    if (Objects.nonNull(folioSpringLiquibase)) {
+    if (folioSpringLiquibase != null) {
       var folioExecutionContext = contextService.getFolioExecutionContext();
       var tenantId = folioExecutionContext.getTenantId();
 

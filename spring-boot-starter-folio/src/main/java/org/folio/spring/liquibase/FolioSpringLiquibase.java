@@ -18,8 +18,10 @@ public class FolioSpringLiquibase extends SpringLiquibase {
   public void performLiquibaseUpdate() throws LiquibaseException {
     var defaultSchema = getDefaultSchema();
     if (StringUtils.isNotBlank(defaultSchema)) {
-      try (var c = getDataSource().getConnection()) {
-        c.createStatement().execute("create schema if not exists " + defaultSchema + ";");
+      try (var connection = getDataSource().getConnection()) {
+        try (var statement = connection.createStatement()) {
+          statement.execute("create schema if not exists " + defaultSchema + ";");
+        }
       } catch (SQLException e) {
         e.printStackTrace();
         log.error("Default schema " + defaultSchema + " has not been created.", e);

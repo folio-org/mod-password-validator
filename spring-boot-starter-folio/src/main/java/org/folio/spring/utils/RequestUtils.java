@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class RequestUtils {
@@ -25,7 +24,7 @@ public class RequestUtils {
   }
 
   public static Map<String, Collection<String>> getHttpHeadersFromRequest(HttpServletRequest request) {
-    return (Objects.nonNull(request)) ?
+    return request != null ?
       Collections
         .list(request.getHeaderNames())
         .stream()
