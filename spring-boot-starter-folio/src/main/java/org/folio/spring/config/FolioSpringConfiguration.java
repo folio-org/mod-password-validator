@@ -49,16 +49,4 @@ public class FolioSpringConfiguration {
     return new DataSourceSchemaAdvisorBeanPostProcessor(folioExecutionContextService);
   }
 
-//  public static class DefaultTenantControllerConfiguration
-
-//  @Bean
-//  @ConditionalOnMissingBean
-//  @RequestMapping(value = "/_/")
-//  @ResponseBody
-//  public TenantApi defaultTenantController(@Autowired(required = false) FolioSpringLiquibase folioSpringLiquibase,
-//                                           @Autowired FolioExecutionContextService contextService) {
-//    return new TenantController(folioSpringLiquibase, contextService);
-//  }
-
-
 }

@@ -11,6 +11,9 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Objects;
 
+/**
+ * Simple type to support PostgreSQL ENUM types
+ */
 public class PostgreEnumTypeSql implements EnhancedUserType {
   @Override
   public String objectToSQLString(Object value) {

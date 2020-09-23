@@ -22,10 +22,11 @@ public class DefaultFolioExecutionContextService implements FolioExecutionContex
 
   private final FolioModuleMetadata folioModuleMetadata;
 
-  private final FolioExecutionContext emptyFolioExecutionContext = new EmptyFolioExecutionContext();
+  private final FolioExecutionContext emptyFolioExecutionContext;
 
   public DefaultFolioExecutionContextService(FolioModuleMetadata folioModuleMetadata) {
     this.folioModuleMetadata = folioModuleMetadata;
+    emptyFolioExecutionContext = new EmptyFolioExecutionContext(folioModuleMetadata);
   }
 
   @Override
@@ -119,7 +120,12 @@ public class DefaultFolioExecutionContextService implements FolioExecutionContex
     }
   }
 
-  private class EmptyFolioExecutionContext implements FolioExecutionContext {
+  private static class EmptyFolioExecutionContext implements FolioExecutionContext {
+    private final FolioModuleMetadata folioModuleMetadata;
+
+    private EmptyFolioExecutionContext(FolioModuleMetadata folioModuleMetadata) {
+      this.folioModuleMetadata = folioModuleMetadata;
+    }
 
     @Override
     public String getTenantId() {
