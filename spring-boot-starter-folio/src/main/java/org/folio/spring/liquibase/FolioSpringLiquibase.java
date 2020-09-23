@@ -3,7 +3,7 @@ package org.folio.spring.liquibase;
 import liquibase.exception.LiquibaseException;
 import liquibase.integration.spring.SpringLiquibase;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.util.Strings;
+import org.apache.commons.lang3.StringUtils;
 
 import java.sql.SQLException;
 
@@ -17,7 +17,7 @@ public class FolioSpringLiquibase extends SpringLiquibase {
 
   public void performLiquibaseUpdate() throws LiquibaseException {
     var defaultSchema = getDefaultSchema();
-    if (Strings.isNotBlank(defaultSchema)) {
+    if (StringUtils.isNotBlank(defaultSchema)) {
       try (var c = getDataSource().getConnection()) {
         c.createStatement().execute("create schema if not exists " + defaultSchema + ";");
       } catch (SQLException e) {

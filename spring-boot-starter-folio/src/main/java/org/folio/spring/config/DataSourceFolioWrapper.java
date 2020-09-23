@@ -1,6 +1,6 @@
 package org.folio.spring.config;
 
-import org.apache.logging.log4j.util.Strings;
+import org.apache.commons.lang3.StringUtils;
 import org.folio.spring.FolioExecutionContextService;
 import org.springframework.jdbc.datasource.DelegatingDataSource;
 
@@ -22,11 +22,13 @@ public class DataSourceFolioWrapper extends DelegatingDataSource {
       var folioExecutionContext = folioExecutionContextService.getFolioExecutionContext();
 
       var tenantId = folioExecutionContext.getTenantId();
-      connection.prepareStatement(
+      try (var statement = connection.prepareStatement(
         String.format(
           "SET search_path = %s;",
-          Strings.isBlank(tenantId) ? "public" : folioExecutionContext.getFolioModuleMetadata().getDBSchemaName(tenantId) + ", public")
-      ).execute();
+          StringUtils.isBlank(tenantId) ? "public" : folioExecutionContext.getFolioModuleMetadata().getDBSchemaName(tenantId) + ", public")
+      )) {
+        statement.execute();
+      }
 
       return connection;
     }

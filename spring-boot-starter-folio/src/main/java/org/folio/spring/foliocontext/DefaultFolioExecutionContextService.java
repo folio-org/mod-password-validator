@@ -53,11 +53,11 @@ public class DefaultFolioExecutionContextService implements FolioExecutionContex
   private FolioExecutionContext createFolioExecutionContextFromRequest() {
     var httpHeadersFromRequest = RequestUtils.getHttpHeadersFromRequest();
     return Objects.nonNull(httpHeadersFromRequest) ?
-      new DefaultFolioExecutionContext(httpHeadersFromRequest) : emptyFolioExecutionContext;
+      new DefaultFolioExecutionContext(folioModuleMetadata, httpHeadersFromRequest) : emptyFolioExecutionContext;
   }
 
-  private class DefaultFolioExecutionContext implements FolioExecutionContext {
-
+  private static class DefaultFolioExecutionContext implements FolioExecutionContext {
+    private final FolioModuleMetadata folioModuleMetadata;
     private final Map<String, Collection<String>> allHeaders;
     private final Map<String, Collection<String>> okapiHeaders;
 
@@ -66,7 +66,8 @@ public class DefaultFolioExecutionContextService implements FolioExecutionContex
     private final String token;
     private final String userName;
 
-    private DefaultFolioExecutionContext(Map<String, Collection<String>> allHeaders) {
+    private DefaultFolioExecutionContext(FolioModuleMetadata folioModuleMetadata, Map<String, Collection<String>> allHeaders) {
+      this.folioModuleMetadata = folioModuleMetadata;
       this.allHeaders = allHeaders;
       this.okapiHeaders = new HashMap<>(allHeaders);
       this.okapiHeaders.entrySet().removeIf(e -> !e.getKey().toLowerCase().startsWith(OKAPI_HEADERS_PREFIX));
@@ -74,12 +75,12 @@ public class DefaultFolioExecutionContextService implements FolioExecutionContex
       this.tenantId = retrieveFirstSafe(okapiHeaders.get(TENANT));
       this.okapiUrl = retrieveFirstSafe(okapiHeaders.get(URL));
       this.token = retrieveFirstSafe(okapiHeaders.get(TOKEN));
-      this.userName = null; //TODO: retrieve user name
+      //TODO: retrieve user name correctly
+      this.userName = "NO_USER";
     }
 
     private String retrieveFirstSafe(Collection<String> strings) {
       return (Objects.nonNull(strings) && !strings.isEmpty()) ? strings.iterator().next() : "";
-//      return ofNullable(strings).flatMap(s -> s.stream().findFirst()).orElse("");
     }
 
     @Override
