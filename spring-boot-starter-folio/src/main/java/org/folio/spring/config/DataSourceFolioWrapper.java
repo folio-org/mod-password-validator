@@ -7,8 +7,11 @@ import org.springframework.jdbc.datasource.DelegatingDataSource;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.regex.Pattern;
 
 public class DataSourceFolioWrapper extends DelegatingDataSource {
+  private static final Pattern NON_WORD_CHARACTERS = Pattern.compile("[^a-zA-Z0-9_]");
+
   private final FolioExecutionContextService folioExecutionContextService;
 
   public DataSourceFolioWrapper(DataSource targetDataSource, FolioExecutionContextService folioExecutionContextService) {
@@ -20,12 +23,15 @@ public class DataSourceFolioWrapper extends DelegatingDataSource {
     if (connection != null) {
       var folioExecutionContext = folioExecutionContextService.getFolioExecutionContext();
 
+      var schemaName = "public";
       var tenantId = folioExecutionContext.getTenantId();
-      try (var statement = connection.prepareStatement(
-        String.format(
-          "SET search_path = %s;",
-          StringUtils.isBlank(tenantId) ? "public" : folioExecutionContext.getFolioModuleMetadata().getDBSchemaName(tenantId) + ", public")
-      )) {
+      if (StringUtils.isNotBlank(tenantId)) {
+        if (NON_WORD_CHARACTERS.matcher(tenantId).find()) {
+          throw new IllegalArgumentException("Invalid tenant name: " + tenantId);
+        }
+        schemaName = folioExecutionContext.getFolioModuleMetadata().getDBSchemaName(tenantId) + ", public";
+      }
+      try (var statement = connection.prepareStatement(String.format("SET search_path = %s;", schemaName))) {
         statement.execute();
       }
 

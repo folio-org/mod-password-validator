@@ -14,25 +14,31 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan({"org.folio.spring.controller", "org.folio.spring.filter"})
+@ComponentScan({"org.folio.spring.controller", "org.folio.spring.config", "org.folio.spring.filter"})
 public class FolioSpringConfiguration {
 
   @Bean
   @ConditionalOnMissingBean
   public FolioModuleMetadata folioModuleMetadata(@Value("${spring.application.name}") String applicationName) {
-    var schemaSuffix = StringUtils.isNotBlank(applicationName) ? "_" + applicationName.replace('-', '_') : "";
+    var schemaSuffix = StringUtils.isNotBlank(applicationName) ? "_" + applicationName.toLowerCase().replace('-', '_') : "";
     return new FolioModuleMetadata() {
       @Override
       public String getModuleName() {
         return applicationName;
       }
 
+      /**
+       * Schema name MUST in in lowercase
+       *
+       * @param tenantId
+       * @return
+       */
       @Override
       public String getDBSchemaName(String tenantId) {
         if (StringUtils.isBlank(tenantId)) {
           throw new IllegalArgumentException("tenantId can't be null or empty");
         }
-        return tenantId + schemaSuffix;
+        return tenantId.toLowerCase() + schemaSuffix;
       }
     };
   }

@@ -6,9 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.SQLException;
+import java.util.regex.Pattern;
 
 @Slf4j
 public class FolioSpringLiquibase extends SpringLiquibase {
+  private static final Pattern NON_WORD_CHARACTERS = Pattern.compile("[^a-zA-Z0-9_]");
 
   @Override
   public void afterPropertiesSet() {
@@ -18,6 +20,10 @@ public class FolioSpringLiquibase extends SpringLiquibase {
   public void performLiquibaseUpdate() throws LiquibaseException {
     var defaultSchema = getDefaultSchema();
     if (StringUtils.isNotBlank(defaultSchema)) {
+      //DB schema name check to prevent SQL injection.
+      if (NON_WORD_CHARACTERS.matcher(defaultSchema).find()) {
+        throw new IllegalArgumentException("Invalid schema name: " + defaultSchema);
+      }
       try (var connection = getDataSource().getConnection()) {
         try (var statement = connection.createStatement()) {
           statement.execute("create schema if not exists " + defaultSchema + ";");
