@@ -1,12 +1,29 @@
-FROM folioci/alpine-jre-openjdk11:latest
+#--------------------------------------------------------
+# 1. image with extracted application layers
+#--------------------------------------------------------
+FROM adoptopenjdk/openjdk11:alpine-jre as builder
+# should be a single jar file
+ARG JAR_FILE=mod-password-validator-server/target/*.jar
 
-ENV VERTICLE_FILE mod-password-validator-server-fat.jar
+COPY ${JAR_FILE} application.jar
+RUN java -Djarmode=layertools -jar application.jar extract
 
-# Set the location of the verticles
-ENV VERTICLE_HOME /usr/verticles
+#--------------------------------------------------------
+# 2. target image
+#--------------------------------------------------------
+FROM adoptopenjdk/openjdk11:alpine-jre
 
-# Copy your fat jar to the container
-COPY mod-password-validator-server/target/${VERTICLE_FILE} ${VERTICLE_HOME}/${VERTICLE_FILE}
+COPY --from=builder dependencies/ ./
+COPY --from=builder snapshot-dependencies/ ./
+COPY --from=builder spring-boot-loader/ ./
+COPY --from=builder application/ ./
 
 # Expose this port locally in the container.
 EXPOSE 8081
+
+ENV JAVA_OPTS ${JAVA_OPTIONS} \
+        "--spring.datasource.username=${DB_USERNAME}" \
+        "--spring.datasource.password=${DB_PASSWORD}" \
+        "--spring.datasource.url=${DB_URL}"
+
+ENTRYPOINT ["java", "${JAVA_OPTS}", "org.springframework.boot.loader.JarLauncher"]
