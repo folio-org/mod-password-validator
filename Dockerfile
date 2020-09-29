@@ -13,17 +13,20 @@ RUN java -Djarmode=layertools -jar application.jar extract
 #--------------------------------------------------------
 FROM adoptopenjdk/openjdk11:alpine-jre
 
-COPY --from=builder dependencies/ ./
-COPY --from=builder snapshot-dependencies/ ./
-COPY --from=builder spring-boot-loader/ ./
-COPY --from=builder application/ ./
+ENV JAVA_APP_DIR=/opt/folio
+RUN mkdir -p ${JAVA_APP_DIR}
+
+COPY --from=builder dependencies/ ${JAVA_APP_DIR}/
+COPY --from=builder snapshot-dependencies/ ${JAVA_APP_DIR}/
+COPY --from=builder spring-boot-loader/ ${JAVA_APP_DIR}/
+COPY --from=builder application/ ${JAVA_APP_DIR}/
+
+COPY run.sh ${JAVA_APP_DIR}/
+RUN chmod 755 ${JAVA_APP_DIR}/run.sh
 
 # Expose this port locally in the container.
 EXPOSE 8081
 
-ENV JAVA_OPTS ${JAVA_OPTIONS} \
-        "--spring.datasource.username=${DB_USERNAME}" \
-        "--spring.datasource.password=${DB_PASSWORD}" \
-        "--spring.datasource.url=${DB_URL}"
+WORKDIR $JAVA_APP_DIR
 
-ENTRYPOINT ["java", "${JAVA_OPTS}", "org.springframework.boot.loader.JarLauncher"]
+#ENTRYPOINT ["sh", "./run.sh"]
