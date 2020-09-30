@@ -5,8 +5,8 @@ import org.folio.spring.integration.XOkapiHeaders;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.GenericFilterBean;
 
-import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -18,7 +18,7 @@ import java.io.IOException;
 @Component("defaultTenantOkapiHeaderValidationFilter")
 @ConditionalOnMissingBean(name = "tenantOkapiHeaderValidationFilter")
 @ConditionalOnProperty(prefix = "folio.tenant.validation", name = "enabled", matchIfMissing = true)
-public class TenantOkapiHeaderValidationFilter implements Filter {
+public class TenantOkapiHeaderValidationFilter extends GenericFilterBean {
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
     HttpServletRequest req = (HttpServletRequest) request;
