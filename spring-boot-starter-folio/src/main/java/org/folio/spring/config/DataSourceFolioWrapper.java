@@ -1,7 +1,7 @@
 package org.folio.spring.config;
 
 import org.apache.commons.lang3.StringUtils;
-import org.folio.spring.FolioExecutionContextService;
+import org.folio.spring.FolioExecutionContext;
 import org.springframework.jdbc.datasource.DelegatingDataSource;
 
 import javax.sql.DataSource;
@@ -12,16 +12,15 @@ import java.util.regex.Pattern;
 public class DataSourceFolioWrapper extends DelegatingDataSource {
   private static final Pattern NON_WORD_CHARACTERS = Pattern.compile("[^a-zA-Z0-9_]");
 
-  private final FolioExecutionContextService folioExecutionContextService;
+  private final FolioExecutionContext folioExecutionContext;
 
-  public DataSourceFolioWrapper(DataSource targetDataSource, FolioExecutionContextService folioExecutionContextService) {
+  public DataSourceFolioWrapper(DataSource targetDataSource, FolioExecutionContext folioExecutionContext) {
     super(targetDataSource);
-    this.folioExecutionContextService = folioExecutionContextService;
+    this.folioExecutionContext = folioExecutionContext;
   }
 
   private Connection prepareConnectionSafe(Connection connection) throws SQLException {
     if (connection != null) {
-      var folioExecutionContext = folioExecutionContextService.getFolioExecutionContext();
 
       var schemaName = "public";
       var tenantId = folioExecutionContext.getTenantId();

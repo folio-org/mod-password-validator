@@ -1,9 +1,8 @@
 package org.folio.spring.config;
 
 import org.apache.commons.lang3.StringUtils;
-import org.folio.spring.FolioExecutionContextService;
+import org.folio.spring.FolioExecutionContext;
 import org.folio.spring.FolioModuleMetadata;
-import org.folio.spring.foliocontext.DefaultFolioExecutionContextService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,15 +43,9 @@ public class FolioSpringConfiguration {
   }
 
   @Bean
-  @ConditionalOnMissingBean
-  public FolioExecutionContextService folioExecutionContextService(@Autowired FolioModuleMetadata folioModuleMetadata) {
-    return new DefaultFolioExecutionContextService(folioModuleMetadata);
-  }
-
-  @Bean
   @Qualifier("dataSourceSchemaAdvisorBeanPostProcessor")
-  public BeanPostProcessor dataSourceSchemaAdvisorBeanPostProcessor(@Autowired FolioExecutionContextService folioExecutionContextService) {
-    return new DataSourceSchemaAdvisorBeanPostProcessor(folioExecutionContextService);
+  public BeanPostProcessor dataSourceSchemaAdvisorBeanPostProcessor(@Autowired FolioExecutionContext folioExecutionContext) {
+    return new DataSourceSchemaAdvisorBeanPostProcessor(folioExecutionContext);
   }
 
 }

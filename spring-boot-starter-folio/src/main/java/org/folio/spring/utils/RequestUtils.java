@@ -1,5 +1,6 @@
 package org.folio.spring.utils;
 
+import lombok.experimental.UtilityClass;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -9,10 +10,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@UtilityClass
 public class RequestUtils {
-
-  private RequestUtils() {
-  }
 
   public static HttpServletRequest getHttpServletRequest() {
     var requestAttributes = RequestContextHolder.getRequestAttributes();
