@@ -29,6 +29,8 @@
     <mapstruct.version>1.3.1.Final</mapstruct.version>
     <json.version>20200518</json.version>
     <junit-extensions.version>2.4.0</junit-extensions.version>
+    <mockito.version>3.6.28</mockito.version>
+    <wiremock.version>2.27.2</wiremock.version>
     <!-- -->
     <validator-registry.yaml.file>${project.basedir}/src/main/resources/swagger.api/validator-registry.yaml</validator-registry.yaml.file>
     <password-validator.yaml.file>${project.basedir}/src/main/resources/swagger.api/password-validator.yaml</password-validator.yaml.file>
@@ -98,6 +100,19 @@
       <version>${junit-extensions.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-inline</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.tomakehurst</groupId>
+      <artifactId>wiremock-jre8</artifactId>
+      <version>${wiremock.version}</version>
+      <scope>test</scope>
+    </dependency>
+
     <dependency>
       <groupId>ru.yandex.qatools.embed</groupId>
       <artifactId>postgresql-embedded</artifactId>
