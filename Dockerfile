@@ -1,7 +1,5 @@
 FROM folioci/alpine-jre-openjdk11:latest
 
-USER root
-
 # Copy your fat jar to the container
 ENV APP_FILE mod-password-validator-fat.jar
 
