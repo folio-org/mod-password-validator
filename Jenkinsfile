@@ -1,4 +1,3 @@
-@Library ('folio_jenkins_shared_libs@FOLIO-3073-docker-health') _
 
 buildMvn {
   publishModDescriptor = 'yes'
