@@ -33,6 +33,12 @@
     <!-- -->
     <validator-registry.yaml.file>${project.basedir}/src/main/resources/swagger.api/validator-registry.yaml</validator-registry.yaml.file>
     <password-validator.yaml.file>${project.basedir}/src/main/resources/swagger.api/password-validator.yaml</password-validator.yaml.file>
+
+    <sonar.exclusions>
+      src/main/java/org/folio/pv/domain/**,
+      src/main/java/org/folio/pv/repository/**,
+    </sonar.exclusions>
+
   </properties>
 
   <dependencies>

@@ -15,7 +15,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.folio.pv.domain.dto.HashedPasswordUsage;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
@@ -26,13 +26,14 @@ import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ReflectionUtils;
 
+import org.folio.pv.domain.dto.HashedPasswordUsage;
+
 public class HashedPasswordUsageCollectionConverter<T extends Collection<HashedPasswordUsage>>
     extends AbstractGenericHttpMessageConverter<T> {
 
   private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
   private final Pattern usagePattern = Pattern.compile("\\s*([0-9a-fA-F]+)\\s*:\\s*(\\d+)\\s*");
-
 
   public HashedPasswordUsageCollectionConverter() {
     super(MediaType.TEXT_PLAIN);
@@ -116,8 +117,7 @@ public class HashedPasswordUsageCollectionConverter<T extends Collection<HashedP
   }
 
   @Override
-  protected T readInternal(Class<? extends T> clazz,
-      HttpInputMessage inputMessage) throws HttpMessageNotReadableException {
+  protected T readInternal(Class<? extends T> clazz, HttpInputMessage inputMessage) throws HttpMessageNotReadableException {
     throw new UnsupportedOperationException();
   }
 
@@ -126,21 +126,12 @@ public class HashedPasswordUsageCollectionConverter<T extends Collection<HashedP
 
     if (m.matches()) {
       String suffix = m.group(1);
-
-      int usageCount;
-      try {
-        usageCount = Integer.parseInt(m.group(2));
-      } catch (NumberFormatException e) {
-        throw new HttpMessageNotReadableException(
-            "[line:" + lineNumber + "] Invalid usage number value: " + m.group(2),
-            e, inputMessage);
-      }
-
+      int usageCount = Integer.parseInt(m.group(2));
       return new HashedPasswordUsage(suffix, usageCount);
     } else {
       throw new HttpMessageNotReadableException(
-          "[line:" + lineNumber + "] Invalid format of the line: '" + line + "'",
-          inputMessage);
+        "[line:" + lineNumber + "] Invalid format of the line: '" + line + "'",
+        inputMessage);
     }
   }
 
