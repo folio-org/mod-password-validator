@@ -83,8 +83,9 @@ class HashedPasswordUsageCollectionConverterTest {
 
     var converter = new HashedPasswordUsageCollectionConverter<LinkedHashSet<HashedPasswordUsage>>();
 
+    var parameterizedSetType = getParameterizedSetType();
     var exception = Assertions.assertThrows(HttpMessageNotReadableException.class,
-      () -> converter.read(getParameterizedSetType(), null, inputMessage));
+      () -> converter.read(parameterizedSetType, null, inputMessage));
     assertThat(exception).hasMessageContaining("Invalid format of the line");
   }
 

@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.ArgumentMatchers.contains;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -103,7 +102,7 @@ class ValidationRuleServiceImplTest {
     OffsetRequest offsetReq = new OffsetRequest(offset, limit);
     Page<PasswordValidationRule> rulePage = new PageImpl<>(rules);
 
-    when(repository.findAll(eq(offsetReq))).thenReturn(rulePage);
+    when(repository.findAll(offsetReq)).thenReturn(rulePage);
     when(mapper.mapEntitiesToValidationRuleCollection(rulePage)).thenReturn(ruleCollection);
 
     ValidationRuleCollection result = service.getValidationRules(offset, limit, orderBy);
@@ -226,8 +225,8 @@ class ValidationRuleServiceImplTest {
     }
 
     private void mockValidator(Password password, String userName, ValidationErrors errors) {
-      when(validator.validate(eq(password.getPassword()), eq(new UserData(password.getUserId(), userName))))
-          .thenReturn(errors);
+      when(validator.validate(password.getPassword(), new UserData(password.getUserId(), userName)))
+        .thenReturn(errors);
     }
 
     private void mockValidatorByRule(PasswordValidationRule enabledRule) {

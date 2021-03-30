@@ -1,5 +1,7 @@
 package org.folio.pv.api;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import static org.folio.pv.testutils.APITestUtils.TENANT_ID;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
@@ -11,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -57,6 +60,11 @@ class BaseApiTest {
   @AfterEach
   void afterEach() {
     this.wireMockServer.resetAll();
+  }
+
+  @Test
+  public void contextLoads() {
+    assertThat(metadata).isNotNull();
   }
 
   protected Response verifyGet(String path, int code) {
