@@ -63,7 +63,7 @@ class BaseApiTest {
   }
 
   @Test
-  public void contextLoads() {
+  void contextLoads() {
     assertThat(metadata).isNotNull();
   }
 
