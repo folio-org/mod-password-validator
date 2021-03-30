@@ -9,6 +9,7 @@ import static org.folio.pv.testutils.APITestUtils.rulePath;
 import static org.folio.pv.testutils.APITestUtils.rulesPath;
 import static org.folio.pv.testutils.DBTestUtils.getValidationRuleById;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -25,13 +26,22 @@ class ValidationRulesControllerApiTest extends BaseApiTest {
     assertThat(ruleCollection)
       .hasFieldOrPropertyWithValue("totalRecords", 11)
       .extracting(ValidationRuleCollection::getRules)
-      .satisfies(validationRules -> {
-        assertThat(validationRules)
-          .hasSize(11)
-          .flatExtracting(ValidationRule::getName)
-          .startsWith("no_consecutive_whitespaces")
-          .endsWith("alphabetical_letters");
-      });
+      .satisfies(validationRules -> assertThat(validationRules)
+        .hasSize(11)
+        .flatExtracting(ValidationRule::getName)
+        .containsAll(List.of(
+          "no_consecutive_whitespaces",
+          "no_repeatable_password",
+          "special_character",
+          "no_user_name",
+          "numeric_symbol",
+          "password_length",
+          "no_white_space_character",
+          "keyboard_sequence",
+          "repeating_characters",
+          "alphabetical_letters",
+          "not_compromised"
+        )));
   }
 
   @Test
