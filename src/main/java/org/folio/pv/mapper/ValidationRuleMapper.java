@@ -56,7 +56,8 @@ public interface ValidationRuleMapper {
   List<PasswordValidationRule> mapDtosToEntities(List<ValidationRule> validationRuleList);
 
   default ValidationRuleCollection mapEntitiesToValidationRuleCollection(Iterable<PasswordValidationRule> passwordValidationRuleList) {
-    return new ValidationRuleCollection().rules(mapEntitiesToDtos(passwordValidationRuleList));
+    var rules = mapEntitiesToDtos(passwordValidationRuleList);
+    return new ValidationRuleCollection().rules(rules).totalRecords(rules.size());
   }
 
   default UUID stringToUUIDSafe(String uuid) {

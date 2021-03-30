@@ -27,12 +27,17 @@
     <openapi-generator.version>4.3.1</openapi-generator.version>
     <mapstruct.version>1.3.1.Final</mapstruct.version>
     <json.version>20200518</json.version>
+
+    <validator-registry.yaml.file>${project.basedir}/src/main/resources/swagger.api/validator-registry.yaml</validator-registry.yaml.file>
+    <password-validator.yaml.file>${project.basedir}/src/main/resources/swagger.api/password-validator.yaml</password-validator.yaml.file>
+
+    <!-- Test Properties-->
     <junit-extensions.version>2.4.0</junit-extensions.version>
     <mockito.version>3.6.28</mockito.version>
     <wiremock.version>2.27.2</wiremock.version>
-    <!-- -->
-    <validator-registry.yaml.file>${project.basedir}/src/main/resources/swagger.api/validator-registry.yaml</validator-registry.yaml.file>
-    <password-validator.yaml.file>${project.basedir}/src/main/resources/swagger.api/password-validator.yaml</password-validator.yaml.file>
+    <rest-assured.version>4.3.3</rest-assured.version>
+    <embedded-postgresql.version>1.6.2</embedded-postgresql.version>
+    <groovy.version>3.0.7</groovy.version>
 
     <sonar.exclusions>
       src/main/java/org/folio/pv/domain/**,
@@ -117,11 +122,21 @@
       <version>${wiremock.version}</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
-      <groupId>ru.yandex.qatools.embed</groupId>
-      <artifactId>postgresql-embedded</artifactId>
-      <version>2.10</version>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <version>${rest-assured.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.zonky.test</groupId>
+      <artifactId>embedded-database-spring-test</artifactId>
+      <version>${embedded-postgresql.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.module</groupId>
+      <artifactId>jackson-module-jaxb-annotations</artifactId>
       <scope>test</scope>
     </dependency>
 
