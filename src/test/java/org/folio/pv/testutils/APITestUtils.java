@@ -2,6 +2,7 @@ package org.folio.pv.testutils;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 
 import java.net.URISyntaxException;
@@ -43,11 +44,17 @@ public class APITestUtils {
   }
 
 
-  public static void mockGet(String url, String body, int status, WireMockServer mockServer) {
+  public static void mockGet(String url, String body, int status, String contentType, WireMockServer mockServer) {
     mockServer.stubFor(get(urlMatching(url))
+      .willReturn(aResponse().withBody(body)
+        .withHeader(HttpHeaders.CONTENT_TYPE, contentType)
+        .withStatus(status)));
+  }
+
+  public static void mockPost(String url, String body, int status, WireMockServer mockServer) {
+    mockServer.stubFor(post(urlMatching(url))
       .willReturn(aResponse().withBody(body)
         .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .withStatus(status)));
   }
-
 }

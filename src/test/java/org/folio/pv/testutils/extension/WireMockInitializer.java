@@ -23,7 +23,9 @@ public class WireMockInitializer implements ApplicationContextInitializer<Config
     });
 
     TestPropertyValues
-      .of("x-okapi-url:http://localhost:" + wireMockServer.port())
+      .of("x-okapi-url:http://localhost:" + wireMockServer.port(),
+        "pwned-passwords.client.url:http://localhost:" + wireMockServer.port()
+      )
       .applyTo(configurableApplicationContext);
   }
 }
