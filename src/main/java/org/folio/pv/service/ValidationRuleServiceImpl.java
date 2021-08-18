@@ -5,11 +5,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.folio.pv.service.exception.FieldNotProvidedException;
+import org.folio.pv.service.exception.UserNotFoundException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
@@ -75,6 +78,7 @@ public class ValidationRuleServiceImpl implements ValidationRuleService {
 
   @Override
   public ValidationResult validatePasswordByRules(final Password passwordContainer) {
+    validatePasswordContainer(passwordContainer);
     var userName = getUserNameByUserId(passwordContainer.getUserId());
     var userData = new UserData(passwordContainer.getUserId(), userName);
 
@@ -109,6 +113,15 @@ public class ValidationRuleServiceImpl implements ValidationRuleService {
     return validationResult;
   }
 
+  private void validatePasswordContainer(Password passwordContainer) {
+    if (Objects.isNull(passwordContainer.getUserId())) {
+      throw new FieldNotProvidedException("User Id");
+    }
+    if (Objects.isNull(passwordContainer.getPassword())) {
+      throw new FieldNotProvidedException("Password");
+    }
+  }
+
   private String ruleBriefDescription(PasswordValidationRule rule) {
     return new ToStringBuilder(rule)
         .append("id", rule.getId())
@@ -124,7 +137,7 @@ public class ValidationRuleServiceImpl implements ValidationRuleService {
 
     var totalRecords = userContainer.getInt("totalRecords");
     if (totalRecords == 0) {
-      throw new RuntimeException("User is not found: id = " + userId);
+      throw new UserNotFoundException(userId);
     }
     JSONObject user = (JSONObject) userContainer.getJSONArray("users").get(0);
     return user.getString("username");
