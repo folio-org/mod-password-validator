@@ -105,6 +105,10 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+    <dependency>
       <groupId>io.github.glytching</groupId>
       <artifactId>junit-extensions</artifactId>
       <version>${junit-extensions.version}</version>

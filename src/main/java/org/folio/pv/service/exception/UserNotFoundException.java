@@ -1,13 +1,16 @@
 package org.folio.pv.service.exception;
 
-import org.springframework.http.HttpStatus;
+public class UserNotFoundException extends RuntimeException {
 
-public class UserNotFoundException extends RuntimeHttpException {
-
-  private static final String MESSAGE = "User is not found: id = ";
-  private static final HttpStatus STATUS_CODE = HttpStatus.NOT_FOUND;
+  private static final String MESSAGE = "User with given id not found";
+  private final String userId;
 
   public UserNotFoundException(String userId) {
-    super(MESSAGE + userId, STATUS_CODE);
+    super(MESSAGE);
+    this.userId = userId;
+  }
+
+  public String getUserId() {
+    return userId;
   }
 }

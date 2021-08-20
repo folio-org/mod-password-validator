@@ -1,8 +1,6 @@
 package org.folio.pv.api;
 
-import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
-import static org.apache.http.HttpStatus.SC_NOT_FOUND;
-import static org.apache.http.HttpStatus.SC_OK;
+import static org.apache.http.HttpStatus.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -15,6 +13,8 @@ import static org.folio.pv.testutils.APITestUtils.mockPost;
 
 import java.util.UUID;
 
+import org.folio.pv.domain.dto.Error;
+import org.folio.pv.domain.dto.Errors;
 import org.junit.jupiter.api.Test;
 
 import org.folio.pv.domain.dto.Password;
@@ -53,36 +53,35 @@ class PasswordValidatorControllerApiTest extends BaseApiTest {
   @Test
   void validateInvalid_ifUserNotFound() {
     Password password = new Password().password("test-password").userId(UUID.randomUUID().toString());
-    String expectedErrorMessage = String.format("User is not found: id = %s", password.getUserId());
+    String expectedErrorMessage = "User with given id not found";
 
     mockGet("/users.*", "{\"totalRecords\":0}", SC_OK,
       APPLICATION_JSON_VALUE, wireMockServer
     );
-    ValidationResult validationResult = verifyPost(PASSWORD_VALIDATE_PATH, password, SC_NOT_FOUND).as(ValidationResult.class);
+    Error error = verifyPost(PASSWORD_VALIDATE_PATH, password, SC_NOT_FOUND).as(Error.class);
 
-    assertEquals("invalid", validationResult.getResult());
-    assertTrue(validationResult.getMessages().contains(expectedErrorMessage));
+    assertEquals(expectedErrorMessage, error.getMessage());
   }
 
   @Test
   void validateInvalid_ifUserIdNotProvided() {
     Password password = new Password().password("test-password");
-    String expectedErrorMessage = "User Id is not provided";
+    String expectedErrorMessage = "userId must not be null";
 
-    ValidationResult validationResult = verifyPost(PASSWORD_VALIDATE_PATH, password, SC_BAD_REQUEST).as(ValidationResult.class);
+    Errors errors = verifyPost(PASSWORD_VALIDATE_PATH, password, SC_UNPROCESSABLE_ENTITY).as(Errors.class);
+    Error error = errors.getErrors().get(0);
 
-    assertEquals("invalid", validationResult.getResult());
-    assertTrue(validationResult.getMessages().contains(expectedErrorMessage));
+    assertEquals(expectedErrorMessage, error.getMessage());
   }
 
   @Test
   void validateInvalid_ifPasswordNotProvided() {
     Password password = new Password().userId(UUID.randomUUID().toString());
-    String expectedErrorMessage = "Password is not provided";
+    String expectedErrorMessage = "password must not be null";
 
-    ValidationResult validationResult = verifyPost(PASSWORD_VALIDATE_PATH, password, SC_BAD_REQUEST).as(ValidationResult.class);
+    Errors errors = verifyPost(PASSWORD_VALIDATE_PATH, password, SC_UNPROCESSABLE_ENTITY).as(Errors.class);
+    Error error = errors.getErrors().get(0);
 
-    assertEquals("invalid", validationResult.getResult());
-    assertTrue(validationResult.getMessages().contains(expectedErrorMessage));
+    assertEquals(expectedErrorMessage, error.getMessage());
   }
 }

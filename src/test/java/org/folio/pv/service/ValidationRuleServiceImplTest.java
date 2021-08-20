@@ -16,6 +16,7 @@ import java.util.UUID;
 
 import io.github.glytching.junit.extension.random.Random;
 import io.github.glytching.junit.extension.random.RandomBeansExtension;
+import org.folio.pv.service.exception.UserNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -77,7 +78,7 @@ class ValidationRuleServiceImplTest {
   @Test
   void shouldReturnValidationRuleById(@Random UUID ruleId, @Random PasswordValidationRule rule,
       @Random ValidationRule ruleDto) {
-    
+
     when(repository.findById(ruleId)).thenReturn(Optional.of(rule));
     when(mapper.mapEntityToDto(rule)).thenReturn(ruleDto);
 
@@ -129,7 +130,7 @@ class ValidationRuleServiceImplTest {
   void shouldCreateValidationRule(@Random ValidationRule ruleDto, @Random PasswordValidationRule rule) {
     rule.setId(null);
     rule.setCreatedDate(null);
-    
+
     when(mapper.mapDtoToEntity(ruleDto)).thenReturn(rule);
     when(repository.save(rule)).thenReturn(rule);
     when(mapper.mapEntityToDto(rule)).thenReturn(ruleDto);
@@ -173,12 +174,12 @@ class ValidationRuleServiceImplTest {
       String userId = password.getUserId();
       when(userClient.getUserByQuery(contains(userId))).thenReturn("{\"totalRecords\": 0}");
 
-      Exception exc = Assertions.assertThrows(RuntimeException.class,
+      UserNotFoundException exc = Assertions.assertThrows(UserNotFoundException.class,
           () -> service.validatePasswordByRules(password));
 
       assertAll(
           () -> assertThat(exc.getMessage()).containsIgnoringCase("not found"),
-          () -> assertThat(exc.getMessage()).contains(userId));
+          () -> assertEquals(userId, exc.getUserId()));
     }
 
     @Test

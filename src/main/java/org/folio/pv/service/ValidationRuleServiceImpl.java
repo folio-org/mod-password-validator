@@ -5,13 +5,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.folio.pv.service.exception.FieldNotProvidedException;
 import org.folio.pv.service.exception.UserNotFoundException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -78,7 +76,6 @@ public class ValidationRuleServiceImpl implements ValidationRuleService {
 
   @Override
   public ValidationResult validatePasswordByRules(final Password passwordContainer) {
-    validatePasswordContainer(passwordContainer);
     var userName = getUserNameByUserId(passwordContainer.getUserId());
     var userData = new UserData(passwordContainer.getUserId(), userName);
 
@@ -111,15 +108,6 @@ public class ValidationRuleServiceImpl implements ValidationRuleService {
     log.info("Validation result: {}", validationResult);
 
     return validationResult;
-  }
-
-  private void validatePasswordContainer(Password passwordContainer) {
-    if (Objects.isNull(passwordContainer.getUserId())) {
-      throw new FieldNotProvidedException("User Id");
-    }
-    if (Objects.isNull(passwordContainer.getPassword())) {
-      throw new FieldNotProvidedException("Password");
-    }
   }
 
   private String ruleBriefDescription(PasswordValidationRule rule) {
