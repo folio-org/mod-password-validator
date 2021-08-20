@@ -1,9 +1,10 @@
 package org.folio.pv.api;
 
-import static org.apache.http.HttpStatus.*;
+import static org.apache.http.HttpStatus.SC_NOT_FOUND;
+import static org.apache.http.HttpStatus.SC_OK;
+import static org.apache.http.HttpStatus.SC_UNPROCESSABLE_ENTITY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
@@ -13,10 +14,10 @@ import static org.folio.pv.testutils.APITestUtils.mockPost;
 
 import java.util.UUID;
 
-import org.folio.pv.domain.dto.Error;
-import org.folio.pv.domain.dto.Errors;
 import org.junit.jupiter.api.Test;
 
+import org.folio.pv.domain.dto.Error;
+import org.folio.pv.domain.dto.Errors;
 import org.folio.pv.domain.dto.Password;
 import org.folio.pv.domain.dto.ValidationResult;
 

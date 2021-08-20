@@ -1,9 +1,8 @@
 package org.folio.pv.controller;
 
-import org.folio.pv.domain.dto.Error;
-import org.folio.pv.domain.dto.Errors;
-import org.folio.pv.domain.dto.Parameter;
-import org.folio.pv.service.exception.UserNotFoundException;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,18 +10,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import org.folio.pv.domain.dto.Error;
+import org.folio.pv.domain.dto.Errors;
+import org.folio.pv.domain.dto.Parameter;
+import org.folio.pv.service.exception.UserNotFoundException;
 
 @ControllerAdvice
 public class ErrorHandlingController {
-  private static final String NOT_FOUND_TYPE = "Not found";
-  private static final String MISSING_FIELD_TYPE = "Field is missing";
-  private static final String NOT_FOUND_CODE = "404";
-  private static final String UNPROCESSABLE_ENTITY_CODE = "422";
-
   private static final String USER_ID_FIELD = "userId";
-
 
   @ResponseBody
   @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
@@ -36,8 +31,7 @@ public class ErrorHandlingController {
 
         return new Error().message(error.getField() + ' ' + error.getDefaultMessage())
           .addParametersItem(parameter)
-          .type(MISSING_FIELD_TYPE)
-          .code(UNPROCESSABLE_ENTITY_CODE);
+          .type("-1");
       })
       .collect(Collectors.toList());
 
@@ -53,8 +47,7 @@ public class ErrorHandlingController {
       .value(exception.getUserId());
 
     return new Error().message(exception.getMessage())
-      .type(NOT_FOUND_TYPE)
-      .code(NOT_FOUND_CODE)
+      .type("-2")
       .addParametersItem(parameter);
   }
 }

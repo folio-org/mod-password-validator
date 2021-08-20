@@ -14,6 +14,7 @@ import org.folio.pv.domain.dto.ValidationResult;
 import org.folio.pv.rest.resource.PasswordApi;
 import org.folio.pv.service.ValidationRuleService;
 
+
 @Log4j2
 @RestController
 @RequestMapping(value = "/")
