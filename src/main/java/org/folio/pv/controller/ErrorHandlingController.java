@@ -18,6 +18,8 @@ import org.folio.pv.service.exception.UserNotFoundException;
 @ControllerAdvice
 public class ErrorHandlingController {
   private static final String USER_ID_FIELD = "userId";
+  private static final String INTERNAL_ERROR_TYPE = "-1";
+  private static final String FOLIO_EXTERNAL_OR_UNDEFINED_ERROR_TYPE = "-2";
 
   @ResponseBody
   @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
@@ -31,7 +33,7 @@ public class ErrorHandlingController {
 
         return new Error().message(error.getField() + ' ' + error.getDefaultMessage())
           .addParametersItem(parameter)
-          .type("-1");
+          .type(INTERNAL_ERROR_TYPE);
       })
       .collect(Collectors.toList());
 
@@ -47,7 +49,7 @@ public class ErrorHandlingController {
       .value(exception.getUserId());
 
     return new Error().message(exception.getMessage())
-      .type("-2")
+      .type(FOLIO_EXTERNAL_OR_UNDEFINED_ERROR_TYPE)
       .addParametersItem(parameter);
   }
 }
