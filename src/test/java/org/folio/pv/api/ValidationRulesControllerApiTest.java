@@ -65,6 +65,7 @@ class ValidationRulesControllerApiTest extends BaseApiTest {
       .type(ValidationRule.TypeEnum.REGEXP)
       .validationType(ValidationRule.ValidationTypeEnum.SOFT)
       .state(ValidationRule.StateEnum.DISABLED)
+      .moduleName("test")
       .orderNo(orderNo)
       .errMessageId(errMessageId)
       .expression(expression);

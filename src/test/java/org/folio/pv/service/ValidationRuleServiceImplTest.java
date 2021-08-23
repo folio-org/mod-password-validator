@@ -34,14 +34,15 @@ import org.folio.pv.client.UserClient;
 import org.folio.pv.domain.RuleState;
 import org.folio.pv.domain.ValidationType;
 import org.folio.pv.domain.dto.Password;
+import org.folio.pv.domain.dto.UserData;
+import org.folio.pv.domain.dto.ValidationErrors;
 import org.folio.pv.domain.dto.ValidationResult;
 import org.folio.pv.domain.dto.ValidationRule;
 import org.folio.pv.domain.dto.ValidationRuleCollection;
 import org.folio.pv.domain.entity.PasswordValidationRule;
 import org.folio.pv.mapper.ValidationRuleMapper;
 import org.folio.pv.repository.ValidationRuleRepository;
-import org.folio.pv.domain.dto.UserData;
-import org.folio.pv.domain.dto.ValidationErrors;
+import org.folio.pv.service.exception.UserNotFoundException;
 import org.folio.pv.service.validator.Validator;
 import org.folio.pv.service.validator.ValidatorRegistry;
 import org.folio.spring.data.OffsetRequest;
@@ -77,7 +78,7 @@ class ValidationRuleServiceImplTest {
   @Test
   void shouldReturnValidationRuleById(@Random UUID ruleId, @Random PasswordValidationRule rule,
       @Random ValidationRule ruleDto) {
-    
+
     when(repository.findById(ruleId)).thenReturn(Optional.of(rule));
     when(mapper.mapEntityToDto(rule)).thenReturn(ruleDto);
 
@@ -129,7 +130,7 @@ class ValidationRuleServiceImplTest {
   void shouldCreateValidationRule(@Random ValidationRule ruleDto, @Random PasswordValidationRule rule) {
     rule.setId(null);
     rule.setCreatedDate(null);
-    
+
     when(mapper.mapDtoToEntity(ruleDto)).thenReturn(rule);
     when(repository.save(rule)).thenReturn(rule);
     when(mapper.mapEntityToDto(rule)).thenReturn(ruleDto);
@@ -173,12 +174,12 @@ class ValidationRuleServiceImplTest {
       String userId = password.getUserId();
       when(userClient.getUserByQuery(contains(userId))).thenReturn("{\"totalRecords\": 0}");
 
-      Exception exc = Assertions.assertThrows(RuntimeException.class,
+      UserNotFoundException exc = Assertions.assertThrows(UserNotFoundException.class,
           () -> service.validatePasswordByRules(password));
 
       assertAll(
           () -> assertThat(exc.getMessage()).containsIgnoringCase("not found"),
-          () -> assertThat(exc.getMessage()).contains(userId));
+          () -> assertEquals(userId, exc.getUserId()));
     }
 
     @Test

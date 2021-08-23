@@ -1,7 +1,10 @@
 package org.folio.pv.api;
 
+import static org.apache.http.HttpStatus.SC_NOT_FOUND;
 import static org.apache.http.HttpStatus.SC_OK;
+import static org.apache.http.HttpStatus.SC_UNPROCESSABLE_ENTITY;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
@@ -13,6 +16,8 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
+import org.folio.pv.domain.dto.Error;
+import org.folio.pv.domain.dto.Errors;
 import org.folio.pv.domain.dto.Password;
 import org.folio.pv.domain.dto.ValidationResult;
 
@@ -44,5 +49,40 @@ class PasswordValidatorControllerApiTest extends BaseApiTest {
 
     assertThat(validationResult)
       .hasFieldOrPropertyWithValue("result", "valid");
+  }
+
+  @Test
+  void validateInvalid_ifUserNotFound() {
+    Password password = new Password().password("test-password").userId(UUID.randomUUID().toString());
+    String expectedErrorMessage = "User with given id not found";
+
+    mockGet("/users.*", "{\"totalRecords\":0}", SC_OK,
+      APPLICATION_JSON_VALUE, wireMockServer
+    );
+    Error error = verifyPost(PASSWORD_VALIDATE_PATH, password, SC_NOT_FOUND).as(Error.class);
+
+    assertEquals(expectedErrorMessage, error.getMessage());
+  }
+
+  @Test
+  void validateInvalid_ifUserIdNotProvided() {
+    Password password = new Password().password("test-password");
+    String expectedErrorMessage = "userId must not be null";
+
+    Errors errors = verifyPost(PASSWORD_VALIDATE_PATH, password, SC_UNPROCESSABLE_ENTITY).as(Errors.class);
+    Error error = errors.getErrors().get(0);
+
+    assertEquals(expectedErrorMessage, error.getMessage());
+  }
+
+  @Test
+  void validateInvalid_ifPasswordNotProvided() {
+    Password password = new Password().userId(UUID.randomUUID().toString());
+    String expectedErrorMessage = "password must not be null";
+
+    Errors errors = verifyPost(PASSWORD_VALIDATE_PATH, password, SC_UNPROCESSABLE_ENTITY).as(Errors.class);
+    Error error = errors.getErrors().get(0);
+
+    assertEquals(expectedErrorMessage, error.getMessage());
   }
 }

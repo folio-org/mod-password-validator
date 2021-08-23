@@ -17,13 +17,14 @@ import org.folio.pv.client.UserClient;
 import org.folio.pv.domain.RuleState;
 import org.folio.pv.domain.ValidationType;
 import org.folio.pv.domain.dto.Password;
+import org.folio.pv.domain.dto.UserData;
 import org.folio.pv.domain.dto.ValidationResult;
 import org.folio.pv.domain.dto.ValidationRule;
 import org.folio.pv.domain.dto.ValidationRuleCollection;
 import org.folio.pv.domain.entity.PasswordValidationRule;
 import org.folio.pv.mapper.ValidationRuleMapper;
 import org.folio.pv.repository.ValidationRuleRepository;
-import org.folio.pv.domain.dto.UserData;
+import org.folio.pv.service.exception.UserNotFoundException;
 import org.folio.pv.service.validator.ValidatorRegistry;
 import org.folio.spring.data.OffsetRequest;
 
@@ -124,7 +125,7 @@ public class ValidationRuleServiceImpl implements ValidationRuleService {
 
     var totalRecords = userContainer.getInt("totalRecords");
     if (totalRecords == 0) {
-      throw new RuntimeException("User is not found: id = " + userId);
+      throw new UserNotFoundException(userId);
     }
     JSONObject user = (JSONObject) userContainer.getJSONArray("users").get(0);
     return user.getString("username");
