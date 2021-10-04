@@ -1,8 +1,13 @@
+## 2021-10-04 v2.2.0
+ * MODPWD-69 Remove raml-util and update Jenkinsfile
+ * MODPWD-71: Update rule documentation in README.md
+ * MODPWD-72: Improve exceptions handling
+
 ## 2021-06-09 v2.1.0
-* MODPWD-64 Cleanup database from unused tables and functions
+ * MODPWD-64 Cleanup database from unused tables and functions
 
 ## 2021-05-21 v2.0.2
-* MODPWD-65 Fix exposing env variables during startup
+ * MODPWD-65 Fix exposing env variables during startup
 
 ## 2021-03-25 v2.0.1
  * FOLSPRINGB-2 Reinstate "USER folio" in Dockerfile
