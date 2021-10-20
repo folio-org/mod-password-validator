@@ -57,18 +57,4 @@ public class ErrorHandlingController {
       .addParametersItem(parameter);
   }
 
-  @ResponseBody
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  @ExceptionHandler({FeignException.NotFound.class})
-  public Error handleException(FeignException.NotFound exception) {
-    var errorMessage = exception.responseBody()
-      .map(byteBuffer -> new String(byteBuffer.array(), UTF_8))
-      .orElse("User with given id not found");
-    Parameter parameter = new Parameter()
-      .key(USER_ID_FIELD);
-
-    return new Error().message(errorMessage)
-      .type(FOLIO_EXTERNAL_OR_UNDEFINED_ERROR_TYPE)
-      .addParametersItem(parameter);
-  }
 }

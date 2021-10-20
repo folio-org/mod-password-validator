@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -119,9 +120,13 @@ public class ValidationRuleServiceImpl implements ValidationRuleService {
   }
 
   private String getUserNameByUserId(String userId) {
-    return userClient.getUserById(userId)
-      .map(UserClient.UserDto::getUsername)
-      .orElseThrow(() -> new UserNotFoundException(userId));
+    try {
+      return userClient.getUserById(userId)
+        .map(UserClient.UserDto::getUsername)
+        .orElseThrow(() -> new UserNotFoundException(userId));
+    } catch (FeignException.NotFound e) {
+      throw new UserNotFoundException(userId);
+    }
   }
 
 }
