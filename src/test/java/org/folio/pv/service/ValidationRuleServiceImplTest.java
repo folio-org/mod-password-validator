@@ -48,7 +48,7 @@ import org.folio.pv.service.validator.ValidatorRegistry;
 import org.folio.spring.data.OffsetRequest;
 
 @ExtendWith({
-    RandomBeansExtension.class
+  RandomBeansExtension.class
 })
 @ExtendWith(SpringExtension.class)
 class ValidationRuleServiceImplTest {
@@ -65,19 +65,9 @@ class ValidationRuleServiceImplTest {
   @Autowired
   private ValidationRuleService service;
 
-  @TestConfiguration
-  static class Config {
-
-    @Bean
-    public ValidationRuleService employeeService(ValidationRuleMapper mapper, ValidationRuleRepository repository,
-        UserClient userClient, ValidatorRegistry validationRegistry) {
-      return new ValidationRuleServiceImpl(mapper, repository, userClient, validationRegistry);
-    }
-  }
-
   @Test
   void shouldReturnValidationRuleById(@Random UUID ruleId, @Random PasswordValidationRule rule,
-      @Random ValidationRule ruleDto) {
+                                      @Random ValidationRule ruleDto) {
 
     when(repository.findById(ruleId)).thenReturn(Optional.of(rule));
     when(mapper.mapEntityToDto(rule)).thenReturn(ruleDto);
@@ -98,15 +88,18 @@ class ValidationRuleServiceImplTest {
 
   @Test
   void shouldReturnValidationRules(@Random Integer offset, @Random Integer limit, @Random String orderBy,
-      @Random List<PasswordValidationRule> rules, @Random ValidationRuleCollection ruleCollection) {
+                                   @Random List<PasswordValidationRule> rules,
+                                   @Random ValidationRuleCollection ruleCollection) {
 
-    OffsetRequest offsetReq = new OffsetRequest(offset, limit);
+    int o = Math.abs(offset);
+    int l = Math.abs(limit);
+    OffsetRequest offsetReq = new OffsetRequest(o, l);
     Page<PasswordValidationRule> rulePage = new PageImpl<>(rules);
 
     when(repository.findAll(offsetReq)).thenReturn(rulePage);
     when(mapper.mapEntitiesToValidationRuleCollection(rulePage)).thenReturn(ruleCollection);
 
-    ValidationRuleCollection result = service.getValidationRules(offset, limit, orderBy);
+    ValidationRuleCollection result = service.getValidationRules(o, l, orderBy);
 
     assertSame(ruleCollection, result);
   }
@@ -143,13 +136,23 @@ class ValidationRuleServiceImplTest {
   @Test
   void shouldUpdateValidationRule(@Random ValidationRule ruleDto, @Random PasswordValidationRule rule) {
     when(mapper.mapDtoToEntity(ruleDto)).thenReturn(rule);
-    when(repository.getOne(rule.getId())).thenReturn(rule);
+    when(repository.getById(rule.getId())).thenReturn(rule);
     when(repository.save(rule)).thenReturn(rule);
     when(mapper.mapEntityToDto(rule)).thenReturn(ruleDto);
 
     ValidationRule result = service.createOrUpdateValidationRule(ruleDto);
 
     assertSame(ruleDto, result);
+  }
+
+  @TestConfiguration
+  static class Config {
+
+    @Bean
+    public ValidationRuleService employeeService(ValidationRuleMapper mapper, ValidationRuleRepository repository,
+                                                 UserClient userClient, ValidatorRegistry validationRegistry) {
+      return new ValidationRuleServiceImpl(mapper, repository, userClient, validationRegistry);
+    }
   }
 
   @Nested
@@ -159,27 +162,26 @@ class ValidationRuleServiceImplTest {
     private static final String INVALID_PASSWORD = "password.invalid";
 
     private final ValidationResult VALID = new ValidationResult()
-        .result(ValidationRuleServiceImpl.VALIDATION_VALID_RESULT)
-        .messages(emptyList());
+      .result(ValidationRuleServiceImpl.VALIDATION_VALID_RESULT)
+      .messages(emptyList());
     private final ValidationResult INVALID = new ValidationResult()
-        .result(ValidationRuleServiceImpl.VALIDATION_INVALID_RESULT)
-        .messages(singletonList(INVALID_PASSWORD));
+      .result(ValidationRuleServiceImpl.VALIDATION_INVALID_RESULT)
+      .messages(singletonList(INVALID_PASSWORD));
 
     @Mock
     private Validator validator;
 
-
     @Test
     void shouldFailIfUserNotFoundById(@Random Password password) {
       String userId = password.getUserId();
-      when(userClient.getUserByQuery(contains(userId))).thenReturn("{\"totalRecords\": 0}");
+      when(userClient.getUserById(contains(userId))).thenReturn(Optional.empty());
 
       UserNotFoundException exc = Assertions.assertThrows(UserNotFoundException.class,
-          () -> service.validatePasswordByRules(password));
+        () -> service.validatePasswordByRules(password));
 
       assertAll(
-          () -> assertThat(exc.getMessage()).containsIgnoringCase("not found"),
-          () -> assertEquals(userId, exc.getUserId()));
+        () -> assertThat(exc.getMessage()).containsIgnoringCase("not found"),
+        () -> assertEquals(userId, exc.getUserId()));
     }
 
     @Test
@@ -199,7 +201,7 @@ class ValidationRuleServiceImplTest {
 
     @Test
     void shouldFailWithValidatorMsg(@Random Password password, @Random String userName,
-        @Random PasswordValidationRule enabledRule) {
+                                    @Random PasswordValidationRule enabledRule) {
       String userId = password.getUserId();
       mockFindUserById(userId, userName);
 
@@ -215,14 +217,7 @@ class ValidationRuleServiceImplTest {
     }
 
     private void mockFindUserById(String userId, String userName) {
-      when(userClient.getUserByQuery(contains(userId))).thenReturn("{\n" +
-          "  \"users\": [\n" +
-          "    {\n" +
-          "      \"username\": \"" + userName + "\"\n" +
-          "    }\n" +
-          "  ],\n" +
-          "  \"totalRecords\": 1\n" +
-          "}");
+      when(userClient.getUserById(contains(userId))).thenReturn(Optional.of(new UserClient.UserDto(userId, userName)));
     }
 
     private void mockValidator(Password password, String userName, ValidationErrors errors) {

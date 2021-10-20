@@ -21,7 +21,7 @@ public class DBTestUtils {
   public static PasswordValidationRule getValidationRuleById(UUID id, FolioModuleMetadata metadata,
                                                              JdbcTemplate jdbcTemplate) {
     var sql = "SELECT * FROM " + validationRulesTable(TENANT_ID, metadata) + " WHERE id = ?";
-    return jdbcTemplate.query(sql, new Object[] {id}, rs -> {
+    return jdbcTemplate.query(sql, rs -> {
       rs.next();
       var rule = new PasswordValidationRule();
       rule.setId(getUuid("id", rs));
@@ -35,7 +35,7 @@ public class DBTestUtils {
       rule.setUpdatedDate(rs.getTimestamp("updated_date"));
       rule.setOrderNo(rs.getInt("order_no"));
       return rule;
-    });
+    }, id);
   }
 
   public static String validationRulesTable(String tenantId, FolioModuleMetadata metadata) {

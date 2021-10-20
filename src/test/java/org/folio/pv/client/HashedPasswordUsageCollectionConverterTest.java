@@ -1,5 +1,6 @@
 package org.folio.pv.client;
 
+import static java.nio.charset.Charset.defaultCharset;
 import static org.apache.commons.io.IOUtils.toInputStream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -36,7 +37,7 @@ class HashedPasswordUsageCollectionConverterTest {
 
   @Test
   void testReadToList(@Mock HttpInputMessage inputMessage) throws IOException {
-    when(inputMessage.getBody()).thenReturn(toInputStream(VALID_INPUT));
+    when(inputMessage.getBody()).thenReturn(toInputStream(VALID_INPUT, defaultCharset()));
     when(inputMessage.getHeaders()).thenReturn(getHeaders());
 
     var converter = new HashedPasswordUsageCollectionConverter<List<HashedPasswordUsage>>();
@@ -50,7 +51,7 @@ class HashedPasswordUsageCollectionConverterTest {
 
   @Test
   void testReadToSortedSet(@Mock HttpInputMessage inputMessage) throws IOException {
-    when(inputMessage.getBody()).thenReturn(toInputStream(VALID_INPUT));
+    when(inputMessage.getBody()).thenReturn(toInputStream(VALID_INPUT, defaultCharset()));
     when(inputMessage.getHeaders()).thenReturn(getHeaders());
 
     var converter = new HashedPasswordUsageCollectionConverter<SortedSet<HashedPasswordUsage>>();
@@ -64,7 +65,7 @@ class HashedPasswordUsageCollectionConverterTest {
 
   @Test
   void testReadToSet(@Mock HttpInputMessage inputMessage) throws IOException {
-    when(inputMessage.getBody()).thenReturn(toInputStream(VALID_INPUT));
+    when(inputMessage.getBody()).thenReturn(toInputStream(VALID_INPUT, defaultCharset()));
     when(inputMessage.getHeaders()).thenReturn(getHeaders());
 
     var converter = new HashedPasswordUsageCollectionConverter<LinkedHashSet<HashedPasswordUsage>>();
@@ -78,7 +79,7 @@ class HashedPasswordUsageCollectionConverterTest {
 
   @Test
   void testReadInvalidInputMessage(@Mock HttpInputMessage inputMessage) throws IOException {
-    when(inputMessage.getBody()).thenReturn(toInputStream("0018A45C4D1DEF81644B54AB7F969B88D65:p"));
+    when(inputMessage.getBody()).thenReturn(toInputStream("0018A45C4D1DEF81644B54AB7F969B88D65:p", defaultCharset()));
     when(inputMessage.getHeaders()).thenReturn(getHeaders());
 
     var converter = new HashedPasswordUsageCollectionConverter<LinkedHashSet<HashedPasswordUsage>>();

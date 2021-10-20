@@ -4,7 +4,7 @@ public enum ValidationType {
   SOFT("Soft"),
   STRONG("Strong");
 
-  private String value;
+  private final String value;
 
   ValidationType(String value) {
     this.value = value;
