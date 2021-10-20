@@ -1,8 +1,11 @@
 package org.folio.pv.controller;
 
+import static feign.Util.UTF_8;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
+import feign.FeignException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,6 +20,7 @@ import org.folio.pv.service.exception.UserNotFoundException;
 
 @ControllerAdvice
 public class ErrorHandlingController {
+
   private static final String USER_ID_FIELD = "userId";
   private static final String INTERNAL_ERROR_TYPE = "-1";
   private static final String FOLIO_EXTERNAL_OR_UNDEFINED_ERROR_TYPE = "-2";
@@ -49,6 +53,21 @@ public class ErrorHandlingController {
       .value(exception.getUserId());
 
     return new Error().message(exception.getMessage())
+      .type(FOLIO_EXTERNAL_OR_UNDEFINED_ERROR_TYPE)
+      .addParametersItem(parameter);
+  }
+
+  @ResponseBody
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  @ExceptionHandler({FeignException.NotFound.class})
+  public Error handleException(FeignException.NotFound exception) {
+    var errorMessage = exception.responseBody()
+      .map(byteBuffer -> new String(byteBuffer.array(), UTF_8))
+      .orElse("User with given id not found");
+    Parameter parameter = new Parameter()
+      .key(USER_ID_FIELD);
+
+    return new Error().message(errorMessage)
       .type(FOLIO_EXTERNAL_OR_UNDEFINED_ERROR_TYPE)
       .addParametersItem(parameter);
   }

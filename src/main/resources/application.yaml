@@ -29,6 +29,11 @@ folio:
   tenant:
     validation:
       enabled: true
+  logging:
+    request:
+      enabled: true
+    feign:
+      enabled: true
 pwned-passwords:
   client:
     url: https://api.pwnedpasswords.com

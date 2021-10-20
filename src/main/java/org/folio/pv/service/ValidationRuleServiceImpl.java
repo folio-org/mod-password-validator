@@ -10,7 +10,6 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import org.folio.pv.client.UserClient;
@@ -63,7 +62,7 @@ public class ValidationRuleServiceImpl implements ValidationRuleService {
         rule.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
       }
     } else {
-      rule = validationRuleRepository.getOne(rule.getId()).copyForUpdate(rule);
+      rule = validationRuleRepository.getById(rule.getId()).copyForUpdate(rule);
     }
     return validationRuleMapper.mapEntityToDto(validationRuleRepository.save(rule));
   }
@@ -120,15 +119,9 @@ public class ValidationRuleServiceImpl implements ValidationRuleService {
   }
 
   private String getUserNameByUserId(String userId) {
-    var userContainerStr = userClient.getUserByQuery("id==" + userId);
-    var userContainer = new JSONObject(userContainerStr);
-
-    var totalRecords = userContainer.getInt("totalRecords");
-    if (totalRecords == 0) {
-      throw new UserNotFoundException(userId);
-    }
-    JSONObject user = (JSONObject) userContainer.getJSONArray("users").get(0);
-    return user.getString("username");
+    return userClient.getUserById(userId)
+      .map(UserClient.UserDto::getUsername)
+      .orElseThrow(() -> new UserNotFoundException(userId));
   }
 
 }

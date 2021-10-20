@@ -25,14 +25,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.MappingBuilder;
-import com.github.tomakehurst.wiremock.common.Slf4jNotifier;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import io.github.glytching.junit.extension.random.Random;
 import io.github.glytching.junit.extension.random.RandomBeansExtension;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -64,15 +61,17 @@ import org.folio.spring.integration.XOkapiHeaders;
 import org.folio.spring.liquibase.FolioSpringLiquibase;
 
 @ExtendWith({
-    MockitoExtension.class,
-    RandomBeansExtension.class
+  MockitoExtension.class,
+  RandomBeansExtension.class
 })
 @SpringJUnitConfig(ProgrammaticValidatorTest.Config.class)
 class ProgrammaticValidatorTest {
 
   private static final String EXTERNAL_SERVICE_PATH = "/service";
   private static final String TEST_TENANT = "test_tenant";
-  private static WireMockServer service;
+
+  @Autowired
+  private WireMockServer service;
 
   @Autowired
   private ObjectMapper jacksonMapper;
@@ -87,45 +86,34 @@ class ProgrammaticValidatorTest {
   @Random
   private UserData userData;
 
-
-  @Configuration
-  @Import({
-      FolioSpringConfiguration.class,
-      JacksonAutoConfiguration.class,
-      FeignAutoConfiguration.class,
-      HttpClientConfiguration.class
-  })
-  static class Config {
-
-    @MockBean
-    private FolioSpringLiquibase liquibase;
-    @MockBean
-    private JdbcTemplate jdbcTemplate;
-
-    @Bean
-    public FolioExecutionContext folioExecutionContext(FolioModuleMetadata moduleMetadata) {
-      Map<String, Collection<String>> headers = new HashMap<>();
-      headers.put(XOkapiHeaders.URL, singleton(service.baseUrl()));
-      headers.put(XOkapiHeaders.TENANT, singleton(TEST_TENANT));
-
-      return new DefaultFolioExecutionContext(moduleMetadata, headers);
-    }
-    
+  static IntStream failedStatuses() {
+    return IntStream.range(400, 511);
   }
 
-  @BeforeAll
-  static void beforeAll() {
-    WireMockConfiguration options = new WireMockConfiguration()
-        .notifier(new Slf4jNotifier(true))
-        .dynamicPort();
-
-    service = new WireMockServer(options);
-    service.start();
+  private static Function<MappingBuilder, MappingBuilder> successfulResponse(int status) {
+    return response -> response.willReturn(
+      aResponse()
+        .withStatus(status)
+        .withHeader(CONTENT_TYPE, "application/json")
+        .withBody("{ \"result\": \"success\" }")
+    );
   }
 
-  @AfterAll
-  static void afterAll() {
-    service.stop();
+  private static Function<MappingBuilder, MappingBuilder> successfulResponseWithErrors(int status,
+                                                                                       String message) {
+    return response -> response.willReturn(
+      aResponse()
+        .withStatus(status)
+        .withHeader(CONTENT_TYPE, "application/json")
+        .withBody("{" +
+          " \"result\": \"success\"," +
+          " \"messages\": [ \"" + message + "\" ]" +
+          " }")
+    );
+  }
+
+  private static Function<MappingBuilder, MappingBuilder> serverErrorResponse(int status, String message) {
+    return response -> response.willReturn(aResponse().withStatus(status).withBody(message));
   }
 
   @BeforeEach
@@ -142,7 +130,7 @@ class ProgrammaticValidatorTest {
   }
 
   @ParameterizedTest
-  @ValueSource(ints = { 200, 201, 202 })
+  @ValueSource(ints = {200, 201, 202})
   void shouldPassIfServiceReturnsSuccessfulResponse(int responseStatus) throws JsonProcessingException {
     stubPostWithResponse(successfulResponse(responseStatus));
 
@@ -153,15 +141,15 @@ class ProgrammaticValidatorTest {
   }
 
   @ParameterizedTest
-  @ValueSource(ints = { 200, 201, 202 })
+  @ValueSource(ints = {200, 201, 202})
   void shouldFailIfServiceReturnsSuccessfulResponseWithErrors(int responseStatus) throws JsonProcessingException {
     stubPostWithResponse(successfulResponseWithErrors(responseStatus, "Invalid password"));
 
     ValidationErrors errors = validator.validate(password, userData);
 
     Assertions.assertAll(
-        () -> assertTrue(errors.hasErrors()),
-        () -> assertThat(errors.getErrorMessages()).containsExactly("Invalid password")
+      () -> assertTrue(errors.hasErrors()),
+      () -> assertThat(errors.getErrorMessages()).containsExactly("Invalid password")
     );
     verifyPostRequest();
   }
@@ -169,13 +157,13 @@ class ProgrammaticValidatorTest {
   @ParameterizedTest
   @MethodSource("failedStatuses")
   void shouldFailWithRuntimeExcIfValidationIsStrongAndServiceReturnsFailure(int responseStatus)
-        throws JsonProcessingException {
+    throws JsonProcessingException {
 
     stubPostWithResponse(serverErrorResponse(responseStatus, "Server error"));
     rule.setValidationType(ValidationType.STRONG.getValue());
 
     Exception exc = Assertions.assertThrows(RuntimeException.class,
-        () -> validator.validate(password, userData));
+      () -> validator.validate(password, userData));
 
     assertEquals("Server error", exc.getMessage());
     verifyPostRequest();
@@ -184,7 +172,7 @@ class ProgrammaticValidatorTest {
   @ParameterizedTest
   @MethodSource("failedStatuses")
   void shouldPassIfValidationIsSoftAndServiceReturnsFailure(int responseStatus)
-      throws JsonProcessingException {
+    throws JsonProcessingException {
 
     stubPostWithResponse(serverErrorResponse(responseStatus, "Server error"));
     rule.setValidationType(ValidationType.SOFT.getValue());
@@ -195,50 +183,52 @@ class ProgrammaticValidatorTest {
     verifyPostRequest();
   }
 
-  static IntStream failedStatuses() {
-    return IntStream.range(400, 511);
-  }
-
-  private static Function<MappingBuilder, MappingBuilder> successfulResponse(int status) {
-    return response -> response.willReturn(
-        aResponse()
-            .withStatus(status)
-            .withHeader(CONTENT_TYPE, "application/json")
-            .withBody("{ \"result\": \"success\" }")
-    );
-  }
-
-  private static Function<MappingBuilder, MappingBuilder> successfulResponseWithErrors(int status,
-      String message) {
-    return response -> response.willReturn(
-        aResponse()
-            .withStatus(status)
-            .withHeader(CONTENT_TYPE, "application/json")
-            .withBody("{" +
-                " \"result\": \"success\"," +
-                " \"messages\": [ \"" + message + "\" ]" +
-                " }")
-    );
-  }
-
-  private static Function<MappingBuilder, MappingBuilder> serverErrorResponse(int status, String message) {
-    return response -> response.willReturn(aResponse().withStatus(status).withBody(message));
-  }
-
   private void stubPostWithResponse(Function<MappingBuilder, MappingBuilder> responseBuilder) {
     service.stubFor(responseBuilder.apply(post(urlEqualTo(EXTERNAL_SERVICE_PATH))));
   }
 
   private void verifyPostRequest() throws JsonProcessingException {
     service.verify(
-        postRequestedFor(urlEqualTo(EXTERNAL_SERVICE_PATH))
-          .withHeader("Content-Type", equalTo("application/json"))
-          .withHeader(XOkapiHeaders.URL, equalTo(service.baseUrl()))
-          .withHeader(XOkapiHeaders.TENANT, equalTo(TEST_TENANT))
-          .withRequestBody(equalToJson(jacksonMapper.writeValueAsString(
-              new Password().password(password).userId(userData.getId())
-          )))
+      postRequestedFor(urlEqualTo(EXTERNAL_SERVICE_PATH))
+        .withHeader("Content-Type", equalTo("application/json"))
+        .withHeader(XOkapiHeaders.URL, equalTo(service.baseUrl()))
+        .withHeader(XOkapiHeaders.TENANT, equalTo(TEST_TENANT))
+        .withRequestBody(equalToJson(jacksonMapper.writeValueAsString(
+          new Password().password(password).userId(userData.getId())
+        )))
     );
+  }
+
+  @Configuration
+  @Import({
+    FolioSpringConfiguration.class,
+    JacksonAutoConfiguration.class,
+    FeignAutoConfiguration.class,
+    HttpClientConfiguration.class
+  })
+  static class Config {
+
+    @MockBean
+    private FolioSpringLiquibase liquibase;
+    @MockBean
+    private JdbcTemplate jdbcTemplate;
+
+    @Bean
+    public FolioExecutionContext folioExecutionContext(FolioModuleMetadata moduleMetadata, WireMockServer wireMockServer) {
+      Map<String, Collection<String>> headers = new HashMap<>();
+      headers.put(XOkapiHeaders.URL, singleton(wireMockServer.baseUrl()));
+      headers.put(XOkapiHeaders.TENANT, singleton(TEST_TENANT));
+
+      return new DefaultFolioExecutionContext(moduleMetadata, headers);
+    }
+
+    @Bean
+    public WireMockServer wireMockServer() {
+      WireMockServer wireMockServer = new WireMockServer(new WireMockConfiguration().dynamicPort());
+      wireMockServer.start();
+      return wireMockServer;
+    }
+
   }
 
 }

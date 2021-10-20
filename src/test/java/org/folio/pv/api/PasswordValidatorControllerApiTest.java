@@ -25,7 +25,7 @@ class PasswordValidatorControllerApiTest extends BaseApiTest {
 
   @Test
   void validateInvalidPassword() {
-    mockGet("/users.*", "{\"users\":[{\"username\":\"cedrick\"}],\"totalRecords\":1}", SC_OK,
+    mockGet("/users.*", "{\"username\":\"cedrick\"}", SC_OK,
       APPLICATION_JSON_VALUE, wireMockServer
     );
     var password = new Password().password("test-password").userId(UUID.randomUUID().toString());
@@ -38,7 +38,7 @@ class PasswordValidatorControllerApiTest extends BaseApiTest {
 
   @Test
   void validateValidPassword() {
-    mockGet("/users.*", "{\"users\":[{\"username\":\"cedrick\"}],\"totalRecords\":1}", SC_OK,
+    mockGet("/users.*", "{\"username\":\"cedrick\"}", SC_OK,
       APPLICATION_JSON_VALUE, wireMockServer
     );
     mockPost("/authn/password/repeatable", "{\"result\":\"valid\"}", SC_OK, wireMockServer);
@@ -56,7 +56,7 @@ class PasswordValidatorControllerApiTest extends BaseApiTest {
     Password password = new Password().password("test-password").userId(UUID.randomUUID().toString());
     String expectedErrorMessage = "User with given id not found";
 
-    mockGet("/users.*", "{\"totalRecords\":0}", SC_OK,
+    mockGet("/users.*", expectedErrorMessage, SC_NOT_FOUND,
       APPLICATION_JSON_VALUE, wireMockServer
     );
     Error error = verifyPost(PASSWORD_VALIDATE_PATH, password, SC_NOT_FOUND).as(Error.class);
