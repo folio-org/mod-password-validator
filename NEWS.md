@@ -1,3 +1,6 @@
+## 2021-11-11 v2.2.1
+* MODPWD-77 Fix permissions
+
 ## 2021-10-04 v2.2.0
  * MODPWD-69 Remove raml-util and update Jenkinsfile
  * MODPWD-71: Update rule documentation in README.md
