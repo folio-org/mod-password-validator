@@ -1,3 +1,6 @@
+## 2021-11-15 v2.2.2
+* revert permission (MODPWD-77) 
+
 ## 2021-11-11 v2.2.1
 * MODPWD-77 Fix permissions
 
