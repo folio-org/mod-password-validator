@@ -15,7 +15,7 @@
         {
           "methods": ["GET"],
           "pathPattern": "/tenant/rules",
-          "permissionsRequired" : [ "validation.rules.collection.get" ]
+          "permissionsRequired" : [ ]
         },
         {
           "methods": ["POST"],
@@ -51,11 +51,6 @@
   ],
   "permissionSets" : [
     {
-      "permissionName" : "validation.rules.collection.get",
-      "displayName" : "get validation rules collection",
-      "description" : "Get a list of validators"
-    },
-    {
       "permissionName" : "validation.validate.post",
       "displayName" : "validate password post",
       "description" : "Validate a password"
@@ -80,7 +75,6 @@
       "displayName" : "password validator module - all permissions",
       "description" : "All permissions for password validation",
       "subPermissions" : [
-        "validation.rules.collection.get",
         "validation.validate.post",
         "validation.rules.item.post",
         "validation.rules.item.put",
