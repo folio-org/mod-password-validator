@@ -9,7 +9,7 @@ public interface ValidationRuleService {
 
   ValidationRule getValidationRuleById(String ruleId);
 
-  ValidationRuleCollection getValidationRules(Integer offset, Integer limit, String orderBy);
+  ValidationRuleCollection getValidationRules(Integer offset, Integer limit, String cql);
 
   ValidationRule createOrUpdateValidationRule(ValidationRule validationRule);
 

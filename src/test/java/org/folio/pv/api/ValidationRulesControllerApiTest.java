@@ -2,9 +2,12 @@ package org.folio.pv.api;
 
 
 import static org.apache.http.HttpStatus.SC_OK;
+import static org.apache.http.HttpStatus.SC_UNPROCESSABLE_ENTITY;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import static org.folio.pv.testutils.APITestUtils.LIMIT_PARAM;
+import static org.folio.pv.testutils.APITestUtils.QUERY_PARAM;
 import static org.folio.pv.testutils.APITestUtils.rulePath;
 import static org.folio.pv.testutils.APITestUtils.rulesPath;
 import static org.folio.pv.testutils.DBTestUtils.getValidationRuleById;
@@ -14,6 +17,7 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
+import org.folio.pv.domain.dto.Error;
 import org.folio.pv.domain.dto.ValidationRule;
 import org.folio.pv.domain.dto.ValidationRuleCollection;
 
@@ -42,6 +46,16 @@ class ValidationRulesControllerApiTest extends BaseApiTest {
           "alphabetical_letters",
           "not_compromised"
         )));
+  }
+
+  @Test
+  void shouldReturn422onInvalidCql() {
+    var error = verifyGet(
+      rulesPath(LIMIT_PARAM, "100", QUERY_PARAM, "invalid"),
+      SC_UNPROCESSABLE_ENTITY
+    ).as(Error.class);
+
+    assertFalse(error.getMessage().isEmpty());
   }
 
   @Test
