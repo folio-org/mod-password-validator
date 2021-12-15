@@ -26,6 +26,7 @@
     <folio-spring-base.version>2.0.0</folio-spring-base.version>
     <openapi-generator.version>5.2.0</openapi-generator.version>
     <mapstruct.version>1.4.2.Final</mapstruct.version>
+    <log4j2.version>2.16.0</log4j2.version> <!-- if less then vulnerable to CVE-2021-44228 and CVE-2021-45046-->
 
     <validator-registry.yaml.file>${project.basedir}/src/main/resources/swagger.api/validator-registry.yaml</validator-registry.yaml.file>
     <password-validator.yaml.file>${project.basedir}/src/main/resources/swagger.api/password-validator.yaml</password-validator.yaml.file>
