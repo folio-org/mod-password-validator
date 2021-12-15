@@ -1,3 +1,6 @@
+## 2021-xx-xx v2.3.0-SNAPSHOT
+ * MODPWD-84 Kiwi R3 2021 - Log4j vulnerability verification and correction
+
 ## 2021-10-04 v2.2.0
  * MODPWD-69 Remove raml-util and update Jenkinsfile
  * MODPWD-71: Update rule documentation in README.md
