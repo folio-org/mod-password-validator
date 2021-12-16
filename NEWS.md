@@ -1,3 +1,6 @@
+## 2021-12-16 v2.2.3
+* MODPWD-84 Kiwi R3 2021 - Log4j vulnerability verification and correction
+
 ## 2021-11-15 v2.2.2
 * revert permission (MODPWD-77) 
 
