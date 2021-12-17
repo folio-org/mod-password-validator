@@ -30,6 +30,7 @@
     <junit-extensions.version>2.4.0</junit-extensions.version>
     <mockito.version>3.6.28</mockito.version>
     <wiremock.version>2.27.2</wiremock.version>
+    <log4j2.version>2.16.0</log4j2.version> <!-- if less then vulnerable to CVE-2021-44228 and CVE-2021-45046-->
     <!-- -->
     <validator-registry.yaml.file>${project.basedir}/src/main/resources/swagger.api/validator-registry.yaml</validator-registry.yaml.file>
     <password-validator.yaml.file>${project.basedir}/src/main/resources/swagger.api/password-validator.yaml</password-validator.yaml.file>

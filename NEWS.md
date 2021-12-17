@@ -1,3 +1,6 @@
+## 2021-12-17 v2.0.3
+* MODPWD-86 Juniper R2 2021 - Log4j vulnerability verification and correction
+
 ## 2021-05-21 v2.0.2
 * MODPWD-65 Fix exposing env variables during startup
 
