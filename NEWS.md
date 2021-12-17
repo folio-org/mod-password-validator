@@ -1,3 +1,6 @@
+## 2021-12-17 v2.1.1
+* MODPWD-86 Juniper R2 2021 - Log4j vulnerability verification and correction
+
 ## 2021-06-09 v2.1.0
 * MODPWD-64 Cleanup database from unused tables and functions
 
