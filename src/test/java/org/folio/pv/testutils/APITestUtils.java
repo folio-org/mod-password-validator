@@ -21,6 +21,7 @@ public class APITestUtils {
   public static final String PASSWORD_VALIDATE_PATH = "/password/validate";
 
   public static final String LIMIT_PARAM = "limit";
+  public static final String QUERY_PARAM = "query";
 
   public static String rulesPath(String... params) {
     if (params.length % 2 != 0) {

@@ -36,8 +36,8 @@ public class ValidationRulesController implements RulesApi {
 
   @Override
   public ResponseEntity<ValidationRuleCollection> getTenantRules(@Min(0) @Max(2147483647) @Valid Integer offset,
-      @Min(0) @Max(2147483647) @Valid Integer limit, @Valid String query) {
-    var validationRules = validationRuleService.getValidationRules(offset, limit, "");
+      @Min(0) @Max(2147483647) @Valid Integer limit, @Valid String cql) {
+    var validationRules = validationRuleService.getValidationRules(offset, limit, cql);
     return new ResponseEntity<>(validationRules, HttpStatus.OK);
   }
 

@@ -87,7 +87,7 @@ class ValidationRuleServiceImplTest {
   }
 
   @Test
-  void shouldReturnValidationRules(@Random Integer offset, @Random Integer limit, @Random String orderBy,
+  void shouldReturnValidationRules(@Random Integer offset, @Random Integer limit, @Random String cql,
                                    @Random List<PasswordValidationRule> rules,
                                    @Random ValidationRuleCollection ruleCollection) {
 
@@ -96,10 +96,28 @@ class ValidationRuleServiceImplTest {
     OffsetRequest offsetReq = new OffsetRequest(o, l);
     Page<PasswordValidationRule> rulePage = new PageImpl<>(rules);
 
+    when(repository.findByCQL(cql, offsetReq)).thenReturn(rulePage);
+    when(mapper.mapEntitiesToValidationRuleCollection(rulePage)).thenReturn(ruleCollection);
+
+    ValidationRuleCollection result = service.getValidationRules(o, l, cql);
+
+    assertSame(ruleCollection, result);
+  }
+
+  @Test
+  void shouldReturnValidationRulesWithoutCql(@Random Integer offset, @Random Integer limit,
+                                   @Random List<PasswordValidationRule> rules,
+                                   @Random ValidationRuleCollection ruleCollection) {
+
+    var o = Math.abs(offset);
+    var l = Math.abs(limit);
+    var offsetReq = new OffsetRequest(o, l);
+    var rulePage = new PageImpl<>(rules);
+
     when(repository.findAll(offsetReq)).thenReturn(rulePage);
     when(mapper.mapEntitiesToValidationRuleCollection(rulePage)).thenReturn(ruleCollection);
 
-    ValidationRuleCollection result = service.getValidationRules(o, l, orderBy);
+    var result = service.getValidationRules(o, l, null);
 
     assertSame(ruleCollection, result);
   }
@@ -157,7 +175,7 @@ class ValidationRuleServiceImplTest {
 
   @Nested
   @ExtendWith(MockitoExtension.class)
-  class ValidatePassword {
+  class ValidatePasswordTest {
 
     private static final String INVALID_PASSWORD = "password.invalid";
 

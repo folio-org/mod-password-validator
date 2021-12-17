@@ -1,5 +1,7 @@
 package org.folio.pv.service;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -50,8 +52,10 @@ public class ValidationRuleServiceImpl implements ValidationRuleService {
   }
 
   @Override
-  public ValidationRuleCollection getValidationRules(Integer offset, Integer limit, String orderBy) {
-    var validationRuleList = validationRuleRepository.findAll(new OffsetRequest(offset, limit));
+  public ValidationRuleCollection getValidationRules(Integer offset, Integer limit, String cql) {
+    var validationRuleList = isBlank(cql)
+      ? validationRuleRepository.findAll(new OffsetRequest(offset, limit))
+      : validationRuleRepository.findByCQL(cql, new OffsetRequest(offset, limit));
     return validationRuleMapper.mapEntitiesToValidationRuleCollection(validationRuleList);
   }
 
