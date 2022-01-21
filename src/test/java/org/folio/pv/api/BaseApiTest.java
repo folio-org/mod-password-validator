@@ -52,7 +52,7 @@ class BaseApiTest {
   @BeforeEach
   void before() {
     if (!dbInitialized) {
-      verifyPost("/_/tenant", new TenantAttributes().moduleTo(""), HttpStatus.SC_OK);
+      verifyPost("/_/tenant", new TenantAttributes().moduleTo("mod-password-validator"), HttpStatus.SC_NO_CONTENT);
       dbInitialized = true;
     }
   }
