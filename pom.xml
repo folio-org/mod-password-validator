@@ -4,39 +4,33 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.6.2</version>
+    <version>2.6.3</version>
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
+
   <groupId>org.folio</groupId>
   <artifactId>mod-password-validator</artifactId>
   <name>mod-password-validator</name>
-  <version>2.3.0-SNAPSHOT</version>
-  <description>FOLIO mod-password-validator module (Spring based implementation)</description>
+  <version>2.3.1-SNAPSHOT</version>
+  <description>FOLIO mod-password-validator module</description>
   <packaging>jar</packaging>
-
-  <licenses>
-    <license>
-      <name>Apache License 2.0</name>
-      <url>http://spdx.org/licenses/Apache-2.0</url>
-    </license>
-  </licenses>
 
   <properties>
     <java.version>11</java.version>
     <folio-spring-base.version>3.0.1</folio-spring-base.version>
     <openapi-generator.version>5.3.1</openapi-generator.version>
     <mapstruct.version>1.4.2.Final</mapstruct.version>
-    <log4j2.version>2.16.0</log4j2.version> <!-- if less then vulnerable to CVE-2021-44228 and CVE-2021-45046-->
 
     <validator-registry.yaml.file>${project.basedir}/src/main/resources/swagger.api/validator-registry.yaml</validator-registry.yaml.file>
     <password-validator.yaml.file>${project.basedir}/src/main/resources/swagger.api/password-validator.yaml</password-validator.yaml.file>
 
     <!-- Test Properties-->
     <junit-extensions.version>2.5.0</junit-extensions.version>
-    <mockito.version>4.0.0</mockito.version>
-    <wiremock.version>2.31.0</wiremock.version>
-    <rest-assured.version>4.4.0</rest-assured.version>
-    <embedded-postgresql.version>2.1.0</embedded-postgresql.version>
+    <mockito.version>4.3.1</mockito.version>
+    <wiremock.version>2.32.0</wiremock.version>
+    <rest-assured.version>4.5.1</rest-assured.version>
+    <embedded-postgresql.version>2.1.1</embedded-postgresql.version>
+    <lombok.mapstruct-binding.version>0.2.0</lombok.mapstruct-binding.version>
 
     <sonar.exclusions>
       src/main/java/org/folio/pv/domain/**,
@@ -142,14 +136,18 @@
 
   <build>
     <plugins>
-
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>versions-maven-plugin</artifactId>
-        <version>2.8.1</version>
-        <configuration>
-          <generateBackupPoms>false</generateBackupPoms>
-        </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>auto-clean</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
 
       <plugin>
@@ -159,6 +157,46 @@
           <layers>
             <enabled>true</enabled>
           </layers>
+          <excludes>
+            <exclude>
+              <groupId>org.springframework.boot</groupId>
+              <artifactId>spring-boot-configuration-processor</artifactId>
+            </exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <release>11</release>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>${lombok.version}</version>
+            </path>
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok-mapstruct-binding</artifactId>
+              <version>${lombok.mapstruct-binding.version}</version>
+            </path>
+            <path>
+              <groupId>org.mapstruct</groupId>
+              <artifactId>mapstruct-processor</artifactId>
+              <version>${mapstruct.version}</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <version>2.8.1</version>
+        <configuration>
+          <generateBackupPoms>false</generateBackupPoms>
         </configuration>
       </plugin>
 
@@ -262,9 +300,9 @@
                 <dateLibrary>java</dateLibrary>
                 <interfaceOnly>true</interfaceOnly>
               </configOptions>
-
             </configuration>
           </execution>
+
           <execution>
             <id>validator</id>
             <goals>
@@ -347,7 +385,13 @@
     <url>https://github.com/folio-org/${project.artifactId}</url>
     <connection>scm:git:git://github.com/folio-org/${project.artifactId}.git</connection>
     <developerConnection>scm:git:git@github.com:folio-org/${project.artifactId}.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>release/v2.3</tag>
   </scm>
 
+  <licenses>
+    <license>
+      <name>Apache License 2.0</name>
+      <url>http://spdx.org/licenses/Apache-2.0</url>
+    </license>
+  </licenses>
 </project>
