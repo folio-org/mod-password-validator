@@ -30,7 +30,7 @@
         {
           "methods": ["GET"],
           "pathPattern": "/tenant/rules/{ruleId}",
-          "permissionsRequired" : [ " validation.rules.item.get" ]
+          "permissionsRequired" : [ "validation.rules.item.get" ]
         }
       ]
     },
