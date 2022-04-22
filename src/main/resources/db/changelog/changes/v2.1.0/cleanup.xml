@@ -11,7 +11,7 @@
         <sql dbms="postgresql">DROP TABLE IF EXISTS ${database.defaultSchemaName}.rmb_internal</sql>
     </changeSet>
     <changeSet id="MODPWD-64@@drop-rmb-internal-analyze-table" author="psmahin">
-        <sql dbms="postgresql">DROP TABLE IF EXISTS rmb_internal_analyze</sql>
+        <sql dbms="postgresql">DROP TABLE IF EXISTS ${database.defaultSchemaName}.rmb_internal_analyze</sql>
     </changeSet>
     <changeSet id="MODPWD-64@@drop-rmb-internal-index-table" author="psmahin">
         <sql dbms="postgresql">DROP TABLE IF EXISTS ${database.defaultSchemaName}.rmb_internal_index</sql>
