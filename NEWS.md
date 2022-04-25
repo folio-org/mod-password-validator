@@ -1,3 +1,8 @@
+## 2022-04-25 v2.3.1
+ * MODPWD-92 Fix permission name
+ * MODPWD-93 Update Spring from 2.6.3 to 2.6.6 - Spring4Shell (CVE-2022-22965)
+ * MODPWS-75 Module upgrade fails in multi-tenant environment, set schema
+
 ## 2022-02-23 v2.3.0
  * MODPWD-84 Log4j vulnerability verification and correction
  * MODPWD-56 Support CQL queries when getting list of validation rules
