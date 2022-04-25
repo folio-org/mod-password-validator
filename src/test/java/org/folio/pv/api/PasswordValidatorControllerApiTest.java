@@ -67,22 +67,18 @@ class PasswordValidatorControllerApiTest extends BaseApiTest {
   @Test
   void validateInvalid_ifUserIdNotProvided() {
     Password password = new Password().password("test-password");
-    String expectedErrorMessage = "userId must not be null";
-
     Errors errors = verifyPost(PASSWORD_VALIDATE_PATH, password, SC_UNPROCESSABLE_ENTITY).as(Errors.class);
-    Error error = errors.getErrors().get(0);
-
-    assertEquals(expectedErrorMessage, error.getMessage());
+    assertErrorField(errors, "userId");
   }
 
   @Test
   void validateInvalid_ifPasswordNotProvided() {
     Password password = new Password().userId(UUID.randomUUID().toString());
-    String expectedErrorMessage = "password must not be null";
-
     Errors errors = verifyPost(PASSWORD_VALIDATE_PATH, password, SC_UNPROCESSABLE_ENTITY).as(Errors.class);
-    Error error = errors.getErrors().get(0);
+    assertErrorField(errors, "password");
+  }
 
-    assertEquals(expectedErrorMessage, error.getMessage());
+  private void assertErrorField(Errors errors, String expectedErrorField) {
+    assertEquals(expectedErrorField, errors.getErrors().get(0).getParameters().get(0).getKey());
   }
 }
