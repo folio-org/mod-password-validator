@@ -1,3 +1,6 @@
+## 2022-05-10 v2.3.1
+ * MODPWD-94 Fix cleanup script migration
+
 ## 2022-02-23 v2.3.0
  * MODPWD-84 Log4j vulnerability verification and correction
  * MODPWD-56 Support CQL queries when getting list of validation rules
