@@ -1,3 +1,6 @@
+## 2022-xx-xx v2.3.2-SNAPSHOT
+* MODPWD-98 Update folio-spring-base v4.1.0
+
 ## 2022-04-25 v2.3.1
  * MODPWD-92 Fix permission name
  * MODPWD-93 Update Spring from 2.6.3 to 2.6.6 - Spring4Shell (CVE-2022-22965)
