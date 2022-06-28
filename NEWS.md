@@ -1,4 +1,4 @@
-## 2022-xx-xx v2.3.2-SNAPSHOT
+## 2022-06-28 v2.4.0
 * MODPWD-98 Update folio-spring-base v4.1.0
 
 ## 2022-04-25 v2.3.1
