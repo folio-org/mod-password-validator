@@ -3,11 +3,9 @@ package org.folio.pv.service.validator;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.util.regex.Pattern;
-
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-
 import org.folio.pv.domain.dto.UserData;
 import org.folio.pv.domain.dto.ValidationErrors;
 import org.folio.pv.domain.entity.PasswordValidationRule;

@@ -2,19 +2,16 @@ package org.folio.pv.service;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+import feign.FeignException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
-
-import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.springframework.stereotype.Service;
-
 import org.folio.pv.client.UserClient;
 import org.folio.pv.domain.RuleState;
 import org.folio.pv.domain.ValidationType;
@@ -29,6 +26,7 @@ import org.folio.pv.repository.ValidationRuleRepository;
 import org.folio.pv.service.exception.UserNotFoundException;
 import org.folio.pv.service.validator.ValidatorRegistry;
 import org.folio.spring.data.OffsetRequest;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -116,11 +114,11 @@ public class ValidationRuleServiceImpl implements ValidationRuleService {
 
   private String ruleBriefDescription(PasswordValidationRule rule) {
     return new ToStringBuilder(rule)
-        .append("id", rule.getId())
-        .append("name", rule.getName())
-        .append("type", rule.getRuleType())
-        .append("validationType", rule.getValidationType())
-        .build();
+      .append("id", rule.getId())
+      .append("name", rule.getName())
+      .append("type", rule.getRuleType())
+      .append("validationType", rule.getValidationType())
+      .build();
   }
 
   private String getUserNameByUserId(String userId) {

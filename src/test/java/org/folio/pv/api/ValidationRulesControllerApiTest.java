@@ -4,22 +4,19 @@ package org.folio.pv.api;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.apache.http.HttpStatus.SC_UNPROCESSABLE_ENTITY;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.folio.pv.testutils.ApiTestUtils.LIMIT_PARAM;
+import static org.folio.pv.testutils.ApiTestUtils.QUERY_PARAM;
+import static org.folio.pv.testutils.ApiTestUtils.rulePath;
+import static org.folio.pv.testutils.ApiTestUtils.rulesPath;
+import static org.folio.pv.testutils.DbTestUtils.getValidationRuleById;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-
-import static org.folio.pv.testutils.APITestUtils.LIMIT_PARAM;
-import static org.folio.pv.testutils.APITestUtils.QUERY_PARAM;
-import static org.folio.pv.testutils.APITestUtils.rulePath;
-import static org.folio.pv.testutils.APITestUtils.rulesPath;
-import static org.folio.pv.testutils.DBTestUtils.getValidationRuleById;
 
 import java.util.List;
 import java.util.UUID;
-
-import org.junit.jupiter.api.Test;
-
 import org.folio.pv.domain.dto.Error;
 import org.folio.pv.domain.dto.ValidationRule;
 import org.folio.pv.domain.dto.ValidationRuleCollection;
+import org.junit.jupiter.api.Test;
 
 class ValidationRulesControllerApiTest extends BaseApiTest {
 

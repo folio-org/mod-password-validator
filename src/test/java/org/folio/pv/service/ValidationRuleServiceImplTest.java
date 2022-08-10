@@ -10,26 +10,11 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.when;
 
+import io.github.glytching.junit.extension.random.Random;
+import io.github.glytching.junit.extension.random.RandomBeansExtension;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-import io.github.glytching.junit.extension.random.Random;
-import io.github.glytching.junit.extension.random.RandomBeansExtension;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-
 import org.folio.pv.client.UserClient;
 import org.folio.pv.domain.RuleState;
 import org.folio.pv.domain.ValidationType;
@@ -46,6 +31,19 @@ import org.folio.pv.service.exception.UserNotFoundException;
 import org.folio.pv.service.validator.Validator;
 import org.folio.pv.service.validator.ValidatorRegistry;
 import org.folio.spring.data.OffsetRequest;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith({
   RandomBeansExtension.class
@@ -106,8 +104,8 @@ class ValidationRuleServiceImplTest {
 
   @Test
   void shouldReturnValidationRulesWithoutCql(@Random Integer offset, @Random Integer limit,
-                                   @Random List<PasswordValidationRule> rules,
-                                   @Random ValidationRuleCollection ruleCollection) {
+                                             @Random List<PasswordValidationRule> rules,
+                                             @Random ValidationRuleCollection ruleCollection) {
 
     var o = Math.abs(offset);
     var l = Math.abs(limit);
@@ -179,10 +177,10 @@ class ValidationRuleServiceImplTest {
 
     private static final String INVALID_PASSWORD = "password.invalid";
 
-    private final ValidationResult VALID = new ValidationResult()
+    private final ValidationResult valid = new ValidationResult()
       .result(ValidationRuleServiceImpl.VALIDATION_VALID_RESULT)
       .messages(emptyList());
-    private final ValidationResult INVALID = new ValidationResult()
+    private final ValidationResult invalid = new ValidationResult()
       .result(ValidationRuleServiceImpl.VALIDATION_INVALID_RESULT)
       .messages(singletonList(INVALID_PASSWORD));
 
@@ -214,7 +212,7 @@ class ValidationRuleServiceImplTest {
 
       ValidationResult result = service.validatePasswordByRules(password);
 
-      assertEquals(VALID, result);
+      assertEquals(valid, result);
     }
 
     @Test
@@ -231,7 +229,7 @@ class ValidationRuleServiceImplTest {
 
       ValidationResult result = service.validatePasswordByRules(password);
 
-      assertEquals(INVALID, result);
+      assertEquals(invalid, result);
     }
 
     private void mockFindUserById(String userId, String userName) {

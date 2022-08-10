@@ -5,6 +5,7 @@ import static org.apache.commons.io.IOUtils.toInputStream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import com.google.common.reflect.TypeToken;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
@@ -12,8 +13,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
-
-import com.google.common.reflect.TypeToken;
+import org.folio.pv.domain.dto.HashedPasswordUsage;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,8 +23,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-
-import org.folio.pv.domain.dto.HashedPasswordUsage;
 
 @ExtendWith(MockitoExtension.class)
 class HashedPasswordUsageCollectionConverterTest {

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>2.7.0</version>
-    <relativePath /> <!-- lookup parent from repository -->
+    <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
   <groupId>org.folio</groupId>
@@ -21,8 +22,10 @@
     <openapi-generator.version>5.3.1</openapi-generator.version>
     <mapstruct.version>1.5.1.Final</mapstruct.version>
 
-    <validator-registry.yaml.file>${project.basedir}/src/main/resources/swagger.api/validator-registry.yaml</validator-registry.yaml.file>
-    <password-validator.yaml.file>${project.basedir}/src/main/resources/swagger.api/password-validator.yaml</password-validator.yaml.file>
+    <validator-registry.yaml.file>${project.basedir}/src/main/resources/swagger.api/validator-registry.yaml
+    </validator-registry.yaml.file>
+    <password-validator.yaml.file>${project.basedir}/src/main/resources/swagger.api/password-validator.yaml
+    </password-validator.yaml.file>
 
     <!-- Test Properties-->
     <junit-extensions.version>2.5.0</junit-extensions.version>
@@ -31,6 +34,7 @@
     <rest-assured.version>4.5.1</rest-assured.version>
     <embedded-postgresql.version>2.1.1</embedded-postgresql.version>
     <lombok.mapstruct-binding.version>0.2.0</lombok.mapstruct-binding.version>
+    <maven-checkstyle-plugin.version>3.1.1</maven-checkstyle-plugin.version>
 
     <sonar.exclusions>
       src/main/java/org/folio/pv/domain/**,
@@ -290,7 +294,8 @@
               <generateApiTests>true</generateApiTests>
               <generateApiDocumentation>true</generateApiDocumentation>
               <generateModels>true</generateModels>
-              <modelsToGenerate>error,errors,parameter,metadata,validationRule,validationRuleCollection</modelsToGenerate>
+              <modelsToGenerate>error,errors,parameter,metadata,validationRule,validationRuleCollection
+              </modelsToGenerate>
               <generateModelTests>false</generateModelTests>
               <generateSupportingFiles>true</generateSupportingFiles>
               <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
@@ -350,6 +355,41 @@
           <tagNameFormat>v@{project.version}</tagNameFormat>
           <pushChanges>false</pushChanges>
           <localCheckout>true</localCheckout>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${maven-checkstyle-plugin.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>com.puppycrawl.tools</groupId>
+            <artifactId>checkstyle</artifactId>
+            <version>8.38</version>
+          </dependency>
+        </dependencies>
+        <executions>
+          <execution>
+            <id>verify-style</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <sourceDirectories>
+            <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+            <sourceDirectory>${project.build.testSourceDirectory}</sourceDirectory>
+          </sourceDirectories>
+          <failsOnError>true</failsOnError>
+          <encoding>UTF-8</encoding>
+          <violationSeverity>warning</violationSeverity>
+          <failOnViolation>true</failOnViolation>
+          <logViolationsToConsole>true</logViolationsToConsole>
+          <configLocation>checkstyle/checkstyle.xml</configLocation>
+          <cacheFile>${basedir}/target/cachefile</cacheFile>
         </configuration>
       </plugin>
 

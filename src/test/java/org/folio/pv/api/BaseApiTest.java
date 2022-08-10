@@ -1,8 +1,7 @@
 package org.folio.pv.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
-import static org.folio.pv.testutils.APITestUtils.TENANT_ID;
+import static org.folio.pv.testutils.ApiTestUtils.TENANT_ID;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import io.restassured.RestAssured;
@@ -11,6 +10,10 @@ import io.restassured.response.Response;
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
+import org.folio.pv.testutils.extension.WireMockInitializer;
+import org.folio.spring.FolioModuleMetadata;
+import org.folio.spring.integration.XOkapiHeaders;
+import org.folio.tenant.domain.dto.TenantAttributes;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,11 +25,6 @@ import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-
-import org.folio.pv.testutils.extension.WireMockInitializer;
-import org.folio.spring.FolioModuleMetadata;
-import org.folio.spring.integration.XOkapiHeaders;
-import org.folio.tenant.domain.dto.TenantAttributes;
 
 
 @ActiveProfiles("test")
