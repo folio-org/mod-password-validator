@@ -6,18 +6,24 @@ import static java.util.Collections.unmodifiableList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @EqualsAndHashCode
 @ToString
-public class ValidationErrors {
+public final class ValidationErrors {
 
   private static final ValidationErrors NONE = new ValidationErrors();
 
   private final List<String> errorMessages;
 
+  private ValidationErrors() {
+    this(emptyList());
+  }
+
+  private ValidationErrors(List<String> errorMessages) {
+    this.errorMessages = errorMessages != null ? new ArrayList<>(errorMessages) : emptyList();
+  }
 
   public static ValidationErrors none() {
     return NONE;
@@ -29,14 +35,6 @@ public class ValidationErrors {
 
   public static ValidationErrors of(List<String> messages) {
     return new ValidationErrors(messages);
-  }
-
-  private ValidationErrors() {
-    this(emptyList());
-  }
-
-  private ValidationErrors(List<String> errorMessages) {
-    this.errorMessages = errorMessages != null ? new ArrayList<>(errorMessages) : emptyList();
   }
 
   public boolean hasErrors() {

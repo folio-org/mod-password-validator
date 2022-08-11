@@ -2,24 +2,22 @@ package org.folio.pv.service.validator;
 
 import static io.github.benas.randombeans.randomizers.text.StringRandomizer.aNewStringRandomizer;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.folio.pv.testutils.RandomTestData.nextRandomRuleOfType;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.folio.pv.testutils.RandomTestData.nextRandomRuleOfType;
-
 import io.github.glytching.junit.extension.random.Random;
 import io.github.glytching.junit.extension.random.RandomBeansExtension;
+import org.folio.pv.domain.RuleType;
+import org.folio.pv.domain.dto.UserData;
+import org.folio.pv.domain.dto.ValidationErrors;
+import org.folio.pv.domain.entity.PasswordValidationRule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
-
-import org.folio.pv.domain.RuleType;
-import org.folio.pv.domain.dto.UserData;
-import org.folio.pv.domain.dto.ValidationErrors;
-import org.folio.pv.domain.entity.PasswordValidationRule;
 
 @ExtendWith(RandomBeansExtension.class)
 class RegExpValidatorTest {
@@ -78,8 +76,8 @@ class RegExpValidatorTest {
     ValidationErrors errors = validator.validate(password, userData);
 
     Assertions.assertAll(
-        () -> assertTrue(errors.hasErrors()),
-        () -> assertThat(errors.getErrorMessages()).containsExactly(rule.getErrMessageId())
+      () -> assertTrue(errors.hasErrors()),
+      () -> assertThat(errors.getErrorMessages()).containsExactly(rule.getErrMessageId())
     );
   }
 }

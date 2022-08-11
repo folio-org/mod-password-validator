@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(name = "pwned-passwords",
-    url = "${pwned-passwords.client.url}",
-    configuration = PwnedClientConfiguration.class)
+  url = "${pwned-passwords.client.url}",
+  configuration = PwnedClientConfiguration.class)
 public interface PwnedClient {
 
   @GetMapping(path = "/range/{hashPrefix}", produces = MediaType.TEXT_PLAIN_VALUE)

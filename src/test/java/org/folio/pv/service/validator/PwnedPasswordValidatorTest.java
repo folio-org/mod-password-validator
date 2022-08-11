@@ -3,14 +3,20 @@ package org.folio.pv.service.validator;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.folio.pv.testutils.RandomTestData.nextRandomRuleOfType;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
-import static org.folio.pv.testutils.RandomTestData.nextRandomRuleOfType;
-
 import io.github.glytching.junit.extension.random.Random;
 import io.github.glytching.junit.extension.random.RandomBeansExtension;
+import org.folio.pv.client.PwnedClient;
+import org.folio.pv.domain.RuleType;
+import org.folio.pv.domain.dto.HashedPasswordUsage;
+import org.folio.pv.domain.dto.PasswordHash;
+import org.folio.pv.domain.dto.UserData;
+import org.folio.pv.domain.dto.ValidationErrors;
+import org.folio.pv.domain.entity.PasswordValidationRule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,17 +26,9 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import org.folio.pv.client.PwnedClient;
-import org.folio.pv.domain.RuleType;
-import org.folio.pv.domain.dto.HashedPasswordUsage;
-import org.folio.pv.domain.dto.PasswordHash;
-import org.folio.pv.domain.dto.UserData;
-import org.folio.pv.domain.dto.ValidationErrors;
-import org.folio.pv.domain.entity.PasswordValidationRule;
-
 @ExtendWith({
-    MockitoExtension.class,
-    RandomBeansExtension.class
+  MockitoExtension.class,
+  RandomBeansExtension.class
 })
 class PwnedPasswordValidatorTest {
 
@@ -63,7 +61,7 @@ class PwnedPasswordValidatorTest {
     PasswordHash hash = new PasswordHash(password);
 
     when(pwnedClient.getPwdRange(hash.getPrefix()))
-        .thenReturn(singletonList(new HashedPasswordUsage(hash.getSuffix(), 0)));
+      .thenReturn(singletonList(new HashedPasswordUsage(hash.getSuffix(), 0)));
 
     ValidationErrors errors = validator.validate(password, userData);
 
@@ -86,14 +84,14 @@ class PwnedPasswordValidatorTest {
     PasswordHash hash = new PasswordHash(password);
 
     when(pwnedClient.getPwdRange(hash.getPrefix()))
-        .thenReturn(singletonList(new HashedPasswordUsage(hash.getSuffix(), 1)));
+      .thenReturn(singletonList(new HashedPasswordUsage(hash.getSuffix(), 1)));
 
     ValidationErrors errors = validator.validate(password, userData);
 
     Assertions.assertAll(
-        () -> assertTrue(errors.hasErrors()),
-        () -> assertThat(errors.getErrorMessages()).containsExactly(rule.getErrMessageId())
+      () -> assertTrue(errors.hasErrors()),
+      () -> assertThat(errors.getErrorMessages()).containsExactly(rule.getErrMessageId())
     );
   }
-  
+
 }

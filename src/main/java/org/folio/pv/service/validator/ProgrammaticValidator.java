@@ -1,11 +1,10 @@
 package org.folio.pv.service.validator;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -13,7 +12,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-
 import org.folio.pv.domain.ValidationType;
 import org.folio.pv.domain.dto.Password;
 import org.folio.pv.domain.dto.UserData;
@@ -65,15 +63,15 @@ class ProgrammaticValidator implements Validator {
   }
 
   private void addBody(HttpPost httpPost, String password, UserData user) throws UnsupportedEncodingException,
-      JsonProcessingException {
+    JsonProcessingException {
     httpPost.setEntity(new StringEntity(jacksonObjectMapper.writeValueAsString(
-        new Password().password(password).userId(user.getId())))
+      new Password().password(password).userId(user.getId())))
     );
   }
 
   private void addHeaders(HttpPost httpPost) {
     folioExecutionContext.getOkapiHeaders()
-        .forEach((key, values) -> values.forEach(value -> httpPost.addHeader(key, value)));
+      .forEach((key, values) -> values.forEach(value -> httpPost.addHeader(key, value)));
     // Some servers choke on the default accept string.
     httpPost.addHeader("accept", "*/*");
     httpPost.addHeader("content-type", "application/json");

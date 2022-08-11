@@ -5,16 +5,15 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 
-import java.net.URISyntaxException;
-
 import com.github.tomakehurst.wiremock.WireMockServer;
+import java.net.URISyntaxException;
 import lombok.experimental.UtilityClass;
 import org.apache.http.client.utils.URIBuilder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
 @UtilityClass
-public class APITestUtils {
+public class ApiTestUtils {
 
   public static final String TENANT_ID = "test";
   public static final String RULES_PATH = "/tenant/rules";

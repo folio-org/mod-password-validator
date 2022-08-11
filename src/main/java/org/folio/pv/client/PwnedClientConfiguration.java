@@ -27,7 +27,7 @@ public class PwnedClientConfiguration {
   }
 
   @Bean
-  public Decoder feignDecoder () {
+  public Decoder feignDecoder() {
     var springConverters = messageConverters.getObject().getConverters();
     var decoderConverters = new ArrayList<HttpMessageConverter<?>>(springConverters.size() + 1);
 
@@ -41,7 +41,7 @@ public class PwnedClientConfiguration {
 
   @Bean
   public RequestInterceptor addPaddingInterceptor(
-      @Value("${pwned-passwords.padding.enabled}") boolean paddingEnabled) {
+    @Value("${pwned-passwords.padding.enabled}") boolean paddingEnabled) {
     return new PwnedClientAddPaddingInterceptor(paddingEnabled);
   }
 

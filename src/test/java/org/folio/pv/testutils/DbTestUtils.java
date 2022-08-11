@@ -1,20 +1,18 @@
 package org.folio.pv.testutils;
 
 
-import static org.folio.pv.testutils.APITestUtils.TENANT_ID;
+import static org.folio.pv.testutils.ApiTestUtils.TENANT_ID;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
-
 import lombok.experimental.UtilityClass;
-import org.springframework.jdbc.core.JdbcTemplate;
-
 import org.folio.pv.domain.entity.PasswordValidationRule;
 import org.folio.spring.FolioModuleMetadata;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 @UtilityClass
-public class DBTestUtils {
+public class DbTestUtils {
 
   public static final String VALIDATION_RULES_TABLE_NAME = "validationrules";
 

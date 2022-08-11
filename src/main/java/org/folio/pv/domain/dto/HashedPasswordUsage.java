@@ -1,7 +1,6 @@
 package org.folio.pv.domain.dto;
 
 import java.util.Comparator;
-
 import lombok.Value;
 
 @Value

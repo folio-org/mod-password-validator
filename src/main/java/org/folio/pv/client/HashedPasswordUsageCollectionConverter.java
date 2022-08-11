@@ -15,7 +15,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import org.folio.pv.domain.dto.HashedPasswordUsage;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
@@ -26,10 +26,8 @@ import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ReflectionUtils;
 
-import org.folio.pv.domain.dto.HashedPasswordUsage;
-
 public class HashedPasswordUsageCollectionConverter<T extends Collection<HashedPasswordUsage>>
-    extends AbstractGenericHttpMessageConverter<T> {
+  extends AbstractGenericHttpMessageConverter<T> {
 
   private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
@@ -112,12 +110,13 @@ public class HashedPasswordUsageCollectionConverter<T extends Collection<HashedP
 
   @Override
   protected void writeInternal(T hashedPasswordUsages, Type type,
-      HttpOutputMessage outputMessage) throws HttpMessageNotWritableException {
+                               HttpOutputMessage outputMessage) throws HttpMessageNotWritableException {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  protected T readInternal(Class<? extends T> clazz, HttpInputMessage inputMessage) throws HttpMessageNotReadableException {
+  protected T readInternal(Class<? extends T> clazz, HttpInputMessage inputMessage)
+    throws HttpMessageNotReadableException {
     throw new UnsupportedOperationException();
   }
 
@@ -159,6 +158,6 @@ public class HashedPasswordUsageCollectionConverter<T extends Collection<HashedP
   private static Charset getCharset(HttpHeaders headers) {
     var contentType = headers.getContentType();
     var charset = contentType != null ? contentType.getCharset() : null;
-    return (charset != null ? charset : DEFAULT_CHARSET);
+    return charset != null ? charset : DEFAULT_CHARSET;
   }
 }

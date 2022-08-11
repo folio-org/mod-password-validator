@@ -2,19 +2,17 @@ package org.folio.pv.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+import org.folio.cql2pgjson.exception.CQL2PgJSONException;
+import org.folio.pv.domain.dto.Error;
+import org.folio.pv.domain.dto.Errors;
+import org.folio.pv.domain.dto.Parameter;
+import org.folio.pv.service.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
-import org.folio.cql2pgjson.exception.CQL2PgJSONException;
-import org.folio.pv.domain.dto.Error;
-import org.folio.pv.domain.dto.Errors;
-import org.folio.pv.domain.dto.Parameter;
-import org.folio.pv.service.exception.UserNotFoundException;
 
 @ControllerAdvice
 public class ErrorHandlingController {

@@ -9,17 +9,10 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 import static java.util.Collections.singleton;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.folio.pv.testutils.RandomTestData.nextRandomRuleOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import static org.folio.pv.testutils.RandomTestData.nextRandomRuleOfType;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.IntStream;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,6 +21,23 @@ import com.github.tomakehurst.wiremock.client.MappingBuilder;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import io.github.glytching.junit.extension.random.Random;
 import io.github.glytching.junit.extension.random.RandomBeansExtension;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.IntStream;
+import org.folio.pv.domain.RuleType;
+import org.folio.pv.domain.ValidationType;
+import org.folio.pv.domain.dto.Password;
+import org.folio.pv.domain.dto.UserData;
+import org.folio.pv.domain.dto.ValidationErrors;
+import org.folio.pv.domain.entity.PasswordValidationRule;
+import org.folio.spring.DefaultFolioExecutionContext;
+import org.folio.spring.FolioExecutionContext;
+import org.folio.spring.FolioModuleMetadata;
+import org.folio.spring.config.FolioSpringConfiguration;
+import org.folio.spring.integration.XOkapiHeaders;
+import org.folio.spring.liquibase.FolioSpringLiquibase;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,19 +56,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-
-import org.folio.pv.domain.RuleType;
-import org.folio.pv.domain.ValidationType;
-import org.folio.pv.domain.dto.Password;
-import org.folio.pv.domain.dto.UserData;
-import org.folio.pv.domain.dto.ValidationErrors;
-import org.folio.pv.domain.entity.PasswordValidationRule;
-import org.folio.spring.DefaultFolioExecutionContext;
-import org.folio.spring.FolioExecutionContext;
-import org.folio.spring.FolioModuleMetadata;
-import org.folio.spring.config.FolioSpringConfiguration;
-import org.folio.spring.integration.XOkapiHeaders;
-import org.folio.spring.liquibase.FolioSpringLiquibase;
 
 @ExtendWith({
   MockitoExtension.class,
@@ -105,10 +102,10 @@ class ProgrammaticValidatorTest {
       aResponse()
         .withStatus(status)
         .withHeader(CONTENT_TYPE, "application/json")
-        .withBody("{" +
-          " \"result\": \"success\"," +
-          " \"messages\": [ \"" + message + "\" ]" +
-          " }")
+        .withBody("{"
+          + " \"result\": \"success\","
+          + " \"messages\": [ \"" + message + "\" ]"
+          + " }")
     );
   }
 
@@ -214,7 +211,8 @@ class ProgrammaticValidatorTest {
     private JdbcTemplate jdbcTemplate;
 
     @Bean
-    public FolioExecutionContext folioExecutionContext(FolioModuleMetadata moduleMetadata, WireMockServer wireMockServer) {
+    public FolioExecutionContext folioExecutionContext(FolioModuleMetadata moduleMetadata,
+                                                       WireMockServer wireMockServer) {
       Map<String, Collection<String>> headers = new HashMap<>();
       headers.put(XOkapiHeaders.URL, singleton(wireMockServer.baseUrl()));
       headers.put(XOkapiHeaders.TENANT, singleton(TEST_TENANT));

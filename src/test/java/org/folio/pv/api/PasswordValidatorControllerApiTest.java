@@ -4,22 +4,19 @@ import static org.apache.http.HttpStatus.SC_NOT_FOUND;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.apache.http.HttpStatus.SC_UNPROCESSABLE_ENTITY;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.folio.pv.testutils.ApiTestUtils.PASSWORD_VALIDATE_PATH;
+import static org.folio.pv.testutils.ApiTestUtils.mockGet;
+import static org.folio.pv.testutils.ApiTestUtils.mockPost;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
-import static org.folio.pv.testutils.APITestUtils.PASSWORD_VALIDATE_PATH;
-import static org.folio.pv.testutils.APITestUtils.mockGet;
-import static org.folio.pv.testutils.APITestUtils.mockPost;
-
 import java.util.UUID;
-
-import org.junit.jupiter.api.Test;
-
 import org.folio.pv.domain.dto.Error;
 import org.folio.pv.domain.dto.Errors;
 import org.folio.pv.domain.dto.Password;
 import org.folio.pv.domain.dto.ValidationResult;
+import org.junit.jupiter.api.Test;
 
 class PasswordValidatorControllerApiTest extends BaseApiTest {
 
