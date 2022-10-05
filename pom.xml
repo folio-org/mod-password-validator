@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.7.0</version>
+    <version>2.7.4</version>
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
 
@@ -17,27 +17,32 @@
 
   <properties>
     <java.version>11</java.version>
-    <folio-spring-base.version>4.1.0</folio-spring-base.version>
-    <openapi-generator.version>5.3.1</openapi-generator.version>
-    <mapstruct.version>1.5.1.Final</mapstruct.version>
-
     <validator-registry.yaml.file>${project.basedir}/src/main/resources/swagger.api/validator-registry.yaml</validator-registry.yaml.file>
     <password-validator.yaml.file>${project.basedir}/src/main/resources/swagger.api/password-validator.yaml</password-validator.yaml.file>
 
-    <!-- Test Properties-->
-    <junit-extensions.version>2.5.0</junit-extensions.version>
-    <mockito.version>4.3.1</mockito.version>
-    <wiremock.version>2.33.2</wiremock.version>
-    <rest-assured.version>4.5.1</rest-assured.version>
-    <embedded-postgresql.version>2.1.1</embedded-postgresql.version>
-    <lombok.mapstruct-binding.version>0.2.0</lombok.mapstruct-binding.version>
-    <maven-checkstyle-plugin.version>3.1.1</maven-checkstyle-plugin.version>
+    <folio-spring-base.version>5.0.0</folio-spring-base.version>
+    <mapstruct.version>1.5.2.Final</mapstruct.version>
 
     <sonar.exclusions>
       src/main/java/org/folio/pv/domain/**,
       src/main/java/org/folio/pv/repository/**,
     </sonar.exclusions>
 
+    <!-- Test Properties-->
+    <junit-extensions.version>2.6.0</junit-extensions.version>
+    <mockito.version>4.8.0</mockito.version>
+    <wiremock.version>2.34.0</wiremock.version>
+    <rest-assured.version>5.2.0</rest-assured.version>
+    <embedded-postgresql.version>2.1.2</embedded-postgresql.version>
+
+    <!-- Plugin properties-->
+    <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+    <openapi-generator.version>6.2.0</openapi-generator.version>
+    <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
+    <maven-copy-rename-plugin.version>1.0.1</maven-copy-rename-plugin.version>
+    <maven-build-helper-plugin.version>3.3.0</maven-build-helper-plugin.version>
+    <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+    <maven-release-plugin.version>3.0.0-M5</maven-release-plugin.version>
   </properties>
 
   <dependencies>
@@ -126,6 +131,12 @@
       <artifactId>embedded-database-spring-test</artifactId>
       <version>${embedded-postgresql.version}</version>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-classic</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.module</groupId>
@@ -181,7 +192,7 @@
             <path>
               <groupId>org.projectlombok</groupId>
               <artifactId>lombok-mapstruct-binding</artifactId>
-              <version>${lombok.mapstruct-binding.version}</version>
+              <version>${lombok-mapstruct-binding.version}</version>
             </path>
             <path>
               <groupId>org.mapstruct</groupId>
@@ -195,7 +206,6 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>versions-maven-plugin</artifactId>
-        <version>2.8.1</version>
         <configuration>
           <generateBackupPoms>false</generateBackupPoms>
         </configuration>
@@ -203,7 +213,6 @@
 
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
-        <version>3.2.0</version>
         <executions>
           <execution>
             <id>filter-descriptor-inputs</id>
@@ -228,7 +237,7 @@
       <plugin>
         <groupId>com.coderplus.maven.plugins</groupId>
         <artifactId>copy-rename-maven-plugin</artifactId>
-        <version>1.0.1</version>
+        <version>${maven-copy-rename-plugin.version}</version>
         <executions>
           <execution>
             <id>rename-descriptor-outputs</id>
@@ -255,7 +264,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
-        <version>3.2.0</version>
+        <version>${maven-build-helper-plugin.version}</version>
         <executions>
           <execution>
             <phase>generate-sources</phase>
@@ -336,7 +345,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.0.0-M5</version>
+        <version>${maven-surefire-plugin.version}</version>
         <configuration>
           <useSystemClassLoader>false</useSystemClassLoader>
         </configuration>
@@ -345,7 +354,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
-        <version>3.0.0-M1</version>
+        <version>${maven-release-plugin.version}</version>
         <configuration>
           <preparationGoals>clean verify</preparationGoals>
           <tagNameFormat>v@{project.version}</tagNameFormat>
