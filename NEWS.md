@@ -1,6 +1,7 @@
 ## v2.5.0 IN-PROGRESS
-
 * MODPWD-101 supports users interface versions 15.0 16.0
+* MODPWD-102 Add checkstyle maven plugin
+* MODPWD-103 Update folio-spring-base to v5.0.0
 
 ## 2022-06-28 v2.4.0
 * MODPWD-98 Update folio-spring-base v4.1.0
