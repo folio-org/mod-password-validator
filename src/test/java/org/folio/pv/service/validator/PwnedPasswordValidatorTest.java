@@ -43,7 +43,7 @@ class PwnedPasswordValidatorTest {
 
   @BeforeEach
   void setUp() {
-    rule = nextRandomRuleOfType(RuleType.PWNEDPASSWORD);
+    rule = nextRandomRuleOfType(RuleType.PwnedPassword);
 
     validator = new PwnedPasswordValidator(rule, pwnedClient);
   }

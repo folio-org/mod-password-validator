@@ -29,9 +29,9 @@
         <preConditions onFail="MARK_RAN">
             <tableIsEmpty tableName="validation_rules" schemaName="${database.defaultSchemaName}"/>
         </preConditions>
-        
+
         <sqlFile dbms="postgresql"
-                 path="populate-initial-rules.sql"
+                 path="v1.9.0/populate-initial-rules.sql"
                  relativeToChangelogFile="true"
                  splitStatements="false"/>
     </changeSet>

@@ -1,14 +1,20 @@
 package org.folio.pv.domain.entity;
 
+import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import lombok.Data;
+import org.folio.pv.domain.RuleState;
+import org.folio.pv.domain.RuleType;
+import org.folio.pv.domain.ValidationType;
 import org.hibernate.annotations.Type;
 
 @Data
@@ -23,17 +29,20 @@ public class PasswordValidationRule {
   @Column(name = "name")
   private String name;
 
-  @Column(name = "rule_type")
-  @Type(type = "org.folio.spring.domain.PostgreEnumTypeSql")
-  private String ruleType;
+  @Column(name = "rule_type", columnDefinition = "RuleType")
+  @Enumerated(EnumType.STRING)
+  @Type(PostgreSQLEnumType.class)
+  private RuleType ruleType;
 
-  @Column(name = "rule_state")
-  @Type(type = "org.folio.spring.domain.PostgreEnumTypeSql")
-  private String ruleState;
+  @Column(name = "rule_state", columnDefinition = "RuleState")
+  @Enumerated(EnumType.STRING)
+  @Type(PostgreSQLEnumType.class)
+  private RuleState ruleState;
 
-  @Column(name = "validation_type")
-  @Type(type = "org.folio.spring.domain.PostgreEnumTypeSql")
-  private String validationType;
+  @Column(name = "validation_type", columnDefinition = "RuleValidationType")
+  @Enumerated(EnumType.STRING)
+  @Type(PostgreSQLEnumType.class)
+  private ValidationType validationType;
 
   @Column(name = "order_no")
   private Integer orderNo;
@@ -89,5 +98,4 @@ public class PasswordValidationRule {
 
     return this;
   }
-
 }

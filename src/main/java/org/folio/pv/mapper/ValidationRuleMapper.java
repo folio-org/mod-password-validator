@@ -3,6 +3,9 @@ package org.folio.pv.mapper;
 import java.util.List;
 import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
+import org.folio.pv.domain.RuleState;
+import org.folio.pv.domain.RuleType;
+import org.folio.pv.domain.ValidationType;
 import org.folio.pv.domain.dto.ValidationRule;
 import org.folio.pv.domain.dto.ValidationRuleCollection;
 import org.folio.pv.domain.entity.PasswordValidationRule;
@@ -12,17 +15,19 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.NullValueCheckStrategy;
 
-@Mapper(componentModel = "spring", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+@Mapper(componentModel = "spring",
+  nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
+  imports = {RuleType.class, RuleState.class, ValidationType.class})
 public interface ValidationRuleMapper {
 
   @Mapping(target = "id", expression = "java(uuidToStringSafe(passwordValidationRule.getId()))")
   @Mapping(target = "name", source = "name")
-  @Mapping(target = "type",
-    expression = "java(ValidationRule.TypeEnum.fromValue(passwordValidationRule.getRuleType()))")
-  @Mapping(target = "validationType",
-    expression = "java(ValidationRule.ValidationTypeEnum.fromValue(passwordValidationRule.getValidationType()))")
-  @Mapping(target = "state",
-    expression = "java(ValidationRule.StateEnum.fromValue(passwordValidationRule.getRuleState()))")
+  @Mapping(target = "type", expression = "java(passwordValidationRule.getRuleType() != null ? "
+    + "ValidationRule.TypeEnum.fromValue(passwordValidationRule.getRuleType().getValue()) : null)")
+  @Mapping(target = "state", expression = "java(passwordValidationRule.getRuleState() != null ? "
+    + "ValidationRule.StateEnum.fromValue(passwordValidationRule.getRuleState().getValue()) : null)")
+  @Mapping(target = "validationType", expression = "java(passwordValidationRule.getValidationType() != null ? "
+    + "ValidationRule.ValidationTypeEnum.fromValue(passwordValidationRule.getValidationType().getValue()) : null)")
   @Mapping(target = "moduleName", source = "moduleName")
   @Mapping(target = "implementationReference", source = "implementationReference")
   @Mapping(target = "expression", source = "ruleExpression")
@@ -41,14 +46,13 @@ public interface ValidationRuleMapper {
   @Mapping(target = "metadata.updatedByUsername", source = "updatedByUsername")
   ValidationRule mapEntityToDto(PasswordValidationRule passwordValidationRule);
 
-
   @Mapping(target = "id", expression = "java(stringToUuidSafe(validationRule.getId()))")
-  @Mapping(target = "ruleType",
-    expression = "java(validationRule.getType() == null ? null : validationRule.getType().toString())")
-  @Mapping(target = "ruleState",
-    expression = "java(validationRule.getState() == null ? null : validationRule.getState().toString())")
-  @Mapping(target = "validationType", expression = "java(validationRule.getValidationType() == null ? "
-    + "null : validationRule.getValidationType().toString())")
+  @Mapping(target = "ruleType", expression = "java(validationRule.getType() != null ? "
+    + "RuleType.fromValue(validationRule.getType().getValue()) : null)")
+  @Mapping(target = "ruleState", expression = "java(validationRule.getState() != null ? "
+    + "RuleState.fromValue(validationRule.getState().getValue()) : null)")
+  @Mapping(target = "validationType", expression = "java(validationRule.getState() != null ? "
+    + "ValidationType.fromValue(validationRule.getValidationType().getValue()) : null)")
   @Mapping(target = "createdByUserId", expression = "java(validationRule.getMetadata() == null ? "
     + "null : stringToUuidSafe(validationRule.getMetadata().getCreatedByUserId()))")
   @Mapping(target = "updatedByUserId", expression = "java(validationRule.getMetadata() == null ? "

@@ -31,7 +31,7 @@ public final class RandomTestData {
 
   public static PasswordValidationRule nextRandomRuleOfType(RuleType type) {
     PasswordValidationRule result = RULE_RANDOMIZER.nextObject(PasswordValidationRule.class);
-    result.setRuleType(type.getValue());
+    result.setRuleType(type);
 
     return result;
   }

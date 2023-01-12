@@ -1,9 +1,9 @@
 package org.folio.pv.domain;
 
 public enum RuleType {
-  REGEXP("RegExp"),
-  PROGRAMMATIC("Programmatic"),
-  PWNEDPASSWORD("PwnedPassword");
+  RegExp("RegExp"),
+  Programmatic("Programmatic"),
+  PwnedPassword("PwnedPassword");
 
   private final String value;
 

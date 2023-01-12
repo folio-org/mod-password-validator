@@ -1,8 +1,8 @@
 package org.folio.pv.domain;
 
 public enum ValidationType {
-  SOFT("Soft"),
-  STRONG("Strong");
+  Soft("Soft"),
+  Strong("Strong");
 
   private final String value;
 

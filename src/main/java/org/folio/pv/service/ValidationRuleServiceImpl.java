@@ -83,7 +83,7 @@ public class ValidationRuleServiceImpl implements ValidationRuleService {
 
     var password = passwordContainer.getPassword();
 
-    var enabledRules = validationRuleRepository.findByRuleState(RuleState.ENABLED.getValue());
+    var enabledRules = validationRuleRepository.findByRuleState(RuleState.Enabled);
     enabledRules.sort(Comparator.comparing(PasswordValidationRule::getOrderNo));
 
     List<String> validationMessages = new ArrayList<>();
@@ -99,7 +99,7 @@ public class ValidationRuleServiceImpl implements ValidationRuleService {
 
       validationMessages.addAll(errors.getErrorMessages());
 
-      if (errors.hasErrors() && ValidationType.STRONG == ValidationType.fromValue(rule.getValidationType())) {
+      if (errors.hasErrors() && ValidationType.Strong == rule.getValidationType()) {
         break;
       }
     }

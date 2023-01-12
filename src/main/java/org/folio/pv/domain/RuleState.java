@@ -2,8 +2,8 @@ package org.folio.pv.domain;
 
 public enum RuleState {
 
-  ENABLED("Enabled"),
-  DISABLED("Disabled");
+  Enabled("Enabled"),
+  Disabled("Disabled");
 
   private final String value;
 
