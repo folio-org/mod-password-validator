@@ -61,7 +61,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
   RandomBeansExtension.class
 })
 @SpringBootTest
-class ProgrammaticValidatorTest {
+public class ProgrammaticValidatorTest {
 
   private static final String EXTERNAL_SERVICE_PATH = "/service";
   private static final String TEST_TENANT = "test_tenant";
