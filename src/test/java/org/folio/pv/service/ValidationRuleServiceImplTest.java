@@ -49,7 +49,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
   RandomBeansExtension.class
 })
 @ExtendWith(SpringExtension.class)
-public class ValidationRuleServiceImplTest {
+class ValidationRuleServiceImplTest {
 
   @MockBean
   private ValidationRuleMapper mapper;
