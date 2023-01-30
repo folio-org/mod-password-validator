@@ -90,9 +90,9 @@ class ValidationRulesControllerApiTest extends BaseApiTest {
     assertThat(actualRule)
       .hasFieldOrPropertyWithValue("id", UUID.fromString(createdRuleId))
       .hasFieldOrPropertyWithValue("name", newRuleName)
-      .hasFieldOrPropertyWithValue("ruleType", RuleType.RegExp)
-      .hasFieldOrPropertyWithValue("validationType", ValidationType.Soft)
-      .hasFieldOrPropertyWithValue("ruleState", RuleState.Disabled)
+      .hasFieldOrPropertyWithValue("ruleType", RuleType.REGEXP)
+      .hasFieldOrPropertyWithValue("validationType", ValidationType.SOFT)
+      .hasFieldOrPropertyWithValue("ruleState", RuleState.DISABLED)
       .hasFieldOrPropertyWithValue("orderNo", orderNo)
       .hasFieldOrPropertyWithValue("ruleExpression", expression)
       .hasFieldOrPropertyWithValue("errMessageId", errMessageId);
@@ -109,6 +109,6 @@ class ValidationRulesControllerApiTest extends BaseApiTest {
     var actualRule = getValidationRuleById(UUID.fromString(ruleId), metadata, jdbcTemplate);
     assertThat(actualRule)
       .hasFieldOrPropertyWithValue("id", UUID.fromString(ruleId))
-      .hasFieldOrPropertyWithValue("ruleState", RuleState.Disabled);
+      .hasFieldOrPropertyWithValue("ruleState", RuleState.DISABLED);
   }
 }

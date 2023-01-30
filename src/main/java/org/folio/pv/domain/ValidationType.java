@@ -1,8 +1,8 @@
 package org.folio.pv.domain;
 
 public enum ValidationType {
-  Soft("Soft"),
-  Strong("Strong");
+  SOFT("Soft"),
+  STRONG("Strong");
 
   private final String value;
 
@@ -21,7 +21,7 @@ public enum ValidationType {
 
   public static ValidationType fromValue(String value) {
     for (ValidationType vt : ValidationType.values()) {
-      if (vt.value.equals(value)) {
+      if (vt.value.equals(value) || vt.value.toUpperCase().equals(value)) {
         return vt;
       }
     }

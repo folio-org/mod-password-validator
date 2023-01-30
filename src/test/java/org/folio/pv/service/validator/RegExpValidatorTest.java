@@ -31,7 +31,7 @@ class RegExpValidatorTest {
 
   @BeforeEach
   void setUp() {
-    rule = nextRandomRuleOfType(RuleType.RegExp);
+    rule = nextRandomRuleOfType(RuleType.REGEXP);
 
     validator = new RegExpValidator(rule);
   }

@@ -221,7 +221,7 @@ public class ValidationRuleServiceImplTest {
       String userId = password.getUserId();
       mockFindUserById(userId, userName);
 
-      enabledRule.setValidationType(ValidationType.Strong);
+      enabledRule.setValidationType(ValidationType.STRONG);
       mockValidatorByRule(enabledRule);
 
       ValidationErrors errors = ValidationErrors.of(INVALID_PASSWORD);
@@ -242,7 +242,7 @@ public class ValidationRuleServiceImplTest {
     }
 
     private void mockValidatorByRule(PasswordValidationRule enabledRule) {
-      when(repository.findByRuleState(RuleState.Enabled)).thenReturn(singletonList(enabledRule));
+      when(repository.findByRuleState(RuleState.ENABLED)).thenReturn(singletonList(enabledRule));
       when(validationRegistry.validatorByRule(enabledRule)).thenReturn(validator);
     }
   }

@@ -64,9 +64,9 @@ class ValidatorRegistryImplTest {
 
   private static Stream<Arguments> validatorPerRuleProvider() {
     return Stream.of(
-      arguments(mockedRuleWithType(RuleType.RegExp.getValue()), RegExpValidator.class),
-      arguments(mockedRuleWithType(RuleType.Programmatic.getValue()), ProgrammaticValidator.class),
-      arguments(mockedRuleWithType(RuleType.PwnedPassword.getValue()), PwnedPasswordValidator.class)
+      arguments(mockedRuleWithType(RuleType.REGEXP.getValue()), RegExpValidator.class),
+      arguments(mockedRuleWithType(RuleType.PROGRAMMATIC.getValue()), ProgrammaticValidator.class),
+      arguments(mockedRuleWithType(RuleType.PWNEDPASSWORD.getValue()), PwnedPasswordValidator.class)
     );
   }
 

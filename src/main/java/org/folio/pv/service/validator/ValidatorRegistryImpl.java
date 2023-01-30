@@ -29,11 +29,11 @@ class ValidatorRegistryImpl implements ValidatorRegistry {
 
     var ruleType = rule.getRuleType();
 
-    if (ruleType == RuleType.RegExp) {
+    if (ruleType == RuleType.REGEXP) {
       validator = new RegExpValidator(rule);
-    } else if (ruleType == RuleType.Programmatic) {
+    } else if (ruleType == RuleType.PROGRAMMATIC) {
       validator = new ProgrammaticValidator(rule, folioExecutionContext, jacksonObjectMapper);
-    } else if (ruleType == RuleType.PwnedPassword) {
+    } else if (ruleType == RuleType.PWNEDPASSWORD) {
       validator = new PwnedPasswordValidator(rule, pwnedClient);
     } else {
       throw new IllegalStateException("Validator is not registered for rule type: " + ruleType);

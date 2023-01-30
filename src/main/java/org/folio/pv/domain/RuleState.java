@@ -2,8 +2,8 @@ package org.folio.pv.domain;
 
 public enum RuleState {
 
-  Enabled("Enabled"),
-  Disabled("Disabled");
+  ENABLED("Enabled"),
+  DISABLED("Disabled");
 
   private final String value;
 
@@ -22,7 +22,7 @@ public enum RuleState {
 
   public static RuleState fromValue(String value) {
     for (RuleState rt : RuleState.values()) {
-      if (rt.value.equals(value)) {
+      if (rt.value.equals(value) || rt.value.toUpperCase().equals(value)) {
         return rt;
       }
     }

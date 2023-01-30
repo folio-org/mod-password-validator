@@ -114,7 +114,7 @@ public class ProgrammaticValidatorTest {
 
   @BeforeEach
   void setUp() {
-    rule = nextRandomRuleOfType(RuleType.Programmatic);
+    rule = nextRandomRuleOfType(RuleType.PROGRAMMATIC);
     rule.setImplementationReference(EXTERNAL_SERVICE_PATH);
 
     validator = new ProgrammaticValidator(rule, folioExecutionContext, jacksonMapper);
@@ -156,7 +156,7 @@ public class ProgrammaticValidatorTest {
     throws JsonProcessingException {
 
     stubPostWithResponse(serverErrorResponse(responseStatus, "Server error"));
-    rule.setValidationType(ValidationType.Strong);
+    rule.setValidationType(ValidationType.STRONG);
 
     Exception exc = Assertions.assertThrows(RuntimeException.class,
       () -> validator.validate(password, userData));
@@ -171,7 +171,7 @@ public class ProgrammaticValidatorTest {
     throws JsonProcessingException {
 
     stubPostWithResponse(serverErrorResponse(responseStatus, "Server error"));
-    rule.setValidationType(ValidationType.Soft);
+    rule.setValidationType(ValidationType.SOFT);
 
     ValidationErrors errors = validator.validate(password, userData);
 

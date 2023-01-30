@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.2</version>
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
 
@@ -325,8 +325,6 @@
                 <interfaceOnly>true</interfaceOnly>
                 <useSpringBoot3>true</useSpringBoot3>
                 <requestMappingMode>api_interface</requestMappingMode>
-<!--                <useTags>true</useTags>-->
-<!--                <skipDefaultInterface>true</skipDefaultInterface>-->
               </configOptions>
             </configuration>
           </execution>
@@ -356,8 +354,6 @@
                 <interfaceOnly>true</interfaceOnly>
                 <useSpringBoot3>true</useSpringBoot3>
                 <requestMappingMode>api_interface</requestMappingMode>
-<!--                <useTags>true</useTags>-->
-<!--                <skipDefaultInterface>true</skipDefaultInterface>-->
               </configOptions>
             </configuration>
           </execution>
