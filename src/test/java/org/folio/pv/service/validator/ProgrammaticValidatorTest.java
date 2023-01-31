@@ -48,21 +48,20 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.cloud.commons.httpclient.HttpClientConfiguration;
 import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 @ExtendWith({
   MockitoExtension.class,
   RandomBeansExtension.class
 })
-@SpringJUnitConfig(ProgrammaticValidatorTest.Config.class)
-class ProgrammaticValidatorTest {
+@SpringBootTest
+public class ProgrammaticValidatorTest {
 
   private static final String EXTERNAL_SERVICE_PATH = "/service";
   private static final String TEST_TENANT = "test_tenant";
@@ -157,7 +156,7 @@ class ProgrammaticValidatorTest {
     throws JsonProcessingException {
 
     stubPostWithResponse(serverErrorResponse(responseStatus, "Server error"));
-    rule.setValidationType(ValidationType.STRONG.getValue());
+    rule.setValidationType(ValidationType.STRONG);
 
     Exception exc = Assertions.assertThrows(RuntimeException.class,
       () -> validator.validate(password, userData));
@@ -172,7 +171,7 @@ class ProgrammaticValidatorTest {
     throws JsonProcessingException {
 
     stubPostWithResponse(serverErrorResponse(responseStatus, "Server error"));
-    rule.setValidationType(ValidationType.SOFT.getValue());
+    rule.setValidationType(ValidationType.SOFT);
 
     ValidationErrors errors = validator.validate(password, userData);
 
@@ -200,10 +199,9 @@ class ProgrammaticValidatorTest {
   @Import({
     FolioSpringConfiguration.class,
     JacksonAutoConfiguration.class,
-    FeignAutoConfiguration.class,
-    HttpClientConfiguration.class
+    FeignAutoConfiguration.class
   })
-  static class Config {
+  public static class Config {
 
     @MockBean
     private FolioSpringLiquibase liquibase;

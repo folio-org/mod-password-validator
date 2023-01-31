@@ -21,7 +21,7 @@ public enum ValidationType {
 
   public static ValidationType fromValue(String value) {
     for (ValidationType vt : ValidationType.values()) {
-      if (vt.value.equals(value)) {
+      if (vt.value.equals(value) || vt.value.toUpperCase().equals(value)) {
         return vt;
       }
     }

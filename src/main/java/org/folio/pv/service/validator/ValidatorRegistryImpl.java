@@ -27,7 +27,7 @@ class ValidatorRegistryImpl implements ValidatorRegistry {
 
     Validator validator;
 
-    var ruleType = RuleType.fromValue(rule.getRuleType());
+    var ruleType = rule.getRuleType();
 
     if (ruleType == RuleType.REGEXP) {
       validator = new RegExpValidator(rule);

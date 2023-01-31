@@ -46,9 +46,10 @@ class ValidatorRegistryImplTest {
 
   @Test
   void shouldFailIfRuleTypeIsInvalid(@Random String ruleType) {
-    PasswordValidationRule rule = mockedRuleWithType(ruleType);
-
-    var exception = assertThrows(IllegalArgumentException.class, () -> registry.validatorByRule(rule));
+    var exception = assertThrows(IllegalArgumentException.class, () -> {
+      PasswordValidationRule rule = mockedRuleWithType(ruleType);
+      registry.validatorByRule(rule);
+    });
     assertThat(exception).hasMessageContaining("Unexpected value");
   }
 
@@ -71,7 +72,7 @@ class ValidatorRegistryImplTest {
 
   private static PasswordValidationRule mockedRuleWithType(String ruleType) {
     PasswordValidationRule rule = new PasswordValidationRule();
-    rule.setRuleType(ruleType);
+    rule.setRuleType(RuleType.fromValue(ruleType));
 
     return rule;
   }

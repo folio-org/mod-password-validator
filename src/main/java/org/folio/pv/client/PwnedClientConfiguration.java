@@ -9,13 +9,10 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
-import org.springframework.cloud.openfeign.clientconfig.OkHttpFeignConfiguration;
 import org.springframework.cloud.openfeign.support.SpringDecoder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.HttpMessageConverter;
 
-@Import(OkHttpFeignConfiguration.class)
 public class PwnedClientConfiguration {
 
   @Autowired

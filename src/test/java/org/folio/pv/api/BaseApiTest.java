@@ -1,5 +1,7 @@
 package org.folio.pv.api;
 
+import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.ZONKY;
+import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.folio.pv.testutils.ApiTestUtils.TENANT_ID;
 
@@ -10,6 +12,8 @@ import io.restassured.response.Response;
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
+import org.folio.pv.service.ValidationRuleServiceImplTest;
+import org.folio.pv.service.validator.ProgrammaticValidatorTest;
 import org.folio.pv.testutils.extension.WireMockInitializer;
 import org.folio.spring.FolioModuleMetadata;
 import org.folio.spring.integration.XOkapiHeaders;
@@ -19,8 +23,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
@@ -28,9 +38,11 @@ import org.springframework.test.context.ContextConfiguration;
 
 
 @ActiveProfiles("test")
-@AutoConfigureEmbeddedDatabase
+@AutoConfigureEmbeddedDatabase(beanName = "dataSource", type = POSTGRES, provider = ZONKY)
 @ContextConfiguration(initializers = {WireMockInitializer.class})
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@EnableAutoConfiguration(exclude = {FlywayAutoConfiguration.class})
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+  properties = {"folio.jpa.repository.base-packages=org.folio.pv"})
 class BaseApiTest {
 
   private static boolean dbInitialized = false;
@@ -109,4 +121,15 @@ class BaseApiTest {
     return "http://localhost:" + port + path;
   }
 
+
+  @Configuration
+  @ComponentScan(basePackages = {"org.folio.pv"},
+    excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,
+      value = {ValidationRuleServiceImplTest.Config.class, ProgrammaticValidatorTest.Config.class})})
+  static class TestConfiguration {
+    @Bean
+    public Object liquibaseDatabaseExtension() {
+      return new Object();
+    }
+  }
 }

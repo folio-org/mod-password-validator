@@ -1,6 +1,6 @@
 package org.folio.pv.controller;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.folio.pv.domain.dto.Password;
 import org.folio.pv.domain.dto.ValidationResult;

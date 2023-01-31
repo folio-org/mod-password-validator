@@ -13,6 +13,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.List;
 import java.util.UUID;
+import org.folio.pv.domain.RuleState;
+import org.folio.pv.domain.RuleType;
+import org.folio.pv.domain.ValidationType;
 import org.folio.pv.domain.dto.Error;
 import org.folio.pv.domain.dto.ValidationRule;
 import org.folio.pv.domain.dto.ValidationRuleCollection;
@@ -87,9 +90,9 @@ class ValidationRulesControllerApiTest extends BaseApiTest {
     assertThat(actualRule)
       .hasFieldOrPropertyWithValue("id", UUID.fromString(createdRuleId))
       .hasFieldOrPropertyWithValue("name", newRuleName)
-      .hasFieldOrPropertyWithValue("ruleType", ValidationRule.TypeEnum.REGEXP.getValue())
-      .hasFieldOrPropertyWithValue("validationType", ValidationRule.ValidationTypeEnum.SOFT.getValue())
-      .hasFieldOrPropertyWithValue("ruleState", ValidationRule.StateEnum.DISABLED.getValue())
+      .hasFieldOrPropertyWithValue("ruleType", RuleType.REGEXP)
+      .hasFieldOrPropertyWithValue("validationType", ValidationType.SOFT)
+      .hasFieldOrPropertyWithValue("ruleState", RuleState.DISABLED)
       .hasFieldOrPropertyWithValue("orderNo", orderNo)
       .hasFieldOrPropertyWithValue("ruleExpression", expression)
       .hasFieldOrPropertyWithValue("errMessageId", errMessageId);
@@ -106,6 +109,6 @@ class ValidationRulesControllerApiTest extends BaseApiTest {
     var actualRule = getValidationRuleById(UUID.fromString(ruleId), metadata, jdbcTemplate);
     assertThat(actualRule)
       .hasFieldOrPropertyWithValue("id", UUID.fromString(ruleId))
-      .hasFieldOrPropertyWithValue("ruleState", ValidationRule.StateEnum.DISABLED.getValue());
+      .hasFieldOrPropertyWithValue("ruleState", RuleState.DISABLED);
   }
 }

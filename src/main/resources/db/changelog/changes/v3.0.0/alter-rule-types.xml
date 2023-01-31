@@ -1,0 +1,29 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+  <changeSet id="MODRS-416@@alter-rule-type-enum" author="humoyun.norboboev">
+    <sql dbms="postgresql">
+      ALTER TYPE RuleType RENAME VALUE 'RegExp' TO 'REGEXP';
+      ALTER TYPE RuleType RENAME VALUE 'Programmatic' TO 'PROGRAMMATIC';
+      ALTER TYPE RuleType RENAME VALUE 'PwnedPassword' TO 'PWNEDPASSWORD';
+    </sql>
+  </changeSet>
+
+  <changeSet id="MODRS-416@@alter-rule-validation-type-enum" author="humoyun.norboboev">
+    <sql dbms="postgresql">
+      ALTER TYPE RuleValidationType RENAME VALUE 'Soft' TO 'SOFT';
+      ALTER TYPE RuleValidationType RENAME VALUE 'Strong' TO 'STRONG';
+    </sql>
+  </changeSet>
+
+  <changeSet id="MODRS-416@@alter-rule-state-enum" author="humoyun.norboboev">
+    <sql dbms="postgresql">
+      ALTER TYPE RuleState RENAME VALUE 'Enabled' TO 'ENABLED';
+      ALTER TYPE RuleState RENAME VALUE 'Disabled' TO 'DISABLED';
+    </sql>
+  </changeSet>
+
+</databaseChangeLog>

@@ -11,6 +11,15 @@ public enum RuleType {
     this.value = value;
   }
 
+  public static RuleType fromValue(String value) {
+    for (RuleType rt : RuleType.values()) {
+      if (rt.value.equals(value) || (rt.value.toUpperCase().equals(value))) {
+        return rt;
+      }
+    }
+    throw new IllegalArgumentException("Unexpected value '" + value + "'");
+  }
+
   public String getValue() {
     return value;
   }
@@ -18,14 +27,5 @@ public enum RuleType {
   @Override
   public String toString() {
     return String.valueOf(value);
-  }
-
-  public static RuleType fromValue(String value) {
-    for (RuleType rt : RuleType.values()) {
-      if (rt.value.equals(value)) {
-        return rt;
-      }
-    }
-    throw new IllegalArgumentException("Unexpected value '" + value + "'");
   }
 }

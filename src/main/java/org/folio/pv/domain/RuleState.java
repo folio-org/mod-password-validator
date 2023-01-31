@@ -22,7 +22,7 @@ public enum RuleState {
 
   public static RuleState fromValue(String value) {
     for (RuleState rt : RuleState.values()) {
-      if (rt.value.equals(value)) {
+      if (rt.value.equals(value) || rt.value.toUpperCase().equals(value)) {
         return rt;
       }
     }

@@ -48,7 +48,7 @@ class ProgrammaticValidator implements Validator {
       log.info("Validation response: statusCode = {}, body = [{}]", statusCode, body);
 
       if (statusCode < 200 || statusCode > 202) {
-        if (ValidationType.STRONG.getValue().equals(rule.getValidationType())) {
+        if (ValidationType.STRONG == rule.getValidationType()) {
           throw new RuntimeException(body);
         } else {
           return ValidationErrors.none();

@@ -49,7 +49,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
   RandomBeansExtension.class
 })
 @ExtendWith(SpringExtension.class)
-class ValidationRuleServiceImplTest {
+public class ValidationRuleServiceImplTest {
 
   @MockBean
   private ValidationRuleMapper mapper;
@@ -162,7 +162,7 @@ class ValidationRuleServiceImplTest {
   }
 
   @TestConfiguration
-  static class Config {
+  public static class Config {
 
     @Bean
     public ValidationRuleService employeeService(ValidationRuleMapper mapper, ValidationRuleRepository repository,
@@ -221,7 +221,7 @@ class ValidationRuleServiceImplTest {
       String userId = password.getUserId();
       mockFindUserById(userId, userName);
 
-      enabledRule.setValidationType(ValidationType.STRONG.getValue());
+      enabledRule.setValidationType(ValidationType.STRONG);
       mockValidatorByRule(enabledRule);
 
       ValidationErrors errors = ValidationErrors.of(INVALID_PASSWORD);
@@ -242,7 +242,7 @@ class ValidationRuleServiceImplTest {
     }
 
     private void mockValidatorByRule(PasswordValidationRule enabledRule) {
-      when(repository.findByRuleState(RuleState.ENABLED.getValue())).thenReturn(singletonList(enabledRule));
+      when(repository.findByRuleState(RuleState.ENABLED)).thenReturn(singletonList(enabledRule));
       when(validationRegistry.validatorByRule(enabledRule)).thenReturn(validator);
     }
   }
