@@ -1,3 +1,22 @@
+## v3.0.0 2023-02-15
+### Breaking changes
+* Migration to Spring Boot v3.0.0 and Java 17 ([MODPWD-110](https://issues.folio.org/browse/MODPWD-110))
+
+### Tech Dept
+* Align logging configuration with common Folio solution ([MODPWD-108](https://issues.folio.org/browse/MODPWD-108))
+
+### Dependencies
+* Bump `java` from `11` to `17`
+* Bump `spring-boot-starter-parent` from `2.7.4` to `3.0.2`
+* Bump `folio-spring-base` from `5.0.1` to `6.0.1`
+* Bump `mapstruct` from `1.5.2.Final` to `1.5.3.Final`
+* Bump `mockito` from `4.8.0` to `5.1.1`
+* Bump `rest-assured` from `5.2.0` to `5.3.0`
+* Bump `embedded-database-spring-test` from `2.1.2` to `2.2.0`
+* Changed `wiremock` from `wiremock-jre8` `2.34.0` to `wiremock-standalone` `2.27.2`
+* Added `io.hypersistence.hypersistence-utils-hibernate-60` `3.1.2`
+* Added `io.zonky.test.embedded-postgres` `2.0.2`
+
 ## 2022-10-19 v2.5.0
 * MODPWD-101 supports users interface versions 15.0 16.0
 * MODPWD-102 Add checkstyle maven plugin
@@ -88,16 +107,16 @@
 
  The password MUST:
 
-|    Description                                 |  Invalid examples                 |
-|------------------------------------------------|-----------------------------------|
-| Contain minimum 8 characters                   | 'pasword'                         |
-| Contain both lowercase and uppercase letters   | 'password', 'PASSWORD'            |
-| Contain at least one numeric character         | 'password'                        |
-| Contain at least one special character         | 'password'                        |
-| NOT contain your username                      | 'pas<USER_NAME>sword'             |
-| NOT contain a keyboard sequence                | 'qwerty12', '12345678', 'q1234567'|
-| NOT contain the same character                 | 'password'                        |
-| NOT contain whitespace                         | 'pas sword'                       |
+| Description                                  | Invalid examples                   |
+|----------------------------------------------|------------------------------------|
+| Contain minimum 8 characters                 | 'pasword'                          |
+| Contain both lowercase and uppercase letters | 'password', 'PASSWORD'             |
+| Contain at least one numeric character       | 'password'                         |
+| Contain at least one special character       | 'password'                         |
+| NOT contain your username                    | 'pas<USER_NAME>sword'              |
+| NOT contain a keyboard sequence              | 'qwerty12', '12345678', 'q1234567' |
+| NOT contain the same character               | 'password'                         |
+| NOT contain whitespace                       | 'pas sword'                        |
 ## 2018-09-19 v1.0.0
  * Add schema description to create validation_rules table
  * Add endpoints /tenant/rules with GET, POST and PUT methods to manage rules for tenant
@@ -107,13 +126,13 @@
 
  CRUD API for rules and password:
 
- | METHOD |             URL               | DESCRIPTION                                        |
- |--------|-------------------------------|----------------------------------------------------|
- | GET    | /tenant/rules                 | Get list of the rules                              |
- | POST   | /tenant/rules                 | Add a new rule to a tenant                         |
- | PUT    | /tenant/rules                 | Change a rule for a tenant                         |
- | GET    | /tenant/rules/{ruleId}        | Get a rule by id                                   |
- | POST   | /password/validate            | Validate user password                             |
+| METHOD |             URL               | DESCRIPTION                                        |
+|--------|-------------------------------|----------------------------------------------------|
+| GET    | /tenant/rules                 | Get list of the rules                              |
+| POST   | /tenant/rules                 | Add a new rule to a tenant                         |
+| PUT    | /tenant/rules                 | Change a rule for a tenant                         |
+| GET    | /tenant/rules/{ruleId}        | Get a rule by id                                   |
+| POST   | /password/validate            | Validate user password                             |
 
 ## 2018-09-04 v0.0.1
  * Initial module setup
