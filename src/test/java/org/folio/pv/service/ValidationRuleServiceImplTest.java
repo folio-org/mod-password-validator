@@ -31,6 +31,7 @@ import org.folio.pv.service.exception.UserNotFoundException;
 import org.folio.pv.service.validator.Validator;
 import org.folio.pv.service.validator.ValidatorRegistry;
 import org.folio.spring.data.OffsetRequest;
+import org.folio.spring.test.type.UnitTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -45,10 +46,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+@UnitTest
 @ExtendWith({
-  RandomBeansExtension.class
+  RandomBeansExtension.class,
+  SpringExtension.class
 })
-@ExtendWith(SpringExtension.class)
 public class ValidationRuleServiceImplTest {
 
   @MockBean

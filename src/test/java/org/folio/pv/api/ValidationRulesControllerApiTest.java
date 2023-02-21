@@ -1,6 +1,5 @@
 package org.folio.pv.api;
 
-
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.apache.http.HttpStatus.SC_UNPROCESSABLE_ENTITY;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -8,7 +7,6 @@ import static org.folio.pv.testutils.ApiTestUtils.LIMIT_PARAM;
 import static org.folio.pv.testutils.ApiTestUtils.QUERY_PARAM;
 import static org.folio.pv.testutils.ApiTestUtils.rulePath;
 import static org.folio.pv.testutils.ApiTestUtils.rulesPath;
-import static org.folio.pv.testutils.DbTestUtils.getValidationRuleById;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.List;
@@ -19,9 +17,17 @@ import org.folio.pv.domain.ValidationType;
 import org.folio.pv.domain.dto.Error;
 import org.folio.pv.domain.dto.ValidationRule;
 import org.folio.pv.domain.dto.ValidationRuleCollection;
+import org.folio.spring.test.type.IntegrationTest;
 import org.junit.jupiter.api.Test;
 
+@IntegrationTest
 class ValidationRulesControllerApiTest extends BaseApiTest {
+  private static final String RULE_ID = "5105b55a-b9a3-4f76-9402-a5243ea63c95";
+  private static final String ERR_MSG_ID = "password.test.invalid";
+  private static final String RULE_NAME = "test rule";
+  private static final String MODULE_NAME = "test";
+  private static final String REG_EXP = "\\w+";
+  private static final int ORDER_NUMBER = 12;
 
   @Test
   void testGetValidationRuleCollection() {
@@ -70,45 +76,47 @@ class ValidationRulesControllerApiTest extends BaseApiTest {
 
   @Test
   void testPostValidationRule() {
-    var newRuleName = "test rule";
-    var errMessageId = "password.test.invalid";
-    var expression = "\\w+";
-    var orderNo = 12;
-    var newRule = new ValidationRule()
-      .name(newRuleName)
+    //  GIVEN
+    ValidationRule newRule = new ValidationRule()
+      .name(RULE_NAME)
       .type(ValidationRule.TypeEnum.REGEXP)
       .validationType(ValidationRule.ValidationTypeEnum.SOFT)
       .state(ValidationRule.StateEnum.DISABLED)
-      .moduleName("test")
-      .orderNo(orderNo)
-      .errMessageId(errMessageId)
-      .expression(expression);
+      .moduleName(MODULE_NAME)
+      .orderNo(ORDER_NUMBER)
+      .errMessageId(ERR_MSG_ID)
+      .expression(REG_EXP);
 
+    //  WHEN
     var createdRuleId = verifyPost(rulesPath(), newRule, SC_OK).as(ValidationRule.class).getId();
+    var actualRule = dbTestUtils.getValidationRuleById(UUID.fromString(createdRuleId));
 
-    var actualRule = getValidationRuleById(UUID.fromString(createdRuleId), metadata, jdbcTemplate);
+    //  THEN
     assertThat(actualRule)
       .hasFieldOrPropertyWithValue("id", UUID.fromString(createdRuleId))
-      .hasFieldOrPropertyWithValue("name", newRuleName)
+      .hasFieldOrPropertyWithValue("name", RULE_NAME)
       .hasFieldOrPropertyWithValue("ruleType", RuleType.REGEXP)
       .hasFieldOrPropertyWithValue("validationType", ValidationType.SOFT)
       .hasFieldOrPropertyWithValue("ruleState", RuleState.DISABLED)
-      .hasFieldOrPropertyWithValue("orderNo", orderNo)
-      .hasFieldOrPropertyWithValue("ruleExpression", expression)
-      .hasFieldOrPropertyWithValue("errMessageId", errMessageId);
+      .hasFieldOrPropertyWithValue("orderNo", ORDER_NUMBER)
+      .hasFieldOrPropertyWithValue("ruleExpression", REG_EXP)
+      .hasFieldOrPropertyWithValue("errMessageId", ERR_MSG_ID);
   }
+
 
   @Test
   void testPutValidationRule() {
-    var ruleId = "5105b55a-b9a3-4f76-9402-a5243ea63c95";
-    var rule = verifyGet(rulePath(ruleId), SC_OK).as(ValidationRule.class);
+    //  GIVEN
+    var rule = verifyGet(rulePath(RULE_ID), SC_OK).as(ValidationRule.class);
     rule.state(ValidationRule.StateEnum.DISABLED);
 
+    //  WHEN
     verifyPut(rulesPath(), rule, SC_OK).as(ValidationRule.class);
+    var actualRule = dbTestUtils.getValidationRuleById(UUID.fromString(RULE_ID));
 
-    var actualRule = getValidationRuleById(UUID.fromString(ruleId), metadata, jdbcTemplate);
+    //  THEN
     assertThat(actualRule)
-      .hasFieldOrPropertyWithValue("id", UUID.fromString(ruleId))
+      .hasFieldOrPropertyWithValue("id", UUID.fromString(RULE_ID))
       .hasFieldOrPropertyWithValue("ruleState", RuleState.DISABLED);
   }
 }

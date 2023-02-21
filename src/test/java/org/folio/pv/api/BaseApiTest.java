@@ -1,26 +1,23 @@
 package org.folio.pv.api;
 
-import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.ZONKY;
-import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.folio.pv.testutils.ApiTestUtils.TENANT_ID;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import io.restassured.RestAssured;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
-import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import org.folio.pv.service.ValidationRuleServiceImplTest;
 import org.folio.pv.service.validator.ProgrammaticValidatorTest;
+import org.folio.pv.testutils.DbTestUtils;
 import org.folio.pv.testutils.extension.WireMockInitializer;
 import org.folio.spring.FolioModuleMetadata;
 import org.folio.spring.integration.XOkapiHeaders;
+import org.folio.spring.test.extension.EnablePostgres;
 import org.folio.tenant.domain.dto.TenantAttributes;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -37,8 +34,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 
+@EnablePostgres
 @ActiveProfiles("test")
-@AutoConfigureEmbeddedDatabase(beanName = "dataSource", type = POSTGRES, provider = ZONKY)
 @ContextConfiguration(initializers = {WireMockInitializer.class})
 @EnableAutoConfiguration(exclude = {FlywayAutoConfiguration.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
@@ -49,10 +46,9 @@ class BaseApiTest {
 
   @Autowired
   protected WireMockServer wireMockServer;
+
   @Autowired
-  protected FolioModuleMetadata metadata;
-  @Autowired
-  protected JdbcTemplate jdbcTemplate;
+  protected DbTestUtils dbTestUtils;
 
   @Value("${x-okapi-url}")
   private String okapiUrl;
@@ -70,11 +66,6 @@ class BaseApiTest {
   @AfterEach
   void afterEach() {
     this.wireMockServer.resetAll();
-  }
-
-  @Test
-  void contextLoads() {
-    assertThat(metadata).isNotNull();
   }
 
   protected Response verifyGet(String path, int code) {
@@ -121,6 +112,14 @@ class BaseApiTest {
     return "http://localhost:" + port + path;
   }
 
+  @org.springframework.boot.test.context.TestConfiguration
+  static class TestConfig {
+
+    @Bean
+    public DbTestUtils dbTestUtils(JdbcTemplate jdbcTemplate, FolioModuleMetadata moduleMetadata) {
+      return new DbTestUtils(moduleMetadata, jdbcTemplate);
+    }
+  }
 
   @Configuration
   @ComponentScan(basePackages = {"org.folio.pv"},
