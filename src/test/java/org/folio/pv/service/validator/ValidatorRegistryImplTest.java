@@ -12,6 +12,7 @@ import org.folio.pv.client.PwnedClient;
 import org.folio.pv.domain.RuleType;
 import org.folio.pv.domain.entity.PasswordValidationRule;
 import org.folio.spring.FolioExecutionContext;
+import org.folio.spring.test.type.UnitTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,6 +22,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+@UnitTest
 @ExtendWith({
   MockitoExtension.class,
   RandomBeansExtension.class

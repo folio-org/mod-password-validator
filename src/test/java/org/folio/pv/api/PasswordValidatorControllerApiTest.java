@@ -16,8 +16,10 @@ import org.folio.pv.domain.dto.Error;
 import org.folio.pv.domain.dto.Errors;
 import org.folio.pv.domain.dto.Password;
 import org.folio.pv.domain.dto.ValidationResult;
+import org.folio.spring.test.type.IntegrationTest;
 import org.junit.jupiter.api.Test;
 
+@IntegrationTest
 class PasswordValidatorControllerApiTest extends BaseApiTest {
 
   @Test

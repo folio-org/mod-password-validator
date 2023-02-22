@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import org.folio.pv.domain.dto.HashedPasswordUsage;
+import org.folio.spring.test.type.UnitTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +25,7 @@ import org.springframework.http.HttpInputMessage;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 
+@UnitTest
 @ExtendWith(MockitoExtension.class)
 class HashedPasswordUsageCollectionConverterTest {
 
