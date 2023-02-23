@@ -38,6 +38,7 @@ import org.folio.spring.FolioModuleMetadata;
 import org.folio.spring.config.FolioSpringConfiguration;
 import org.folio.spring.integration.XOkapiHeaders;
 import org.folio.spring.liquibase.FolioSpringLiquibase;
+import org.folio.spring.test.type.UnitTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,6 +61,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
   MockitoExtension.class,
   RandomBeansExtension.class
 })
+@UnitTest
 @SpringBootTest
 public class ProgrammaticValidatorTest {
 

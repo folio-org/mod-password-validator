@@ -17,10 +17,10 @@ import org.folio.pv.domain.ValidationType;
 import org.folio.pv.domain.dto.Error;
 import org.folio.pv.domain.dto.ValidationRule;
 import org.folio.pv.domain.dto.ValidationRuleCollection;
-import org.folio.spring.test.type.IntegrationTest;
+import org.folio.spring.test.type.UnitTest;
 import org.junit.jupiter.api.Test;
 
-@IntegrationTest
+@UnitTest
 class ValidationRulesControllerApiTest extends BaseApiTest {
   private static final String RULE_ID = "5105b55a-b9a3-4f76-9402-a5243ea63c95";
   private static final String ERR_MSG_ID = "password.test.invalid";

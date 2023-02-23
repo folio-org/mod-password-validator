@@ -27,9 +27,7 @@
 
     <sonar.exclusions>
       src/main/java/org/folio/pv/domain/**,
-      src/main/java/org/folio/pv/repository/**,
-      src/main/java/org/folio/pv/ModPasswordValidatorApplication.java,
-      src/main/java/org/folio/pv/model/**
+      src/main/java/org/folio/pv/repository/**
     </sonar.exclusions>
 
     <!-- Test Properties-->
