@@ -20,7 +20,7 @@ import org.folio.spring.test.type.IntegrationTest;
 import org.junit.jupiter.api.Test;
 
 @IntegrationTest
-class PasswordValidatorControllerApiTest extends BaseApiTest {
+class PasswordValidatorControllerIT extends BaseApiTest {
 
   @Test
   void validateInvalidPassword() {

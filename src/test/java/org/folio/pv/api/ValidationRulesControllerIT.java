@@ -21,7 +21,7 @@ import org.folio.spring.test.type.IntegrationTest;
 import org.junit.jupiter.api.Test;
 
 @IntegrationTest
-class ValidationRulesControllerApiTest extends BaseApiTest {
+class ValidationRulesControllerIT extends BaseApiTest {
   private static final String RULE_ID = "5105b55a-b9a3-4f76-9402-a5243ea63c95";
   private static final String ERR_MSG_ID = "password.test.invalid";
   private static final String RULE_NAME = "test rule";
