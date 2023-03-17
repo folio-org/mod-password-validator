@@ -32,6 +32,8 @@ public class HashedPasswordUsageCollectionConverter<T extends Collection<HashedP
   extends AbstractGenericHttpMessageConverter<T> {
 
   private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
+  private static final String INSTANTIATED_ERROR = "Could not instantiate collection class: %s";
+  private static final String INVALID_FORMAT_ERROR = "[line: %s ] Invalid format of the line: '%s'";
 
   private final Pattern usagePattern = Pattern.compile("\\s*([0-9a-fA-F]+)\\s*:\\s*(\\d+)\\s*");
 
@@ -130,10 +132,9 @@ public class HashedPasswordUsageCollectionConverter<T extends Collection<HashedP
       int usageCount = Integer.parseInt(m.group(2));
       return new HashedPasswordUsage(suffix, usageCount);
     } else {
-      HttpMessageNotReadableException e = new HttpMessageNotReadableException(
-        "[line:" + lineNumber + "] Invalid format of the line: '" + line + "'", inputMessage);
-      log.warn(e.getMessage());
-      throw e;
+      var errorMessage = String.format(INVALID_FORMAT_ERROR, lineNumber, line);
+      log.warn(errorMessage);
+      throw new HttpMessageNotReadableException(errorMessage, inputMessage);
     }
   }
 
@@ -143,10 +144,9 @@ public class HashedPasswordUsageCollectionConverter<T extends Collection<HashedP
       try {
         return (T) ReflectionUtils.accessibleConstructor(collectionClass).newInstance();
       } catch (Exception ex) {
-        IllegalArgumentException e =
-          new IllegalArgumentException("Could not instantiate collection class: " + collectionClass.getName(), ex);
-        log.warn(e.getMessage());
-        throw e;
+        var errorMessage = String.format(INSTANTIATED_ERROR, collectionClass.getName());
+        log.warn(errorMessage);
+        throw new IllegalArgumentException(errorMessage, ex);
       }
     } else if (List.class == collectionClass) {
       return (T) new ArrayList<HashedPasswordUsage>();
