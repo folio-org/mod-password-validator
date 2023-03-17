@@ -24,6 +24,7 @@ class PwnedPasswordValidator implements Validator {
   @Override
   public ValidationErrors validate(String password, UserData user) {
     if (StringUtils.isBlank(password)) {
+      log.warn("validate:: password is blank");
       return ValidationErrors.none();
     }
 

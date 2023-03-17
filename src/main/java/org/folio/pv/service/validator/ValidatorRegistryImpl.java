@@ -28,6 +28,7 @@ class ValidatorRegistryImpl implements ValidatorRegistry {
     Validator validator;
 
     var ruleType = rule.getRuleType();
+    log.info("validatorByRule:: ruleType is {}", rule.getRuleType());
 
     if (ruleType == RuleType.REGEXP) {
       validator = new RegExpValidator(rule);
@@ -36,7 +37,10 @@ class ValidatorRegistryImpl implements ValidatorRegistry {
     } else if (ruleType == RuleType.PWNEDPASSWORD) {
       validator = new PwnedPasswordValidator(rule, pwnedClient);
     } else {
-      throw new IllegalStateException("Validator is not registered for rule type: " + ruleType);
+      IllegalStateException e =
+        new IllegalStateException("Validator is not registered for rule type: " + ruleType);
+      log.warn("Failed on creating validator, msg: {}", e.getMessage());
+      throw e;
     }
 
     return validator;

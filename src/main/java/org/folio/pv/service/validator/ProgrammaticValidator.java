@@ -45,9 +45,9 @@ class ProgrammaticValidator implements Validator {
 
       var statusCode = response.getStatusLine().getStatusCode();
       var body = buffer.toString();
-      log.info("Validation response: statusCode = {}, body = [{}]", statusCode, body);
 
       if (statusCode < 200 || statusCode > 202) {
+        log.warn("Failed on getting validation response: [statusCode: {}, body: {}]", statusCode, body);
         if (ValidationType.STRONG == rule.getValidationType()) {
           throw new RuntimeException(body);
         } else {
@@ -55,9 +55,11 @@ class ProgrammaticValidator implements Validator {
         }
       }
 
+      log.info("Validation response: statusCode = {}, body = [{}]", statusCode, body);
       ValidationResult validationResult = jacksonObjectMapper.readValue(body, ValidationResult.class);
       return ValidationErrors.of(validationResult.getMessages());
     } catch (IOException e) {
+      log.warn("Failed on reading validation response, msg: {}", e.getMessage());
       throw new RuntimeException(e);
     }
   }
