@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 @Log4j2
 class ValidatorRegistryImpl implements ValidatorRegistry {
 
+  private static final String VALIDATOR_NOT_FOUND_ERROR = "Validator is not registered for rule type: %s";
   private final FolioExecutionContext folioExecutionContext;
   private final ObjectMapper jacksonObjectMapper;
   private final PwnedClient pwnedClient;
@@ -28,6 +29,7 @@ class ValidatorRegistryImpl implements ValidatorRegistry {
     Validator validator;
 
     var ruleType = rule.getRuleType();
+    log.info("validatorByRule:: ruleType is {}", rule.getRuleType());
 
     if (ruleType == RuleType.REGEXP) {
       validator = new RegExpValidator(rule);
@@ -36,7 +38,10 @@ class ValidatorRegistryImpl implements ValidatorRegistry {
     } else if (ruleType == RuleType.PWNEDPASSWORD) {
       validator = new PwnedPasswordValidator(rule, pwnedClient);
     } else {
-      throw new IllegalStateException("Validator is not registered for rule type: " + ruleType);
+      var errorMessage = String.format(VALIDATOR_NOT_FOUND_ERROR, ruleType);
+      IllegalStateException e = new IllegalStateException(errorMessage);
+      log.warn("Failed on creating validator, msg: {}", errorMessage);
+      throw e;
     }
 
     return validator;

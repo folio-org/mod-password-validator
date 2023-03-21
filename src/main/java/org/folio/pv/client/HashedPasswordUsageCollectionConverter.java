@@ -15,6 +15,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import lombok.extern.log4j.Log4j2;
 import org.folio.pv.domain.dto.HashedPasswordUsage;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
@@ -26,10 +27,13 @@ import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ReflectionUtils;
 
+@Log4j2
 public class HashedPasswordUsageCollectionConverter<T extends Collection<HashedPasswordUsage>>
   extends AbstractGenericHttpMessageConverter<T> {
 
   private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
+  private static final String INSTANTIATED_ERROR = "Could not instantiate collection class: %s";
+  private static final String INVALID_FORMAT_ERROR = "[line: %s ] Invalid format of the line: '%s'";
 
   private final Pattern usagePattern = Pattern.compile("\\s*([0-9a-fA-F]+)\\s*:\\s*(\\d+)\\s*");
 
@@ -98,7 +102,7 @@ public class HashedPasswordUsageCollectionConverter<T extends Collection<HashedP
       }
     }
 
-    logger.debug("Total number of hashed password usages extracted from the input: " + result.size());
+    log.debug("Total number of hashed password usages extracted from the input: " + result.size());
 
     return result;
   }
@@ -128,9 +132,9 @@ public class HashedPasswordUsageCollectionConverter<T extends Collection<HashedP
       int usageCount = Integer.parseInt(m.group(2));
       return new HashedPasswordUsage(suffix, usageCount);
     } else {
-      throw new HttpMessageNotReadableException(
-        "[line:" + lineNumber + "] Invalid format of the line: '" + line + "'",
-        inputMessage);
+      var errorMessage = String.format(INVALID_FORMAT_ERROR, lineNumber, line);
+      log.warn(errorMessage);
+      throw new HttpMessageNotReadableException(errorMessage, inputMessage);
     }
   }
 
@@ -140,7 +144,9 @@ public class HashedPasswordUsageCollectionConverter<T extends Collection<HashedP
       try {
         return (T) ReflectionUtils.accessibleConstructor(collectionClass).newInstance();
       } catch (Exception ex) {
-        throw new IllegalArgumentException("Could not instantiate collection class: " + collectionClass.getName(), ex);
+        var errorMessage = String.format(INSTANTIATED_ERROR, collectionClass.getName());
+        log.warn(errorMessage);
+        throw new IllegalArgumentException(errorMessage, ex);
       }
     } else if (List.class == collectionClass) {
       return (T) new ArrayList<HashedPasswordUsage>();

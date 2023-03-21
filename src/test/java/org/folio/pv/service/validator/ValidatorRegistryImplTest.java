@@ -47,6 +47,13 @@ class ValidatorRegistryImplTest {
   }
 
   @Test
+  void shouldFailWithNotRegisteredRuleType() {
+    PasswordValidationRule unknown = new PasswordValidationRule();
+    var exception = assertThrows(IllegalStateException.class, () -> registry.validatorByRule(unknown));
+    assertThat(exception).hasMessage("Validator is not registered for rule type: null");
+  }
+
+  @Test
   void shouldFailIfRuleTypeIsInvalid(@Random String ruleType) {
     var exception = assertThrows(IllegalArgumentException.class, () -> {
       PasswordValidationRule rule = mockedRuleWithType(ruleType);

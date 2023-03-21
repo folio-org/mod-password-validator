@@ -31,10 +31,13 @@ public class RegExpValidator implements Validator {
       var pattern = Pattern.compile(exprWithUser);
 
       failed = !pattern.matcher(password).matches();
-      log.info("Password matching failed: {}", failed);
     }
 
-    return failed ? ValidationErrors.of(rule.getErrMessageId()) : ValidationErrors.none();
+    if (failed) {
+      log.warn("Password matching failed, errMsgId: {}", rule.getErrMessageId());
+      return ValidationErrors.of(rule.getErrMessageId());
+    }
+    return ValidationErrors.none();
   }
 
 }
