@@ -38,7 +38,7 @@ class ValidatorRegistryImpl implements ValidatorRegistry {
     } else if (ruleType == RuleType.PWNEDPASSWORD) {
       validator = new PwnedPasswordValidator(rule, pwnedClient);
     } else {
-        var errorMessage = String.format(VALIDATOR_NOT_FOUND_ERROR, ruleType);
+      var errorMessage = String.format(VALIDATOR_NOT_FOUND_ERROR, ruleType);
       IllegalStateException e = new IllegalStateException(errorMessage);
       log.warn("Failed on creating validator, msg: {}", errorMessage);
       throw e;
