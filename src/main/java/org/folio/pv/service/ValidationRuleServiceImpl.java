@@ -59,7 +59,7 @@ public class ValidationRuleServiceImpl implements ValidationRuleService {
 
     var validationRuleList = isBlank
       ? validationRuleRepository.findAll(new OffsetRequest(offset, limit))
-      : validationRuleRepository.findByCQL(cql, new OffsetRequest(offset, limit));
+      : validationRuleRepository.findByCql(cql, new OffsetRequest(offset, limit));
     return validationRuleMapper.mapEntitiesToValidationRuleCollection(validationRuleList);
   }
 

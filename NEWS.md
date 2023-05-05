@@ -1,3 +1,11 @@
+## v3.1.0 in progress
+### Dependencies
+* Bump `folio-spring-base` from `6.0.1` to `7.0.0`
+* Add  `folio-spring-cql` with groupId `org.folio` & version `7.0.0`
+
+### Tech Dept
+* Migrate to folio-spring-support v7.0.0 ([MODPWD-113](https://issues.folio.org/browse/MODPWD-113))
+
 ## v3.0.0 2023-02-15
 ### Breaking changes
 * Migration to Spring Boot v3.0.0 and Java 17 ([MODPWD-110](https://issues.folio.org/browse/MODPWD-110))
