@@ -96,7 +96,7 @@ public class ValidationRuleServiceImplTest {
     OffsetRequest offsetReq = new OffsetRequest(o, l);
     Page<PasswordValidationRule> rulePage = new PageImpl<>(rules);
 
-    when(repository.findByCQL(cql, offsetReq)).thenReturn(rulePage);
+    when(repository.findByCql(cql, offsetReq)).thenReturn(rulePage);
     when(mapper.mapEntitiesToValidationRuleCollection(rulePage)).thenReturn(ruleCollection);
 
     ValidationRuleCollection result = service.getValidationRules(o, l, cql);
