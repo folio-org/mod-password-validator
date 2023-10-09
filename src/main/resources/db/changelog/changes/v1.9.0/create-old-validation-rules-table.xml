@@ -31,7 +31,7 @@
         </preConditions>
 
         <sqlFile dbms="postgresql"
-                 path="v1.9.0/populate-initial-rules.sql"
+                 path="populate-initial-rules.sql"
                  relativeToChangelogFile="true"
                  splitStatements="false"/>
     </changeSet>
