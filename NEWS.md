@@ -1,10 +1,16 @@
-## v3.1.0 in progress
-### Dependencies
-* Bump `folio-spring-base` from `6.0.1` to `7.0.0`
-* Add  `folio-spring-cql` with groupId `org.folio` & version `7.0.0`
-
+## v3.1.0
 ### Tech Dept
-* Migrate to folio-spring-support v7.0.0 ([MODPWD-113](https://issues.folio.org/browse/MODPWD-113))
+* Upgrade Folio spring base dependency version ([MODPWD-118](https://issues.folio.org/browse/MODPWD-118))
+* Migrate to folio-spring-support ([MODPWD-113](https://issues.folio.org/browse/MODPWD-113))
+* Update tests to use testcontainers instead of embedded databases ([MODPWD-112](https://issues.folio.org/browse/MODPWD-112))
+* Logging improvement ([MODPWD-91](https://issues.folio.org/browse/MODPWD-91))
+* Update copyright year ([FOLIO-1021](https://issues.folio.org/browse/FOLIO-1021))
+* Use GitHub Workflows api-lint, api-schema-lint and api-doc ([FOLIO-3678](https://issues.folio.org/browse/FOLIO-3678))
+
+### Dependencies
+* Bump `folio-spring-base` to `7.2.0`
+* Bump `spring-boot-starter-parent` to `3.1.4`
+* Add `folio-spring-cql` `7.2.0`
 
 ## v3.0.0 2023-02-15
 ### Breaking changes
