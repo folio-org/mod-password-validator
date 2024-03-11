@@ -92,6 +92,11 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.hibernate.orm</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>6.2.9.Final</version>
+    </dependency>
+    <dependency>
       <groupId>io.hypersistence</groupId>
       <artifactId>hypersistence-utils-hibernate-62</artifactId>
       <version>${hypersistence-utils.version}</version>
