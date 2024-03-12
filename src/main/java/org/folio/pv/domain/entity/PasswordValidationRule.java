@@ -1,6 +1,5 @@
 package org.folio.pv.domain.entity;
 
-import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,7 +14,8 @@ import lombok.Data;
 import org.folio.pv.domain.RuleState;
 import org.folio.pv.domain.RuleType;
 import org.folio.pv.domain.ValidationType;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 @Data
 @Table(name = "VALIDATIONRULES")
@@ -31,17 +31,17 @@ public class PasswordValidationRule {
 
   @Column(name = "rule_type", columnDefinition = "RuleType")
   @Enumerated(EnumType.STRING)
-  @Type(PostgreSQLEnumType.class)
+  @JdbcType(PostgreSQLEnumJdbcType.class)
   private RuleType ruleType;
 
   @Column(name = "rule_state", columnDefinition = "RuleState")
   @Enumerated(EnumType.STRING)
-  @Type(PostgreSQLEnumType.class)
+  @JdbcType(PostgreSQLEnumJdbcType.class)
   private RuleState ruleState;
 
   @Column(name = "validation_type", columnDefinition = "RuleValidationType")
   @Enumerated(EnumType.STRING)
-  @Type(PostgreSQLEnumType.class)
+  @JdbcType(PostgreSQLEnumJdbcType.class)
   private ValidationType validationType;
 
   @Column(name = "order_no")

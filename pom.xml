@@ -23,7 +23,7 @@
 
     <folio-spring-base.version>8.1.0</folio-spring-base.version>
     <mapstruct.version>1.5.3.Final</mapstruct.version>
-    <hypersistence-utils.version>3.5.2</hypersistence-utils.version>
+    <hypersistence-utils.version>3.7.3</hypersistence-utils.version>
 
     <sonar.exclusions>
       src/main/java/org/folio/pv/domain/**,
@@ -32,9 +32,7 @@
 
     <!-- Test Properties-->
     <junit-extensions.version>2.6.0</junit-extensions.version>
-    <mockito.version>5.1.1</mockito.version>
     <wiremock.version>3.0.1</wiremock.version>
-    <rest-assured.version>5.3.0</rest-assured.version>
     <embedded-database-spring-test.version>2.2.0</embedded-database-spring-test.version>
     <embedded-postgres.version>2.0.3</embedded-postgres.version>
     <folio-service-tools-spring-test.version>3.0.0</folio-service-tools-spring-test.version>
@@ -92,13 +90,8 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.hibernate.orm</groupId>
-      <artifactId>hibernate-core</artifactId>
-      <version>6.2.9.Final</version>
-    </dependency>
-    <dependency>
       <groupId>io.hypersistence</groupId>
-      <artifactId>hypersistence-utils-hibernate-62</artifactId>
+      <artifactId>hypersistence-utils-hibernate-63</artifactId>
       <version>${hypersistence-utils.version}</version>
     </dependency>
 
@@ -126,12 +119,6 @@
       <groupId>io.github.glytching</groupId>
       <artifactId>junit-extensions</artifactId>
       <version>${junit-extensions.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-inline</artifactId>
-      <version>${mockito.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
