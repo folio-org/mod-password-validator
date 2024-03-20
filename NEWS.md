@@ -1,3 +1,6 @@
+## v3.2.0
+* Upgrade to spring version for Q release (MODPWD-119)
+
 ## v3.1.0
 ### Tech Dept
 * Upgrade Folio spring base dependency version ([MODPWD-118](https://issues.folio.org/browse/MODPWD-118))
