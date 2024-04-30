@@ -87,6 +87,10 @@
     {
       "id" : "users",
       "version" : "16.1"
+    },
+    {
+      "id" : "login",
+      "version" : "7.3"
     }
   ],
   "launchDescriptor": {
