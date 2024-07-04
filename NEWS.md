@@ -1,3 +1,6 @@
+## v3.2.1 2024-07-04
+* Missing interface dependencies in module descriptor (MODPWD-122)
+
 ## v3.2.0
 * Upgrade to spring version for Q release (MODPWD-119)
 
