@@ -11,7 +11,7 @@
   <groupId>org.folio</groupId>
   <artifactId>mod-password-validator</artifactId>
   <name>mod-password-validator</name>
-  <version>3.2.2-SNAPSHOT</version>
+  <version>3.3.0</version>
   <description>FOLIO mod-password-validator module</description>
   <packaging>jar</packaging>
 
@@ -462,7 +462,7 @@
     <url>https://github.com/folio-org/${project.artifactId}</url>
     <connection>scm:git:git://github.com/folio-org/${project.artifactId}.git</connection>
     <developerConnection>scm:git:git@github.com:folio-org/${project.artifactId}.git</developerConnection>
-    <tag>release/v2.3</tag>
+    <tag>v3.3.0</tag>
   </scm>
 
   <licenses>
