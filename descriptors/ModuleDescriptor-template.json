@@ -86,7 +86,7 @@
   "requires": [
     {
       "id" : "users",
-      "version" : "16.1"
+      "version" : "16.3"
     },
     {
       "id" : "login",

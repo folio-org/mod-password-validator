@@ -1,3 +1,8 @@
+## v3.3.0 2024-10-31
+* Missing interface dependencies in module descriptor (MODPWD-122)
+* Update Spring support version for Ramsons (MODPWD-125)
+* Update version for Ramsons (MODPWD-127)
+
 ## v3.2.1 2024-07-04
 * Missing interface dependencies in module descriptor (MODPWD-122)
 
