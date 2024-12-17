@@ -18,6 +18,7 @@ public class ApiTestUtils {
   public static final String TENANT_ID = "test";
   public static final String RULES_PATH = "/tenant/rules";
   public static final String PASSWORD_VALIDATE_PATH = "/password/validate";
+  public static final String PASSWORD_CHECK_PATH = "/password/check";
 
   public static final String LIMIT_PARAM = "limit";
   public static final String QUERY_PARAM = "query";

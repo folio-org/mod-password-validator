@@ -349,7 +349,7 @@
               <generateApiTests>true</generateApiTests>
               <generateApiDocumentation>true</generateApiDocumentation>
               <generateModels>true</generateModels>
-              <modelsToGenerate>password,validation_result</modelsToGenerate>
+              <modelsToGenerate>password,password_check,validation_result</modelsToGenerate>
               <generateModelTests>false</generateModelTests>
               <generateSupportingFiles>false</generateSupportingFiles>
               <generateModelDocumentation>true</generateModelDocumentation>
