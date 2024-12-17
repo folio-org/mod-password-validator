@@ -3,6 +3,7 @@ package org.folio.pv.controller;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.folio.pv.domain.dto.Password;
+import org.folio.pv.domain.dto.PasswordCheck;
 import org.folio.pv.domain.dto.ValidationResult;
 import org.folio.pv.rest.resource.PasswordApi;
 import org.folio.pv.service.ValidationRuleService;
