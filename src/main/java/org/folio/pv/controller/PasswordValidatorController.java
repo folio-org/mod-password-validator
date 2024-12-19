@@ -1,14 +1,13 @@
 package org.folio.pv.controller;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.folio.pv.domain.dto.Password;
 import org.folio.pv.domain.dto.PasswordCheck;
 import org.folio.pv.domain.dto.ValidationResult;
 import org.folio.pv.rest.resource.PasswordApi;
-import org.folio.pv.service.ValidationRuleService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.folio.pv.service.PasswordValidatorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,17 +16,21 @@ import org.springframework.web.bind.annotation.RestController;
 @Log4j2
 @RestController
 @RequestMapping(value = "/")
+@RequiredArgsConstructor
 public class PasswordValidatorController implements PasswordApi {
-  private final ValidationRuleService validationRuleService;
+  private final PasswordValidatorService passwordValidatorService;
 
-  @Autowired
-  public PasswordValidatorController(ValidationRuleService validationRuleService) {
-    this.validationRuleService = validationRuleService;
+  @Override
+  public ResponseEntity<ValidationResult> validatePassword(@Valid Password password, String xOkapiTenant) {
+    log.info("Validating password API");
+    ValidationResult validationResult = passwordValidatorService.validatePasswordByRules(xOkapiTenant, password);
+    return ResponseEntity.ok(validationResult);
   }
 
   @Override
-  public ResponseEntity<ValidationResult> validatePassword(@Valid Password passwordContainer) {
-    ValidationResult validationResult = validationRuleService.validatePasswordByRules(passwordContainer);
-    return new ResponseEntity<>(validationResult, HttpStatus.OK);
+  public ResponseEntity<ValidationResult> checkPassword(@Valid PasswordCheck passwordCheck, String xOkapiTenant) {
+    log.info("Checking password API");
+    ValidationResult validationResult = passwordValidatorService.checkPassword(xOkapiTenant, passwordCheck);
+    return ResponseEntity.ok(validationResult);
   }
 }

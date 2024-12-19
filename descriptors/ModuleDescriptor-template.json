@@ -13,6 +13,12 @@
           "modulePermissions": [ "login.password.validate", "users.item.get" ]
         },
         {
+          "methods": ["POST"],
+          "pathPattern": "/password/check",
+          "permissionsRequired" : [ "validation.validate.post" ],
+          "modulePermissions": [ "login.password.validate" ]
+        },
+        {
           "methods": ["GET"],
           "pathPattern": "/tenant/rules",
           "permissionsRequired" : [ ]
