@@ -2,6 +2,7 @@ package org.folio.pv.service;
 
 import feign.FeignException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -34,44 +35,53 @@ public class PasswordValidatorServiceImpl implements PasswordValidatorService {
   private final ValidatorRegistry validationRegistry;
   private final UserClient userClient;
 
-
   @Override
   public ValidationResult validatePasswordByRules(String tenant, final Password passwordContainer) {
-    var userName = getUserNameByUserId(passwordContainer.getUserId());
-    var userData = new UserData(passwordContainer.getUserId(), userName);
-    var password = passwordContainer.getPassword();
-    var enabledRules = validationRuleService.getEnabledRules(tenant);
-    enabledRules.sort(Comparator.comparing(PasswordValidationRule::getOrderNo));
-    return validate(enabledRules, password, userData);
+    String userName = getUserNameByUserId(passwordContainer.getUserId());
+    UserData userData = new UserData(passwordContainer.getUserId(), userName);
+    String password = passwordContainer.getPassword();
+    List<PasswordValidationRule> enabledRules = getSortedRules(validationRuleService.getEnabledRules(tenant));
+    return validateRules(enabledRules, password, userData, true);
   }
 
   @Override
   public ValidationResult checkPassword(String tenant, PasswordCheck passwordCheck) {
-    var username = passwordCheck.getUsername();
-    var password = passwordCheck.getPassword();
-    var userData = new UserData();
+    String username = passwordCheck.getUsername();
+    String password = passwordCheck.getPassword();
+    UserData userData = new UserData();
     userData.setName(username);
-    var rules = getPasswordCheckRules(tenant);
-    return validate(rules, password, userData);
+    List<PasswordValidationRule> rules = getSortedRules(getPasswordCheckRules(tenant));
+    return validateRules(rules, password, userData, false);
   }
 
-  private ValidationResult validate(List<PasswordValidationRule> rules, String password, UserData userData) {
-    rules.sort(Comparator.comparing(PasswordValidationRule::getOrderNo));
+  private List<PasswordValidationRule> getSortedRules(List<PasswordValidationRule> rules) {
+    if (rules == null) {
+      return Collections.emptyList();
+    }
+    return rules.stream()
+        .sorted(Comparator.comparing(PasswordValidationRule::getOrderNo))
+        .toList();
+  }
+
+  private ValidationResult validateRules(List<PasswordValidationRule> rules, String password, UserData userData,
+      boolean isStrongValidation) {
     List<String> validationMessages = new ArrayList<>();
     for (PasswordValidationRule rule : rules) {
-      var validator = validationRegistry.validatorByRule(rule);
       log.info("Validating password with rule: {}", ruleBriefDescription(rule));
+      var validator = validationRegistry.validatorByRule(rule);
       var errors = validator.validate(password, userData);
       if (!errors.hasErrors()) {
-        log.info("validatePasswordByRules:: No validation errors");
-      }
-      validationMessages.addAll(errors.getErrorMessages());
-      if (errors.hasErrors() && ValidationType.STRONG == rule.getValidationType()) {
-        log.warn("Failed on password validating, error msg: {}", String.join(", ", validationMessages));
-        break;
+        log.info("Rule passed: {}", ruleBriefDescription(rule));
+      } else {
+        validationMessages.addAll(errors.getErrorMessages());
+        log.warn("Rule failed: {}, errors: {}", ruleBriefDescription(rule),
+            String.join(", ", errors.getErrorMessages()));
+        if (isStrongValidation && ValidationType.STRONG == rule.getValidationType()) {
+          break;
+        }
       }
     }
-    var validationResult = new ValidationResult();
+    ValidationResult validationResult = new ValidationResult();
     validationResult.setMessages(validationMessages);
     validationResult.setResult(validationMessages.isEmpty() ? VALIDATION_VALID_RESULT : VALIDATION_INVALID_RESULT);
     log.info("Validation result: {}", validationResult);
