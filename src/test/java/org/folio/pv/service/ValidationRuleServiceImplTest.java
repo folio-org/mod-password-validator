@@ -1,13 +1,7 @@
 package org.folio.pv.service;
 
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.when;
 
 import io.github.glytching.junit.extension.random.Random;
@@ -16,28 +10,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.folio.pv.client.UserClient;
-import org.folio.pv.domain.RuleState;
-import org.folio.pv.domain.ValidationType;
-import org.folio.pv.domain.dto.Password;
-import org.folio.pv.domain.dto.UserData;
-import org.folio.pv.domain.dto.ValidationErrors;
-import org.folio.pv.domain.dto.ValidationResult;
 import org.folio.pv.domain.dto.ValidationRule;
 import org.folio.pv.domain.dto.ValidationRuleCollection;
 import org.folio.pv.domain.entity.PasswordValidationRule;
 import org.folio.pv.mapper.ValidationRuleMapper;
 import org.folio.pv.repository.ValidationRuleRepository;
-import org.folio.pv.service.exception.UserNotFoundException;
-import org.folio.pv.service.validator.Validator;
 import org.folio.pv.service.validator.ValidatorRegistry;
 import org.folio.spring.data.OffsetRequest;
 import org.folio.spring.test.type.UnitTest;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -167,85 +149,8 @@ public class ValidationRuleServiceImplTest {
   public static class Config {
 
     @Bean
-    public ValidationRuleService employeeService(ValidationRuleMapper mapper, ValidationRuleRepository repository,
-                                                 UserClient userClient, ValidatorRegistry validationRegistry) {
-      return new ValidationRuleServiceImpl(mapper, repository, userClient, validationRegistry);
-    }
-  }
-
-  @Nested
-  @ExtendWith(MockitoExtension.class)
-  class ValidatePasswordTest {
-
-    private static final String INVALID_PASSWORD = "password.invalid";
-
-    private final ValidationResult valid = new ValidationResult()
-      .result(ValidationRuleServiceImpl.VALIDATION_VALID_RESULT)
-      .messages(emptyList());
-    private final ValidationResult invalid = new ValidationResult()
-      .result(ValidationRuleServiceImpl.VALIDATION_INVALID_RESULT)
-      .messages(singletonList(INVALID_PASSWORD));
-
-    @Mock
-    private Validator validator;
-
-    @Test
-    void shouldFailIfUserNotFoundById(@Random Password password) {
-      String userId = password.getUserId();
-      when(userClient.getUserById(contains(userId))).thenReturn(Optional.empty());
-
-      UserNotFoundException exc = Assertions.assertThrows(UserNotFoundException.class,
-        () -> service.validatePasswordByRules(password));
-
-      assertAll(
-        () -> assertThat(exc.getMessage()).containsIgnoringCase("not found"),
-        () -> assertEquals(userId, exc.getUserId()));
-    }
-
-    @Test
-    void shouldSucceed(@Random Password password, @Random String userName, @Random PasswordValidationRule enabledRule) {
-      String userId = password.getUserId();
-      mockFindUserById(userId, userName);
-
-      mockValidatorByRule(enabledRule);
-
-      ValidationErrors errors = ValidationErrors.none();
-      mockValidator(password, userName, errors);
-
-      ValidationResult result = service.validatePasswordByRules(password);
-
-      assertEquals(valid, result);
-    }
-
-    @Test
-    void shouldFailWithValidatorMsg(@Random Password password, @Random String userName,
-                                    @Random PasswordValidationRule enabledRule) {
-      String userId = password.getUserId();
-      mockFindUserById(userId, userName);
-
-      enabledRule.setValidationType(ValidationType.STRONG);
-      mockValidatorByRule(enabledRule);
-
-      ValidationErrors errors = ValidationErrors.of(INVALID_PASSWORD);
-      mockValidator(password, userName, errors);
-
-      ValidationResult result = service.validatePasswordByRules(password);
-
-      assertEquals(invalid, result);
-    }
-
-    private void mockFindUserById(String userId, String userName) {
-      when(userClient.getUserById(contains(userId))).thenReturn(Optional.of(new UserClient.UserDto(userId, userName)));
-    }
-
-    private void mockValidator(Password password, String userName, ValidationErrors errors) {
-      when(validator.validate(password.getPassword(), new UserData(password.getUserId(), userName)))
-        .thenReturn(errors);
-    }
-
-    private void mockValidatorByRule(PasswordValidationRule enabledRule) {
-      when(repository.findByRuleState(RuleState.ENABLED)).thenReturn(singletonList(enabledRule));
-      when(validationRegistry.validatorByRule(enabledRule)).thenReturn(validator);
+    public ValidationRuleService employeeService(ValidationRuleMapper mapper, ValidationRuleRepository repository) {
+      return new ValidationRuleServiceImpl(mapper, repository);
     }
   }
 }
