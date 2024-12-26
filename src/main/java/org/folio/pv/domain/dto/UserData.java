@@ -1,8 +1,14 @@
 package org.folio.pv.domain.dto;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Value
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class UserData {
 
   String id;

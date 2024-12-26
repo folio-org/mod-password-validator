@@ -4,6 +4,7 @@ import static org.apache.http.HttpStatus.SC_NOT_FOUND;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.apache.http.HttpStatus.SC_UNPROCESSABLE_ENTITY;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.folio.pv.testutils.ApiTestUtils.PASSWORD_CHECK_PATH;
 import static org.folio.pv.testutils.ApiTestUtils.PASSWORD_VALIDATE_PATH;
 import static org.folio.pv.testutils.ApiTestUtils.mockGet;
 import static org.folio.pv.testutils.ApiTestUtils.mockPost;
@@ -15,9 +16,12 @@ import java.util.UUID;
 import org.folio.pv.domain.dto.Error;
 import org.folio.pv.domain.dto.Errors;
 import org.folio.pv.domain.dto.Password;
+import org.folio.pv.domain.dto.PasswordCheck;
 import org.folio.pv.domain.dto.ValidationResult;
 import org.folio.spring.test.type.IntegrationTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 @IntegrationTest
 class PasswordValidatorControllerIT extends BaseApiTest {
@@ -74,6 +78,43 @@ class PasswordValidatorControllerIT extends BaseApiTest {
   void validateInvalid_ifPasswordNotProvided() {
     Password password = new Password().userId(UUID.randomUUID().toString());
     Errors errors = verifyPost(PASSWORD_VALIDATE_PATH, password, SC_UNPROCESSABLE_ENTITY).as(Errors.class);
+    assertErrorField(errors, "password");
+  }
+
+  @Test
+  void checkPassword_success() {
+    var password = new PasswordCheck().password("7Xu^&t[:J3Hha(<B").username("testUser");
+
+    var validationResult = verifyPost(PASSWORD_CHECK_PATH, password, SC_OK).as(ValidationResult.class);
+
+    assertThat(validationResult).hasFieldOrPropertyWithValue("result", "valid");
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"test", "TEST1234", "test@132", "testUser", "someUser123", "testUser123@", "1234443332"})
+  void checkPassword_fail_whenInvalidPassword(String invalidPassword) {
+    var password = new PasswordCheck().password(invalidPassword).username("testUser");
+
+    var validationResult = verifyPost(PASSWORD_CHECK_PATH, password, SC_OK).as(ValidationResult.class);
+
+    assertThat(validationResult).hasFieldOrPropertyWithValue("result", "invalid");
+  }
+
+  @Test
+  void checkPassword_fail_whenEmptyUsername() {
+    var password = new PasswordCheck().password("7Xu^&t[:J3Hha(<B").username("");
+
+    Errors errors = verifyPost(PASSWORD_CHECK_PATH, password, SC_UNPROCESSABLE_ENTITY).as(Errors.class);
+
+    assertErrorField(errors, "username");
+  }
+
+  @Test
+  void checkPassword_fail_whenEmptyPassword() {
+    var password = new PasswordCheck().password("").username("testUser");
+
+    Errors errors = verifyPost(PASSWORD_CHECK_PATH, password, SC_UNPROCESSABLE_ENTITY).as(Errors.class);
+
     assertErrorField(errors, "password");
   }
 
