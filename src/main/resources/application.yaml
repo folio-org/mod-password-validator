@@ -67,3 +67,7 @@ management:
       enabled: true
 server:
   port: 8081
+cache:
+  eviction:
+    time:
+      validation-rule: 1800000

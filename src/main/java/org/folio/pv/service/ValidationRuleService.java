@@ -1,9 +1,9 @@
 package org.folio.pv.service;
 
-import org.folio.pv.domain.dto.Password;
-import org.folio.pv.domain.dto.ValidationResult;
+import java.util.List;
 import org.folio.pv.domain.dto.ValidationRule;
 import org.folio.pv.domain.dto.ValidationRuleCollection;
+import org.folio.pv.domain.entity.PasswordValidationRule;
 
 public interface ValidationRuleService {
 
@@ -15,5 +15,5 @@ public interface ValidationRuleService {
 
   ValidationRule storeValidationRule(ValidationRule validationRule);
 
-  ValidationResult validatePasswordByRules(Password passwordContainer);
+  List<PasswordValidationRule> getEnabledRules(String tenant);
 }
