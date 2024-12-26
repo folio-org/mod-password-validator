@@ -6,6 +6,7 @@ import org.folio.cql2pgjson.exception.CQL2PgJSONException;
 import org.folio.pv.domain.dto.Error;
 import org.folio.pv.domain.dto.Errors;
 import org.folio.pv.domain.dto.Parameter;
+import org.folio.pv.service.exception.NoRulesMatchedException;
 import org.folio.pv.service.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -51,6 +52,14 @@ public class ErrorHandlingController {
     return new Error().message(exception.getMessage())
       .type(FOLIO_EXTERNAL_OR_UNDEFINED_ERROR_TYPE)
       .addParametersItem(parameter);
+  }
+
+  @ResponseBody
+  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+  @ExceptionHandler(NoRulesMatchedException.class)
+  public Error handleException(NoRulesMatchedException exception) {
+    return new Error().message(exception.getMessage())
+        .type(FOLIO_EXTERNAL_OR_UNDEFINED_ERROR_TYPE);
   }
 
   @ResponseBody
