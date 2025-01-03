@@ -83,6 +83,7 @@ class PasswordValidatorControllerIT extends BaseApiTest {
 
   @Test
   void checkPassword_success() {
+    mockGet("/range/.*", "0018A45C4D1DEF81644B54AB7F969B88D65:0", SC_OK, TEXT_PLAIN_VALUE, wireMockServer);
     var password = new PasswordCheck().password("7Xu^&t[:J3Hha(<B").username("testUser");
 
     var validationResult = verifyPost(PASSWORD_CHECK_PATH, password, SC_OK).as(ValidationResult.class);
@@ -93,6 +94,7 @@ class PasswordValidatorControllerIT extends BaseApiTest {
   @ParameterizedTest
   @ValueSource(strings = {"test", "TEST1234", "test@132", "testUser", "someUser123", "testUser123@", "1234443332"})
   void checkPassword_fail_whenInvalidPassword(String invalidPassword) {
+    mockGet("/range/.*", "0018A45C4D1DEF81644B54AB7F969B88D65:0", SC_OK, TEXT_PLAIN_VALUE, wireMockServer);
     var password = new PasswordCheck().password(invalidPassword).username("testUser");
 
     var validationResult = verifyPost(PASSWORD_CHECK_PATH, password, SC_OK).as(ValidationResult.class);
