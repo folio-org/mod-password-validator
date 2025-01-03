@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.folio.pv.client.UserClient;
+import org.folio.pv.domain.RuleType;
 import org.folio.pv.domain.ValidationType;
 import org.folio.pv.domain.dto.Password;
 import org.folio.pv.domain.dto.PasswordCheck;
@@ -28,8 +28,6 @@ import org.springframework.stereotype.Service;
 public class PasswordValidatorServiceImpl implements PasswordValidatorService {
   public static final String VALIDATION_VALID_RESULT = "valid";
   public static final String VALIDATION_INVALID_RESULT = "invalid";
-  private static final Set<String> PASSWORD_CHECK_RULE_NAMES = Set.of("password_length", "alphabetical_letters",
-      "numeric_symbol", "special_character", "no_user_name");
 
   private final ValidationRuleService validationRuleService;
   private final ValidatorRegistry validationRegistry;
@@ -90,7 +88,7 @@ public class PasswordValidatorServiceImpl implements PasswordValidatorService {
 
   private List<PasswordValidationRule> getPasswordCheckRules(String tenant) {
     var rules = validationRuleService.getEnabledRules(tenant).stream()
-        .filter(rule -> PASSWORD_CHECK_RULE_NAMES.contains(rule.getName()))
+        .filter(rule -> !RuleType.PROGRAMMATIC.equals(rule.getRuleType()))
         .collect(Collectors.toList());
 
     if (rules.isEmpty()) {
