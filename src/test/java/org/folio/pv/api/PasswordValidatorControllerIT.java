@@ -104,7 +104,18 @@ class PasswordValidatorControllerIT extends BaseApiTest {
 
   @Test
   void checkPassword_fail_whenEmptyUsername() {
+    mockGet("/range/.*", "0018A45C4D1DEF81644B54AB7F969B88D65:0", SC_OK, TEXT_PLAIN_VALUE, wireMockServer);
     var password = new PasswordCheck().password("7Xu^&t[:J3Hha(<B").username("");
+
+    var validationResult = verifyPost(PASSWORD_CHECK_PATH, password, SC_OK).as(ValidationResult.class);
+
+    assertThat(validationResult).hasFieldOrPropertyWithValue("result", "invalid");
+    assertEquals("password.usernameDuplicate.invalid", validationResult.getMessages().get(0));
+  }
+
+  @Test
+  void checkPassword_fail_whenNullUsername() {
+    var password = new PasswordCheck().password("7Xu^&t[:J3Hha(<B");
 
     Errors errors = verifyPost(PASSWORD_CHECK_PATH, password, SC_UNPROCESSABLE_ENTITY).as(Errors.class);
 
