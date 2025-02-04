@@ -85,7 +85,6 @@ class RegExpValidatorTest {
 
   @Test
   void shouldReturnErrorWithMessageIdIfNoMatchForSpace() {
-    //rule.setRuleExpression("^(?:(?!<USER_NAME>).)+$");
     rule.setRuleExpression("^(?i)(?:(?!<USER_NAME>).)+$");
 
     String password = "Us ername3.";
@@ -100,7 +99,6 @@ class RegExpValidatorTest {
 
   @Test
   void shouldReturnErrorWithMessageIdIfNoMatchForUpperAndLowerCase() {
-    //rule.setRuleExpression("^(?:(?!<USER_NAME>).)+$");
     rule.setRuleExpression("^(?i)(?:(?!<USER_NAME>).)+$");
 
     String password = "USername3.";
