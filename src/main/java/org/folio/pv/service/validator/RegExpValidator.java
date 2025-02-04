@@ -25,12 +25,15 @@ public class RegExpValidator implements Validator {
 
     var failed = false;
     if (isNotBlank(expression)) {
-      var exprWithUser = expression.replace(REGEXP_USER_NAME_PLACEHOLDER, user.getName());
+      String passwordWithoutSpaces = password.replaceAll("\\s", "");
+      String usernameWithoutSpaces = user.getName().replaceAll("\\s", "");
+
+      var exprWithUser = expression.replace(REGEXP_USER_NAME_PLACEHOLDER, usernameWithoutSpaces);
       log.info("Validating password against regexp: {}", exprWithUser);
 
       var pattern = Pattern.compile(exprWithUser);
 
-      failed = !pattern.matcher(password).matches();
+      failed = !pattern.matcher(passwordWithoutSpaces).matches();
     }
 
     if (failed) {
