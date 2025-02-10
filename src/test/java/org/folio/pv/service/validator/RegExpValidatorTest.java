@@ -82,4 +82,32 @@ class RegExpValidatorTest {
       () -> assertThat(errors.getErrorMessages()).containsExactly(rule.getErrMessageId())
     );
   }
+
+  @Test
+  void shouldReturnErrorWithMessageIdIfNoMatchForSpace() {
+    rule.setRuleExpression("^(?i)(?:(?!<USER_NAME>).)+$");
+
+    String password = "Us ername3.";
+    UserData user1Data = new UserData("1", "Username3.");
+    ValidationErrors errors = validator.validate(password, user1Data);
+
+    Assertions.assertAll(
+      () -> assertTrue(errors.hasErrors()),
+      () -> assertThat(errors.getErrorMessages()).containsExactly(rule.getErrMessageId())
+    );
+  }
+
+  @Test
+  void shouldReturnErrorWithMessageIdIfNoMatchForUpperAndLowerCase() {
+    rule.setRuleExpression("^(?i)(?:(?!<USER_NAME>).)+$");
+
+    String password = "USername3.";
+    UserData user1Data = new UserData("1", "Username3.");
+    ValidationErrors errors = validator.validate(password, user1Data);
+
+    Assertions.assertAll(
+      () -> assertTrue(errors.hasErrors()),
+      () -> assertThat(errors.getErrorMessages()).containsExactly(rule.getErrMessageId())
+    );
+  }
 }
