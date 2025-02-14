@@ -3,7 +3,6 @@ package org.folio.pv.service.validator;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.util.regex.Pattern;
-
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
