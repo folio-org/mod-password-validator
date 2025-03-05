@@ -49,12 +49,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 @ExtendWith({
   MockitoExtension.class,
@@ -203,9 +203,9 @@ public class ProgrammaticValidatorTest {
   })
   public static class Config {
 
-    @MockBean
+    @MockitoBean
     private FolioSpringLiquibase liquibase;
-    @MockBean
+    @MockitoBean
     private JdbcTemplate jdbcTemplate;
 
     @Bean
