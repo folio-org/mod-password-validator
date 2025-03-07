@@ -84,10 +84,10 @@ class RegExpValidatorTest {
   }
 
   @Test
-  void shouldReturnErrorWithMessageIdIfNoMatchForSpace() {
+  void shouldReturnErrorWithMessageIdIfNoMatchForUpperAndLowerCase() {
     rule.setRuleExpression("^(?i)(?:(?!<USER_NAME>).)+$");
 
-    String password = "Us ername3.";
+    String password = "USername3.";
     UserData user1Data = new UserData("1", "Username3.");
     ValidationErrors errors = validator.validate(password, user1Data);
 
@@ -98,10 +98,24 @@ class RegExpValidatorTest {
   }
 
   @Test
-  void shouldReturnErrorWithMessageIdIfNoMatchForUpperAndLowerCase() {
-    rule.setRuleExpression("^(?i)(?:(?!<USER_NAME>).)+$");
+  void shouldReturnErrorWithMessageIdIfPasswordContainsConsecutiveWhitespaces() {
+    rule.setRuleExpression("^(?:(?!\\s{2,}).)+$");
 
-    String password = "USername3.";
+    String password = "Test  Model  123@#";
+    UserData user1Data = new UserData("1", "Username3.");
+    ValidationErrors errors = validator.validate(password, user1Data);
+
+    Assertions.assertAll(
+      () -> assertTrue(errors.hasErrors()),
+      () -> assertThat(errors.getErrorMessages()).containsExactly(rule.getErrMessageId())
+    );
+  }
+
+  @Test
+  void shouldReturnErrorWithMessageIdIfPasswordContainsWhitespaces() {
+    rule.setRuleExpression("[^\\s]+");
+
+    String password = "Test Model123@#";
     UserData user1Data = new UserData("1", "Username3.");
     ValidationErrors errors = validator.validate(password, user1Data);
 
