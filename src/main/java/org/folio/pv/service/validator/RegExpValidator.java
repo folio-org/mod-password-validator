@@ -25,6 +25,7 @@ public class RegExpValidator implements Validator {
 
     var failed = false;
     if (isNotBlank(expression)) {
+
       var exprWithUser = expression.replace(REGEXP_USER_NAME_PLACEHOLDER, user.getName());
       log.info("Validating password against regexp: {}", exprWithUser);
 
