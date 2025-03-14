@@ -17,7 +17,7 @@ import org.folio.pv.domain.ValidationType;
 import org.folio.pv.domain.dto.Error;
 import org.folio.pv.domain.dto.ValidationRule;
 import org.folio.pv.domain.dto.ValidationRuleCollection;
-import org.folio.spring.test.type.IntegrationTest;
+import org.folio.spring.testing.type.IntegrationTest;
 import org.junit.jupiter.api.Test;
 
 @IntegrationTest

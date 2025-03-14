@@ -14,7 +14,7 @@ import org.folio.pv.testutils.DbTestUtils;
 import org.folio.pv.testutils.extension.WireMockInitializer;
 import org.folio.spring.FolioModuleMetadata;
 import org.folio.spring.integration.XOkapiHeaders;
-import org.folio.spring.test.extension.EnablePostgres;
+import org.folio.spring.testing.extension.EnablePostgres;
 import org.folio.tenant.domain.dto.TenantAttributes;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
