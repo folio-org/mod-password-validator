@@ -22,8 +22,8 @@
     <password-validator.yaml.file>${project.basedir}/src/main/resources/swagger.api/password-validator.yaml</password-validator.yaml.file>
 
     <folio-spring-base.version>9.0.0</folio-spring-base.version>
-    <mapstruct.version>1.6.2</mapstruct.version>
-    <hypersistence-utils.version>3.7.3</hypersistence-utils.version>
+    <mapstruct.version>1.6.3</mapstruct.version>
+    <hypersistence-utils.version>3.8.3</hypersistence-utils.version>
 
     <sonar.exclusions>
       src/main/java/org/folio/pv/domain/**,

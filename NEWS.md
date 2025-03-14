@@ -1,3 +1,6 @@
+## v3.4.0 2025-03-14
+* Update mod-password-validator to Java 21 ([FOLIO-4219](https://folio-org.atlassian.net/browse/FOLIO-4219))
+
 ## v3.3.0 2024-10-31
 * Missing interface dependencies in module descriptor (MODPWD-122)
 * Update Spring support version for Ramsons (MODPWD-125)
