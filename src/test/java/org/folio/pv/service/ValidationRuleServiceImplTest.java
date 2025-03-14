@@ -17,7 +17,7 @@ import org.folio.pv.mapper.ValidationRuleMapper;
 import org.folio.pv.repository.ValidationRuleRepository;
 import org.folio.pv.service.validator.ValidatorRegistry;
 import org.folio.spring.data.OffsetRequest;
-import org.folio.spring.test.type.UnitTest;
+import org.folio.spring.testing.type.UnitTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

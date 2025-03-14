@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import org.folio.pv.domain.dto.HashedPasswordUsage;
-import org.folio.spring.test.type.UnitTest;
+import org.folio.spring.testing.type.UnitTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

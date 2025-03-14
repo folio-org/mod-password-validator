@@ -18,7 +18,7 @@ import org.folio.pv.domain.dto.Errors;
 import org.folio.pv.domain.dto.Password;
 import org.folio.pv.domain.dto.PasswordCheck;
 import org.folio.pv.domain.dto.ValidationResult;
-import org.folio.spring.test.type.IntegrationTest;
+import org.folio.spring.testing.type.IntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;

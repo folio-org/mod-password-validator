@@ -12,7 +12,7 @@ import org.folio.pv.domain.RuleType;
 import org.folio.pv.domain.dto.UserData;
 import org.folio.pv.domain.dto.ValidationErrors;
 import org.folio.pv.domain.entity.PasswordValidationRule;
-import org.folio.spring.test.type.UnitTest;
+import org.folio.spring.testing.type.UnitTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

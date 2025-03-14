@@ -21,7 +21,7 @@
     <validator-registry.yaml.file>${project.basedir}/src/main/resources/swagger.api/validator-registry.yaml</validator-registry.yaml.file>
     <password-validator.yaml.file>${project.basedir}/src/main/resources/swagger.api/password-validator.yaml</password-validator.yaml.file>
 
-    <folio-spring-base.version>9.0.0</folio-spring-base.version>
+    <folio-spring-support.version>9.0.0</folio-spring-support.version>
     <mapstruct.version>1.6.3</mapstruct.version>
     <hypersistence-utils.version>3.8.3</hypersistence-utils.version>
 
@@ -32,14 +32,13 @@
 
     <!-- Test Properties-->
     <junit-extensions.version>2.6.0</junit-extensions.version>
-    <wiremock.version>3.0.1</wiremock.version>
+    <wiremock.version>3.12.1</wiremock.version>
     <embedded-database-spring-test.version>2.5.0</embedded-database-spring-test.version>
     <embedded-postgres.version>2.0.3</embedded-postgres.version>
-    <folio-service-tools-spring-test.version>3.1.0</folio-service-tools-spring-test.version>
 
     <!-- Plugin properties-->
     <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
-    <openapi-generator.version>7.3.0</openapi-generator.version>
+    <openapi-generator.version>7.12.0</openapi-generator.version>
     <maven-checkstyle-plugin.version>3.5.0</maven-checkstyle-plugin.version>
     <maven-copy-rename-plugin.version>1.0.1</maven-copy-rename-plugin.version>
     <maven-build-helper-plugin.version>3.6.0</maven-build-helper-plugin.version>
@@ -51,13 +50,18 @@
   <dependencies>
     <dependency>
       <groupId>org.folio</groupId>
+      <artifactId>folio-spring-testing</artifactId>
+      <version>${folio-spring-support.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.folio</groupId>
       <artifactId>folio-spring-base</artifactId>
-      <version>${folio-spring-base.version}</version>
+      <version>${folio-spring-support.version}</version>
     </dependency>
     <dependency>
       <groupId>org.folio</groupId>
       <artifactId>folio-spring-cql</artifactId>
-      <version>${folio-spring-base.version}</version>
+      <version>${folio-spring-support.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -122,7 +126,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.github.tomakehurst</groupId>
+      <groupId>org.wiremock</groupId>
       <artifactId>wiremock-standalone</artifactId>
       <version>${wiremock.version}</version>
       <scope>test</scope>
@@ -156,12 +160,7 @@
       <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.folio</groupId>
-      <artifactId>folio-service-tools-spring-test</artifactId>
-      <version>${folio-service-tools-spring-test.version}</version>
-      <scope>test</scope>
-    </dependency>
+
 
   </dependencies>
 
