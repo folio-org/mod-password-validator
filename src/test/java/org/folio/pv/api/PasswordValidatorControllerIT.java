@@ -8,6 +8,8 @@ import static org.folio.pv.testutils.ApiTestUtils.PASSWORD_CHECK_PATH;
 import static org.folio.pv.testutils.ApiTestUtils.PASSWORD_VALIDATE_PATH;
 import static org.folio.pv.testutils.ApiTestUtils.mockGet;
 import static org.folio.pv.testutils.ApiTestUtils.mockPost;
+import static org.folio.pv.testutils.ApiTestUtils.rulePath;
+import static org.folio.pv.testutils.ApiTestUtils.rulesPath;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
@@ -18,6 +20,8 @@ import org.folio.pv.domain.dto.Errors;
 import org.folio.pv.domain.dto.Password;
 import org.folio.pv.domain.dto.PasswordCheck;
 import org.folio.pv.domain.dto.ValidationResult;
+import org.folio.pv.domain.dto.ValidationRule;
+import org.folio.pv.domain.dto.ValidationRule.StateEnum;
 import org.folio.spring.test.type.IntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -25,6 +29,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 @IntegrationTest
 class PasswordValidatorControllerIT extends BaseApiTest {
+
+  private static final String WHITE_SPACE_RULE_ID = "51e201ba-95d3-44e5-b4ec-f0059f11afcb";
 
   @Test
   void validateInvalidPassword() {
@@ -92,14 +98,17 @@ class PasswordValidatorControllerIT extends BaseApiTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"test", "TEST1234", "test@132", "testUser", "someUser123", "testUser123@", "1234443332"})
+  @ValueSource(strings = {"test", "TEST1234", "test@132", "testUser", "someUser123", "testUser123@", "1234443332",
+      "7Xu^&t[:J3Hha(<B ", " 7Xu^&t[:J3Hha(<B"})
   void checkPassword_fail_whenInvalidPassword(String invalidPassword) {
+    updateRuleState(WHITE_SPACE_RULE_ID, StateEnum.ENABLED);
     mockGet("/range/.*", "0018A45C4D1DEF81644B54AB7F969B88D65:0", SC_OK, TEXT_PLAIN_VALUE, wireMockServer);
     var password = new PasswordCheck().password(invalidPassword).username("testUser");
 
     var validationResult = verifyPost(PASSWORD_CHECK_PATH, password, SC_OK).as(ValidationResult.class);
 
     assertThat(validationResult).hasFieldOrPropertyWithValue("result", "invalid");
+    updateRuleState(WHITE_SPACE_RULE_ID, StateEnum.DISABLED);
   }
 
   @Test
@@ -133,5 +142,12 @@ class PasswordValidatorControllerIT extends BaseApiTest {
 
   private void assertErrorField(Errors errors, String expectedErrorField) {
     assertEquals(expectedErrorField, errors.getErrors().get(0).getParameters().get(0).getKey());
+  }
+
+  private void updateRuleState(String id, ValidationRule.StateEnum state) {
+    var rule = verifyGet(rulePath(id), SC_OK).as(ValidationRule.class);
+    rule.state(state);
+
+    verifyPut(rulesPath(), rule, SC_OK).as(ValidationRule.class);
   }
 }
