@@ -44,8 +44,8 @@ public class PasswordValidatorServiceImpl implements PasswordValidatorService {
 
   @Override
   public ValidationResult checkPassword(String tenant, PasswordCheck passwordCheck) {
-    String username = passwordCheck.getUsername().trim();
-    String password = passwordCheck.getPassword().trim();
+    String username = passwordCheck.getUsername();
+    String password = passwordCheck.getPassword();
     UserData userData = new UserData();
     userData.setName(username);
     List<PasswordValidationRule> rules = getSortedRules(getPasswordCheckRules(tenant));
