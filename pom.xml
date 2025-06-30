@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.4.3</version>
+    <version>3.5.3</version>
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
 
@@ -21,9 +21,9 @@
     <validator-registry.yaml.file>${project.basedir}/src/main/resources/swagger.api/validator-registry.yaml</validator-registry.yaml.file>
     <password-validator.yaml.file>${project.basedir}/src/main/resources/swagger.api/password-validator.yaml</password-validator.yaml.file>
 
-    <folio-spring-support.version>9.0.0</folio-spring-support.version>
+    <folio-spring-support.version>9.1.0</folio-spring-support.version>
     <mapstruct.version>1.6.3</mapstruct.version>
-    <hypersistence-utils.version>3.8.3</hypersistence-utils.version>
+    <hypersistence-utils.version>3.10.1</hypersistence-utils.version>
 
     <sonar.exclusions>
       src/main/java/org/folio/pv/domain/**,
@@ -38,13 +38,13 @@
 
     <!-- Plugin properties-->
     <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
-    <openapi-generator.version>7.3.0</openapi-generator.version>
-    <maven-checkstyle-plugin.version>3.5.0</maven-checkstyle-plugin.version>
+    <openapi-generator.version>7.14.0</openapi-generator.version>
+    <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
     <maven-copy-rename-plugin.version>1.0.1</maven-copy-rename-plugin.version>
-    <maven-build-helper-plugin.version>3.6.0</maven-build-helper-plugin.version>
-    <maven-surefire-plugin.version>3.5.1</maven-surefire-plugin.version>
+    <maven-build-helper-plugin.version>3.6.1</maven-build-helper-plugin.version>
+    <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
     <maven-release-plugin.version>3.1.1</maven-release-plugin.version>
-    <maven-failsafe-plugin.version>3.5.1</maven-failsafe-plugin.version>
+    <maven-failsafe-plugin.version>3.5.3</maven-failsafe-plugin.version>
   </properties>
 
   <dependencies>
@@ -403,7 +403,7 @@
           <dependency>
             <groupId>com.puppycrawl.tools</groupId>
             <artifactId>checkstyle</artifactId>
-            <version>8.38</version>
+            <version>10.26.1</version>
           </dependency>
         </dependencies>
         <executions>
