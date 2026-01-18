@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.4.3</version>
+    <version>4.0.1</version>
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
 
@@ -21,9 +21,9 @@
     <validator-registry.yaml.file>${project.basedir}/src/main/resources/swagger.api/validator-registry.yaml</validator-registry.yaml.file>
     <password-validator.yaml.file>${project.basedir}/src/main/resources/swagger.api/password-validator.yaml</password-validator.yaml.file>
 
-    <folio-spring-support.version>9.0.0</folio-spring-support.version>
+    <folio-spring-support.version>9.1.0</folio-spring-support.version>
     <mapstruct.version>1.6.3</mapstruct.version>
-    <hypersistence-utils.version>3.8.3</hypersistence-utils.version>
+    <hypersistence-utils.version>3.14.1</hypersistence-utils.version>
 
     <sonar.exclusions>
       src/main/java/org/folio/pv/domain/**,
@@ -403,7 +403,7 @@
           <dependency>
             <groupId>com.puppycrawl.tools</groupId>
             <artifactId>checkstyle</artifactId>
-            <version>8.38</version>
+            <version>13.0.0</version>
           </dependency>
         </dependencies>
         <executions>
