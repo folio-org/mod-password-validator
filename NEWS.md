@@ -1,3 +1,6 @@
+## v3.4.1
+* bcprov-jdk18on 1.83 fixing TLS certificate DoS CVE-2025-8916 ([MODPWD-145](https://folio-org.atlassian.net/browse/MODPWD-145))
+
 ## v3.4.0 2025-03-14
 * Update mod-password-validator to Java 21 ([FOLIO-4219](https://folio-org.atlassian.net/browse/FOLIO-4219))
 
