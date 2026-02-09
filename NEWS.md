@@ -1,4 +1,4 @@
-## v3.4.1
+## v3.4.1 2026-02-09
 * bcprov-jdk18on 1.83 fixing TLS certificate DoS CVE-2025-8916 ([MODPWD-145](https://folio-org.atlassian.net/browse/MODPWD-145))
 
 ## v3.4.0 2025-03-14
