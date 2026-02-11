@@ -1,3 +1,6 @@
+## v3.5.0 ((in progress))
+* Use GitHub Workflows for Maven ([MODPWD-144](https://folio-org.atlassian.net/browse/MODPWD-144))
+
 ## v3.4.0 2025-03-14
 * Update mod-password-validator to Java 21 ([FOLIO-4219](https://folio-org.atlassian.net/browse/FOLIO-4219))
 
