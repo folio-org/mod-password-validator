@@ -36,6 +36,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpClientErrorException;
 
 @ExtendWith({MockitoExtension.class, RandomBeansExtension.class})
 class PasswordValidatorServiceImplTest {
@@ -132,6 +134,22 @@ class PasswordValidatorServiceImplTest {
         () -> service.checkPassword(tenant, passwordCheck));
 
     assertThat(exception.getMessage()).containsIgnoringCase("No matched rules");
+  }
+
+  @Test
+  void shouldCatchHttpNotFoundExceptionWhenUserNotFound(@Random String tenant, @Random Password password) {
+    String userId = password.getUserId();
+    when(userClient.getUserById(eq(userId)))
+      .thenThrow(HttpClientErrorException.NotFound.create(
+        HttpStatus.NOT_FOUND, "User not found", null, null, null
+      ));
+
+    UserNotFoundException exc = Assertions.assertThrows(UserNotFoundException.class,
+      () -> service.validatePasswordByRules(tenant, password));
+
+    assertAll(
+      () -> assertThat(exc.getMessage()).containsIgnoringCase("not found"),
+      () -> assertEquals(userId, exc.getUserId()));
   }
 
   private void mockFindUserById(String userId, String userName) {
