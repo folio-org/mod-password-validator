@@ -36,6 +36,7 @@ import org.folio.spring.FolioModuleMetadata;
 import org.folio.spring.config.FolioSpringConfiguration;
 import org.folio.spring.integration.XOkapiHeaders;
 import org.folio.spring.liquibase.FolioSpringLiquibase;
+import org.folio.spring.testing.type.UnitTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,6 +56,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
 
+@UnitTest
 @ExtendWith({
   MockitoExtension.class,
   RandomBeansExtension.class

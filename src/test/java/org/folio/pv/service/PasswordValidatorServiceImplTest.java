@@ -18,6 +18,7 @@ import java.util.Optional;
 import java.util.UUID;
 import org.folio.pv.client.UserClient;
 import org.folio.pv.client.model.User;
+import org.folio.pv.domain.RuleType;
 import org.folio.pv.domain.ValidationType;
 import org.folio.pv.domain.dto.Password;
 import org.folio.pv.domain.dto.PasswordCheck;
@@ -28,6 +29,7 @@ import org.folio.pv.service.exception.NoRulesMatchedException;
 import org.folio.pv.service.exception.UserNotFoundException;
 import org.folio.pv.service.validator.RegExpValidator;
 import org.folio.pv.service.validator.ValidatorRegistry;
+import org.folio.spring.testing.type.UnitTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,6 +41,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 
+@UnitTest
 @ExtendWith({MockitoExtension.class, RandomBeansExtension.class})
 class PasswordValidatorServiceImplTest {
   private static final String INVALID_PASSWORD = "password.invalid";
@@ -110,6 +113,7 @@ class PasswordValidatorServiceImplTest {
       @Random PasswordValidationRule enabledRule) {
     String tenant = UUID.randomUUID().toString();
     enabledRule.setName(ruleName);
+    enabledRule.setRuleType(RuleType.REGEXP);
     mockValidatorByRule(tenant, enabledRule);
     ValidationErrors errors = ValidationErrors.none();
     mockValidator(passwordCheck, errors);
@@ -125,9 +129,10 @@ class PasswordValidatorServiceImplTest {
   )
   void checkPassword_shouldFailWithValidatorMsg(String ruleName, @Random PasswordCheck passwordCheck,
       @Random PasswordValidationRule enabledRule) {
-    String tenant = UUID.randomUUID().toString();
     enabledRule.setName(ruleName);
+    enabledRule.setRuleType(RuleType.PROGRAMMATIC);
     enabledRule.setValidationType(ValidationType.STRONG);
+    String tenant = UUID.randomUUID().toString();
     when(validationRuleService.getEnabledRules(tenant)).thenReturn(singletonList(enabledRule));
 
     NoRulesMatchedException exception = Assertions.assertThrows(NoRulesMatchedException.class,
@@ -139,7 +144,7 @@ class PasswordValidatorServiceImplTest {
   @Test
   void shouldCatchHttpNotFoundExceptionWhenUserNotFound(@Random String tenant, @Random Password password) {
     String userId = password.getUserId();
-    when(userClient.getUserById(eq(userId)))
+    when(userClient.getUserById(userId))
       .thenThrow(HttpClientErrorException.NotFound.create(
         HttpStatus.NOT_FOUND, "User not found", null, null, null
       ));
