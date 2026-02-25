@@ -18,26 +18,19 @@ spring:
     enabled: true
   jackson:
     default-property-inclusion: NON_EMPTY
-  cloud:
-    openfeign:
-      okhttp:
-        enabled: true
   sql:
     init:
       continue-on-error: true
-feign:
-  client:
-    config:
-      pwned-passwords:
-        logger-level: full
 folio:
   tenant:
     validation:
       enabled: true
+  exchange:
+    enabled: true
   logging:
     request:
       enabled: true
-    feign:
+    exchange:
       enabled: true
 pwned-passwords:
   client:

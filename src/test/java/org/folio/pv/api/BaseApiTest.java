@@ -20,8 +20,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Bean;
@@ -37,7 +35,6 @@ import org.springframework.test.context.ContextConfiguration;
 @EnablePostgres
 @ActiveProfiles("test")
 @ContextConfiguration(initializers = {WireMockInitializer.class})
-@EnableAutoConfiguration(exclude = {FlywayAutoConfiguration.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
   properties = {"folio.jpa.repository.base-packages=org.folio.pv"})
 class BaseApiTest {

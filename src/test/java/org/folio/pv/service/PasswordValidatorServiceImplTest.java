@@ -17,6 +17,7 @@ import io.github.glytching.junit.extension.random.RandomBeansExtension;
 import java.util.Optional;
 import java.util.UUID;
 import org.folio.pv.client.UserClient;
+import org.folio.pv.client.model.User;
 import org.folio.pv.domain.ValidationType;
 import org.folio.pv.domain.dto.Password;
 import org.folio.pv.domain.dto.PasswordCheck;
@@ -134,7 +135,7 @@ class PasswordValidatorServiceImplTest {
   }
 
   private void mockFindUserById(String userId, String userName) {
-    when(userClient.getUserById(contains(userId))).thenReturn(Optional.of(new UserClient.UserDto(userId, userName)));
+    when(userClient.getUserById(contains(userId))).thenReturn(Optional.of(new User(userId, userName)));
   }
 
   private void mockValidator(PasswordCheck passwordCheck, ValidationErrors errors) {

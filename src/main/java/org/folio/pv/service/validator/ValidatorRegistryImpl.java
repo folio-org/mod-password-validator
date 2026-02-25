@@ -1,6 +1,5 @@
 package org.folio.pv.service.validator;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -10,6 +9,7 @@ import org.folio.pv.domain.entity.PasswordValidationRule;
 import org.folio.spring.FolioExecutionContext;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 @Component
 @RequiredArgsConstructor

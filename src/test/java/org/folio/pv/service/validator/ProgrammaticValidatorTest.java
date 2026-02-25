@@ -14,8 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.MappingBuilder;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
@@ -47,14 +45,15 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
+import org.springframework.boot.jackson.autoconfigure.JacksonAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 @ExtendWith({
   MockitoExtension.class,
@@ -65,6 +64,11 @@ public class ProgrammaticValidatorTest {
 
   private static final String EXTERNAL_SERVICE_PATH = "/service";
   private static final String TEST_TENANT = "test_tenant";
+
+  @MockitoBean
+  private FolioSpringLiquibase liquibase;
+  @MockitoBean
+  private JdbcTemplate jdbcTemplate;
 
   @Autowired
   private WireMockServer service;
@@ -127,7 +131,7 @@ public class ProgrammaticValidatorTest {
 
   @ParameterizedTest
   @ValueSource(ints = {200, 201, 202})
-  void shouldPassIfServiceReturnsSuccessfulResponse(int responseStatus) throws JsonProcessingException {
+  void shouldPassIfServiceReturnsSuccessfulResponse(int responseStatus) throws JacksonException {
     stubPostWithResponse(successfulResponse(responseStatus));
 
     ValidationErrors errors = validator.validate(password, userData);
@@ -138,7 +142,7 @@ public class ProgrammaticValidatorTest {
 
   @ParameterizedTest
   @ValueSource(ints = {200, 201, 202})
-  void shouldFailIfServiceReturnsSuccessfulResponseWithErrors(int responseStatus) throws JsonProcessingException {
+  void shouldFailIfServiceReturnsSuccessfulResponseWithErrors(int responseStatus) throws JacksonException {
     stubPostWithResponse(successfulResponseWithErrors(responseStatus, "Invalid password"));
 
     ValidationErrors errors = validator.validate(password, userData);
@@ -153,7 +157,7 @@ public class ProgrammaticValidatorTest {
   @ParameterizedTest
   @MethodSource("failedStatuses")
   void shouldFailWithRuntimeExcIfValidationIsStrongAndServiceReturnsFailure(int responseStatus)
-    throws JsonProcessingException {
+    throws JacksonException {
 
     stubPostWithResponse(serverErrorResponse(responseStatus, "Server error"));
     rule.setValidationType(ValidationType.STRONG);
@@ -168,7 +172,7 @@ public class ProgrammaticValidatorTest {
   @ParameterizedTest
   @MethodSource("failedStatuses")
   void shouldPassIfValidationIsSoftAndServiceReturnsFailure(int responseStatus)
-    throws JsonProcessingException {
+    throws JacksonException {
 
     stubPostWithResponse(serverErrorResponse(responseStatus, "Server error"));
     rule.setValidationType(ValidationType.SOFT);
@@ -183,7 +187,7 @@ public class ProgrammaticValidatorTest {
     service.stubFor(responseBuilder.apply(post(urlEqualTo(EXTERNAL_SERVICE_PATH))));
   }
 
-  private void verifyPostRequest() throws JsonProcessingException {
+  private void verifyPostRequest() throws JacksonException {
     service.verify(
       postRequestedFor(urlEqualTo(EXTERNAL_SERVICE_PATH))
         .withHeader("Content-Type", equalTo("application/json"))
@@ -198,15 +202,9 @@ public class ProgrammaticValidatorTest {
   @Configuration
   @Import({
     FolioSpringConfiguration.class,
-    JacksonAutoConfiguration.class,
-    FeignAutoConfiguration.class
+    JacksonAutoConfiguration.class
   })
   public static class Config {
-
-    @MockitoBean
-    private FolioSpringLiquibase liquibase;
-    @MockitoBean
-    private JdbcTemplate jdbcTemplate;
 
     @Bean
     public FolioExecutionContext folioExecutionContext(FolioModuleMetadata moduleMetadata,

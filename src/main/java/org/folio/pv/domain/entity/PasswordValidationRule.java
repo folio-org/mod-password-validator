@@ -15,7 +15,7 @@ import org.folio.pv.domain.RuleState;
 import org.folio.pv.domain.RuleType;
 import org.folio.pv.domain.ValidationType;
 import org.hibernate.annotations.JdbcType;
-import org.hibernate.dialect.PostgreSQLEnumJdbcType;
+import org.hibernate.dialect.type.PostgreSQLEnumJdbcType;
 
 @Data
 @Table(name = "VALIDATIONRULES")
