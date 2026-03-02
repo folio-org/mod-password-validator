@@ -24,6 +24,7 @@
     <folio-spring-support.version>10.0.0-RC1</folio-spring-support.version>
     <mapstruct.version>1.6.3</mapstruct.version>
     <hypersistence-utils.version>3.10.0</hypersistence-utils.version>
+    <jspecify.version>1.0.0</jspecify.version>
 
     <sonar.exclusions>
       src/main/java/org/folio/pv/domain/**,
@@ -98,6 +99,11 @@
       <groupId>io.hypersistence</groupId>
       <artifactId>hypersistence-utils-hibernate-70</artifactId>
       <version>${hypersistence-utils.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jspecify</groupId>
+      <artifactId>jspecify</artifactId>
+      <version>${jspecify.version}</version>
     </dependency>
 
     <!-- Test dependencies -->

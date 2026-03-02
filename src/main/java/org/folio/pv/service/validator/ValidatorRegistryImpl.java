@@ -7,7 +7,7 @@ import org.folio.pv.client.PwnedClient;
 import org.folio.pv.domain.RuleType;
 import org.folio.pv.domain.entity.PasswordValidationRule;
 import org.folio.spring.FolioExecutionContext;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 

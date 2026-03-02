@@ -1,7 +1,7 @@
 package org.folio.pv.service.validator;
 
 import org.folio.pv.domain.entity.PasswordValidationRule;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public interface ValidatorRegistry {
 
