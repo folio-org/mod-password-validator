@@ -1,6 +1,5 @@
 package org.folio.pv.service;
 
-import feign.FeignException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.folio.pv.client.UserClient;
+import org.folio.pv.client.model.User;
 import org.folio.pv.domain.RuleType;
 import org.folio.pv.domain.ValidationType;
 import org.folio.pv.domain.dto.Password;
@@ -21,6 +21,7 @@ import org.folio.pv.service.exception.NoRulesMatchedException;
 import org.folio.pv.service.exception.UserNotFoundException;
 import org.folio.pv.service.validator.ValidatorRegistry;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 @Service
 @RequiredArgsConstructor
@@ -101,9 +102,9 @@ public class PasswordValidatorServiceImpl implements PasswordValidatorService {
   private String getUserNameByUserId(String userId) {
     try {
       return userClient.getUserById(userId)
-          .map(UserClient.UserDto::getUsername)
+          .map(User::username)
           .orElseThrow(() -> new UserNotFoundException(userId));
-    } catch (FeignException.NotFound e) {
+    } catch (HttpClientErrorException.NotFound e) {
       log.warn("Failed on getting userName by given id: {}, msg: {}", userId, e.getMessage());
       throw new UserNotFoundException(userId);
     }

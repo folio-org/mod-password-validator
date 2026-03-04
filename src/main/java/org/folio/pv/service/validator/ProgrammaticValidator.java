@@ -1,7 +1,5 @@
 package org.folio.pv.service.validator;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -19,6 +17,8 @@ import org.folio.pv.domain.dto.ValidationErrors;
 import org.folio.pv.domain.dto.ValidationResult;
 import org.folio.pv.domain.entity.PasswordValidationRule;
 import org.folio.spring.FolioExecutionContext;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @Log4j2
@@ -65,7 +65,7 @@ class ProgrammaticValidator implements Validator {
   }
 
   private void addBody(HttpPost httpPost, String password, UserData user) throws UnsupportedEncodingException,
-    JsonProcessingException {
+    JacksonException {
     httpPost.setEntity(new StringEntity(jacksonObjectMapper.writeValueAsString(
       new Password().password(password).userId(user.getId())))
     );

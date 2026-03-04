@@ -2,17 +2,15 @@ package org.folio.pv.client;
 
 import java.util.List;
 import org.folio.pv.domain.dto.HashedPasswordUsage;
-import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.service.annotation.GetExchange;
+import org.springframework.web.service.annotation.HttpExchange;
 
-@FeignClient(name = "pwned-passwords",
-  url = "${pwned-passwords.client.url}",
-  configuration = PwnedClientConfiguration.class)
+@HttpExchange(accept = MediaType.TEXT_PLAIN_VALUE)
 public interface PwnedClient {
 
-  @GetMapping(path = "/range/{hashPrefix}", produces = MediaType.TEXT_PLAIN_VALUE)
+  @GetExchange(value = "/range/{hashPrefix}")
   List<HashedPasswordUsage> getPwdRange(@PathVariable String hashPrefix);
 
 }
