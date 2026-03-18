@@ -32,7 +32,8 @@ The password MUST:
  | NOT contain a keyboard sequence                | 'qwerty12', '12345678', 'q1234567'| disabled |
  | NOT contain the same character                 | 'password'                        | disabled |
  | NOT contain whitespace                         | 'pas sword'                       | disabled |
- | NOT contain two consecutive whitespaces        | 'Michael &bnsp; &nbsp; Jordan'    | enabled  |
+ | NOT contain two consecutive whitespaces        | 'Michael &nbsp; &nbsp; Jordan'    | enabled  |
+ | NOT be commonly-used, expected or compromised  | 'Password123!'                    | enabled  |
 
 ## API
 
