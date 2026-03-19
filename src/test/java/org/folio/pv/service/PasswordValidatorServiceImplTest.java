@@ -106,9 +106,9 @@ class PasswordValidatorServiceImplTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"password_length", "alphabetical_letters", "numeric_symbol", "special_character",
-      "no_user_name"}
-  )
+  @ValueSource(strings = {
+    "password_length", "alphabetical_letters", "numeric_symbol", "special_character", "no_user_name"
+  })
   void checkPassword_shouldSucceed(String ruleName, @Random PasswordCheck passwordCheck,
       @Random PasswordValidationRule enabledRule) {
     String tenant = UUID.randomUUID().toString();
@@ -124,9 +124,9 @@ class PasswordValidatorServiceImplTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"no_repeatable_password", "keyboard_sequence", "no_white_space_character",
-      "repeating_characters"}
-  )
+  @ValueSource(strings = {
+    "no_repeatable_password", "keyboard_sequence", "no_white_space_character", "repeating_characters"
+  })
   void checkPassword_shouldFailWithValidatorMsg(String ruleName, @Random PasswordCheck passwordCheck,
       @Random PasswordValidationRule enabledRule) {
     enabledRule.setName(ruleName);

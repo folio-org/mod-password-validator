@@ -4,7 +4,8 @@ import io.github.benas.randombeans.EnhancedRandomBuilder;
 import io.github.benas.randombeans.api.EnhancedRandom;
 import io.github.benas.randombeans.randomizers.text.StringRandomizer;
 import java.nio.charset.StandardCharsets;
-import lombok.Value;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.folio.pv.domain.RuleType;
 import org.folio.pv.domain.entity.PasswordValidationRule;
@@ -40,10 +41,11 @@ public final class RandomTestData {
     return new FolioModuleMetadataImpl(MODULE_NAME_RANDOMIZER.getRandomValue());
   }
 
-  @Value
-  private static class FolioModuleMetadataImpl implements FolioModuleMetadata {
+  @Data
+  @RequiredArgsConstructor
+  private static final class FolioModuleMetadataImpl implements FolioModuleMetadata {
 
-    String moduleName;
+    private final String moduleName;
 
     @Override
     public String getDBSchemaName(String tenantId) {
