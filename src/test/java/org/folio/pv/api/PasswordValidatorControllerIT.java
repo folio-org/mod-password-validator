@@ -98,8 +98,10 @@ class PasswordValidatorControllerIT extends BaseApiTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"test", "TEST1234", "test@132", "testUser", "someUser123", "testUser123@", "1234443332",
-      "7Xu^&t[:J3Hha(<B ", " 7Xu^&t[:J3Hha(<B"})
+  @ValueSource(strings = {
+    "test", "TEST1234", "test@132", "testUser", "someUser123", "testUser123@", "1234443332",
+    "7Xu^&t[:J3Hha(<B ", " 7Xu^&t[:J3Hha(<B"
+  })
   void checkPassword_fail_whenInvalidPassword(String invalidPassword) {
     updateRuleState(WHITE_SPACE_RULE_ID, StateEnum.ENABLED);
     mockGet("/range/.*", "0018A45C4D1DEF81644B54AB7F969B88D65:0", SC_OK, TEXT_PLAIN_VALUE, wireMockServer);
