@@ -79,7 +79,7 @@ class ValidationRulesControllerIT extends BaseApiTest {
     //  GIVEN
     ValidationRule newRule = new ValidationRule()
       .name(RULE_NAME)
-      .type(ValidationRule.TypeEnum.REGEXP)
+      .type(ValidationRule.TypeEnum.REG_EXP)
       .validationType(ValidationRule.ValidationTypeEnum.SOFT)
       .state(ValidationRule.StateEnum.DISABLED)
       .moduleName(MODULE_NAME)
