@@ -27,7 +27,7 @@ public class RegExpValidator implements Validator {
     if (isNotBlank(expression)) {
 
       var exprWithUser = expression.replace(REGEXP_USER_NAME_PLACEHOLDER, user.getName());
-      log.info("Validating password against regexp: {}", exprWithUser);
+      log.info("Validating password against regexp rule");
 
       var pattern = Pattern.compile(exprWithUser);
 
