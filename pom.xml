@@ -21,7 +21,7 @@
     <validator-registry.yaml.file>${project.basedir}/src/main/resources/swagger.api/validator-registry.yaml</validator-registry.yaml.file>
     <password-validator.yaml.file>${project.basedir}/src/main/resources/swagger.api/password-validator.yaml</password-validator.yaml.file>
 
-    <folio-spring-support.version>10.0.0-RC1</folio-spring-support.version>
+    <folio-spring-support.version>10.0.0</folio-spring-support.version>
     <mapstruct.version>1.6.3</mapstruct.version>
     <hypersistence-utils.version>3.15.2</hypersistence-utils.version>
     <jspecify.version>1.0.0</jspecify.version>
