@@ -1,6 +1,32 @@
-## v3.5.0 ((in progress))
+## v4.0.0 2026-04-16
+
+### Breaking changes
+* Upgrade to Spring Boot 4.x, migrate HTTP clients from OpenFeign to Spring HTTP Interfaces ([MODPWD-143](https://folio-org.atlassian.net/browse/MODPWD-143))
+
+### Features
+* Show validation error when password contains leading or trailing whitespace ([MODPWD-140](https://folio-org.atlassian.net/browse/MODPWD-140))
+
+### Bug fixes
+* Sensitive data in logs cleanup ([MODPWD-134](https://folio-org.atlassian.net/browse/MODPWD-134))
+* Fix TLS certificate DoS vulnerability CVE-2025-8916 by upgrading bcprov-jdk18on to 1.83 ([MODPWD-145](https://folio-org.atlassian.net/browse/MODPWD-145))
+
+### Tech Dept
 * Use GitHub Workflows for Maven ([MODPWD-144](https://folio-org.atlassian.net/browse/MODPWD-144))
-* Upgrade module to Spring Boot v4.0.2 ([MODPWD-143](https://folio-org.atlassian.net/browse/MODPWD-143))
+* Add Dependabot config and pull request template ([MODPWD-138](https://folio-org.atlassian.net/browse/MODPWD-138))
+
+### Dependencies
+* Bump `spring-boot-starter-parent` from `3.4.3` to `4.0.5`
+* Bump `folio-spring-support` from `9.0.0` to `10.0.0`
+* Bump `hypersistence-utils-hibernate-63` from `3.8.3` to `hypersistence-utils-hibernate-70` `3.15.2`
+* Add `jspecify` `1.0.0`
+* Bump `openapi-generator` from `7.3.0` to `7.21.0`
+* Bump `wiremock` from `3.12.1` to `3.13.2`
+* Bump `embedded-database-spring-test` from `2.5.0` to `2.8.0`
+* Bump `embedded-postgres` from `2.0.3` to `2.2.2`
+* Bump `checkstyle` from `8.38` to `13.4.0`
+* Remove `jackson-module-jaxb-annotations`
+
+---
 
 ## v3.4.0 2025-03-14
 * Update mod-password-validator to Java 21 ([FOLIO-4219](https://folio-org.atlassian.net/browse/FOLIO-4219))
