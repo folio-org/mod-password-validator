@@ -40,7 +40,7 @@
 
     <!-- Plugin properties-->
     <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
-    <openapi-generator.version>7.21.0</openapi-generator.version>
+    <openapi-generator.version>7.22.0</openapi-generator.version>
     <maven-copy-rename-plugin.version>1.0.1</maven-copy-rename-plugin.version>
     <maven-build-helper-plugin.version>3.6.1</maven-build-helper-plugin.version>
   </properties>
