@@ -41,7 +41,7 @@ public class ValidationRulesController implements RulesApi {
   }
 
   @Override
-  public ResponseEntity<ValidationRule> postTenantRules(@Valid ValidationRule validationRule) {
+  public ResponseEntity<ValidationRule> postTenantRule(@Valid ValidationRule validationRule) {
     var rule = validationRuleService.createOrUpdateValidationRule(validationRule);
     return new ResponseEntity<>(rule, HttpStatus.OK);
   }
