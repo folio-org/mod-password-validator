@@ -60,6 +60,7 @@ management:
       enabled: true
 server:
   port: 8081
+  max-http-request-header-size: 24KB
 cache:
   eviction:
     time:
