@@ -1,3 +1,16 @@
+## WIP
+
+### Breaking changes
+
+### Features
+
+### Bug fixes
+
+### Tech Dept
+
+### Dependencies
+* Upgrade from JDK 21 to JDK 25 in pom.xml (maven-compiler-plugin release) and Dockerfile ([MODPWD-151](https://folio-org.atlassian.net/browse/MODPWD-151))
+
 ## v4.0.0 2026-04-16
 
 ### Breaking changes

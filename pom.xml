@@ -16,7 +16,7 @@
   <packaging>jar</packaging>
 
   <properties>
-    <java.version>21</java.version>
+    <java.version>25</java.version>
 
     <validator-registry.yaml.file>${project.basedir}/src/main/resources/swagger.api/validator-registry.yaml</validator-registry.yaml.file>
     <password-validator.yaml.file>${project.basedir}/src/main/resources/swagger.api/password-validator.yaml</password-validator.yaml.file>
