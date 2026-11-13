@@ -53,8 +53,8 @@ paths:
               schema:
                 type: string
                 example: Internal server error
-      description: Add a rule to a tenant
-      operationId: postTenantRules
+      description: Add a rule to a tenant; a new rule must not have an "id" property
+      operationId: postTenantRule
       requestBody:
         content:
           application/json:

@@ -9,6 +9,7 @@
 ### Bug fixes
 * Sensitive data in logs cleanup ([MODPWD-134](https://folio-org.atlassian.net/browse/MODPWD-134))
 * Fix TLS certificate DoS vulnerability CVE-2025-8916 by upgrading bcprov-jdk18on to 1.83 ([MODPWD-145](https://folio-org.atlassian.net/browse/MODPWD-145))
+* Fix POST /tenant/rules API documentation ([MODPWD-153](https://folio-org.atlassian.net/browse/MODPWD-153))
 
 ### Tech Dept
 * Use GitHub Workflows for Maven ([MODPWD-144](https://folio-org.atlassian.net/browse/MODPWD-144))
