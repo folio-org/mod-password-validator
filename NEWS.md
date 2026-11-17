@@ -1,3 +1,8 @@
+## v4.0.1 2026-11-17
+
+### Dependencies
+* Upgrade `folio-spring-support` to 10.0.1 ([MODPWD-154](https://folio-org.atlassian.net/browse/MODPWD-154))
+
 ## v4.0.0 2026-04-16
 
 ### Breaking changes
